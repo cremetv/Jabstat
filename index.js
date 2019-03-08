@@ -190,6 +190,7 @@ client.on('message', async message => {
 
   const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+  // log global messageCount
   db.execute(config, database => database.query(`SELECT * FROM jabmessageCount WHERE date = '${dateSimple}'`)
   .then(rows => {
     let query;
@@ -212,6 +213,33 @@ client.on('message', async message => {
     logger.error(err);
     throw err;
   });
+
+
+  // log user messageCount
+  const author = message.author;
+  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${author.id}'`)
+  .then(rows => {
+
+    let query;
+    if (rows.length < 1) {
+      query = database.query(`
+        INSERT INTO jabusers (userID, username, discriminator, avatar, bot, lastMessageID, messageCount, updated)
+        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
+      `);
+    } else {
+      let messageCount = parseInt(rows[0].messageCount) + 1;
+      query = database.query(`
+        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
+      `);
+    }
+
+  }))
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
+
+
 });
 
 

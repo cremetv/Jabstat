@@ -1,3 +1,5 @@
 /node_modules/
 botsettings.json
 /utility/config.js
+error.log
+combined.log
