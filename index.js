@@ -217,19 +217,31 @@ client.on('message', async message => {
 
   // log user messageCount
   const author = message.author;
+
   db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${author.id}'`)
   .then(rows => {
 
     let query;
+    const nickname = message.guild.members.get(author.id).nickname;
+    let nicknames = [];
+
     if (rows.length < 1) {
+      nicknames.push(nickname);
+
       query = database.query(`
-        INSERT INTO jabusers (userID, username, discriminator, avatar, bot, lastMessageID, messageCount, updated)
-        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
+        INSERT INTO jabusers (userID, username, discriminator, nicknames, avatar, bot, lastMessageID, messageCount, updated)
+        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${nicknames}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
       `);
     } else {
       let messageCount = parseInt(rows[0].messageCount) + 1;
+      nicknames = rows[0].nicknames.split(',');
+
+      if (!nicknames.includes(nickname)) {
+        nicknames.push(nickname);
+      }
+
       query = database.query(`
-        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
+        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', nicknames = '${nicknames}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
       `);
     }
 
