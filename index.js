@@ -159,6 +159,42 @@ client.on('ready', async () => {
 
 
 
+  // log daily userCount
+  let now = new Date();
+  let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 0, 0) - now;
+  if (millisTill23 < 0) {
+       millisTill23 += 86400000; // it's after 23:59, try 23:59 tomorrow.
+  }
+  setTimeout(() => {
+    console.log('it\'s 23:59');
+    const d = new Date();
+    const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
+
+    const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    // log global userCount
+    db.execute(config, database => database.query(`SELECT * FROM jabmemberCount WHERE date = '${dateSimple}'`)
+    .then(rows => {
+
+      if (rows.length < 1) {
+        // insert
+        database.query(`
+          INSERT INTO jabmemberCount (date, memberCount, updated)
+          VALUES ('${dateSimple}', ${server.memberCount}, '${date}')`
+        );
+      } else {
+        // update
+        database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
+      }
+      return;
+    }))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+  }, millisTill23);
+
+
 });
 
 
