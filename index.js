@@ -79,41 +79,37 @@ client.on('ready', async () => {
   db.execute(config, database => database.query(`SELECT * FROM jabstats`)
   .then(rows => {
 
-    let query;
     if (rows.length < 1) {
       // insert
-      query = database.query(`INSERT INTO jabstats (statName, statValue)
-      VALUES
-        ('serverID', '${server.id}'),
-        ('name', '${server.name}'),
-        ('memberCount', '${server.memberCount}'),
-        ('available', '${server.available}'),
-        ('icon', '${server.icon}'),
-        ('region', '${server.region}'),
-        ('large', '${server.large}'),
-        ('afkTimeout', '${server.afkTimeout}'),
-        ('ownerID', '${server.ownerID}')
+      database.query(`
+        INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
+        VALUES ('${server.id}', '${server.name}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
       `);
     } else {
       // update
-      query = database.query(`
-        UPDATE jabstats
-           SET statValue = CASE statName
-                           WHEN 'serverID' THEN '${server.id}'
-                           WHEN 'name' THEN '${server.name}'
-                           WHEN 'memberCount' THEN '${server.memberCount}'
-                           WHEN 'available' THEN '${server.available}'
-                           WHEN 'icon' THEN '${server.icon}'
-                           WHEN 'region' THEN '${server.region}'
-                           WHEN 'large' THEN '${server.large}'
-                           WHEN 'afkTimeout' THEN '${server.afkTimeout}'
-                           WHEN 'ownerID' THEN '${server.ownerID}'
-                           ELSE statValue
-                           END
-        WHERE statName IN('serverID', 'name', 'memberCount', 'available', 'icon', 'region', 'large', 'afkTimeout', 'ownerID')
+      database.query(`
+        UPDATE jabstats SET
+          serverID = '${server.id}',
+          name = '${server.name}',
+          nameAcronym = '${server.nameAcronym}',
+          memberCount = ${server.memberCount},
+          available = ${server.available},
+          icon = '${server.icon}',
+          iconURL = '${server.iconURL}',
+          region = '${server.region}',
+          large = ${server.large},
+          afkTimeout = ${server.afkTimeout},
+          ownerID = '${server.ownerID}',
+          createdAt = '${server.createdAt}',
+          createdTimestamp = '${server.createdTimestamp}',
+          explicitContentFilter = ${server.explicitContentFilter},
+          splash = '${server.splash}',
+          splashURL = '${server.splashURL}',
+          verified = ${server.verified}
+        WHERE id = ${rows[0].id}
       `);
     }
-    return query;
+    return;
   }))
   .catch(err => {
     logger.error(err);
@@ -193,11 +189,10 @@ client.on('message', async message => {
   // log global messageCount
   db.execute(config, database => database.query(`SELECT * FROM jabmessageCount WHERE date = '${dateSimple}'`)
   .then(rows => {
-    let query;
 
     if (rows.length < 1) {
       // insert
-      query = database.query(`
+      database.query(`
         INSERT INTO jabmessageCount (date, messageCount, updated)
         VALUES ('${dateSimple}', 1, '${date}')`
       );
@@ -205,9 +200,9 @@ client.on('message', async message => {
       // update
       let messageCount = parseInt(rows[0].messageCount) + 1;
 
-      query = database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
+      database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
     }
-    return query;
+    return;
   }))
   .catch(err => {
     logger.error(err);
@@ -221,27 +216,24 @@ client.on('message', async message => {
   db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${author.id}'`)
   .then(rows => {
 
-    let query;
     const nickname = message.guild.members.get(author.id).nickname;
     let nicknames = [];
 
     if (rows.length < 1) {
       nicknames.push(nickname);
 
-      query = database.query(`
-        INSERT INTO jabusers (userID, username, discriminator, nicknames, avatar, bot, lastMessageID, messageCount, updated)
-        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${nicknames}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
+      database.query(`
+        INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated)
+        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${nickname}', '${nicknames}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
       `);
     } else {
       let messageCount = parseInt(rows[0].messageCount) + 1;
       nicknames = rows[0].nicknames.split(',');
 
-      if (!nicknames.includes(nickname)) {
-        nicknames.push(nickname);
-      }
+      if (!nicknames.includes(nickname)) nicknames.push(nickname);
 
-      query = database.query(`
-        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', nicknames = '${nicknames}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
+      database.query(`
+        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
       `);
     }
 
