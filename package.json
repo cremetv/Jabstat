@@ -4,7 +4,7 @@
   "description": "Discord statistic bot for Cult of Jabrils",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "discord.js": "^11.4.2",
     "mysql": "^2.16.0",
     "node-fetch": "^2.3.0",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "winston": "^3.2.1"
   }
 }
