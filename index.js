@@ -72,7 +72,7 @@ if (process.env.NODE_ENV !== 'production') {
 const logUserCount = () => {
   const server = client.guilds.get('343771301405786113');
   const d = new Date();
-  const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
+  const dateSimple = `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`;
   const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   // log global userCount
   db.execute(config, database => database.query(`SELECT * FROM jabmemberCount WHERE date = '${dateSimple}'`)
@@ -222,7 +222,7 @@ client.on('ready', async () => {
 
   // log daily userCount
   let now = new Date();
-  let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 0, 0) - now;
+  let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 0) - now;
   if (millisTill23 < 0) {
        millisTill23 += 86400000; // it's after 23:59, try 23:59 tomorrow.
   }
