@@ -69,22 +69,47 @@ if (process.env.NODE_ENV !== 'production') {
 /****************
 * Ready
 ****************/
-client.on('ready', async () => {
-  console.log('\x1b[32m%s\x1b[0m', `Bot is ready! ${client.user.username}`);
-  client.user.setActivity(`collecting stats`, "https://ice-creme.de");
-
+const logUserCount = () => {
   const server = client.guilds.get('343771301405786113');
+  const d = new Date();
+  const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
+  const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  // log global userCount
+  db.execute(config, database => database.query(`SELECT * FROM jabmemberCount WHERE date = '${dateSimple}'`)
+  .then(rows => {
+    if (rows.length < 1) {
+      // insert
+      database.query(`
+        INSERT INTO jabmemberCount (date, memberCount, updated)
+        VALUES ('${dateSimple}', ${server.memberCount}, '${date}')`
+      );
+      logger.info(`Inserted memberCount ${dateSimple} into jabmemberCount @${date}`);
+    } else {
+      // update
+      database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
+      logger.info(`Updated memberCount ${dateSimple} in jabmemberCount @${date}`);
+    }
+    return;
+  }))
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
+} // logUserCount
 
+
+const logServerStats = () => {
+  const server = client.guilds.get('343771301405786113');
   // DB general stats
   db.execute(config, database => database.query(`SELECT * FROM jabstats`)
   .then(rows => {
-
     if (rows.length < 1) {
       // insert
       database.query(`
         INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
         VALUES ('${server.id}', '${server.name}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
       `);
+      logger.info(`Inserted serverStats`);
     } else {
       // update
       database.query(`
@@ -108,6 +133,7 @@ client.on('ready', async () => {
           verified = ${server.verified}
         WHERE id = ${rows[0].id}
       `);
+      logger.info(`Updated serverStats`);
     }
     return;
   }))
@@ -115,23 +141,25 @@ client.on('ready', async () => {
     logger.error(err);
     throw err;
   });
+} // logServerStats
 
 
+const logChannels = () => {
+  const server = client.guilds.get('343771301405786113');
+  logger.info(`Start logging channels`);
   server.channels.forEach(c => {
-
     db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${c.id}'`)
     .then(rows => {
-
       if (c.topic == undefined) c.topic = '';
       if (c.nsfw == undefined) c.nsfw = false;
       if (c.lastMessageID == undefined) c.lastMessageID = '';
-
       if (rows.length < 1) {
         // insert
         database.query(`
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID)
           VALUES ('${c.id}', '${c.name}', ${c.position}, '${c.type}', '${c.topic}', ${c.nsfw}, '${c.lastMessageID}')`
         );
+        logger.info(`Inserted ${c.name} into jabchannels`);
       } else {
         // update
         database.query(`
@@ -145,10 +173,8 @@ client.on('ready', async () => {
             lastMessageID = '${c.lastMessageID}'
           WHERE id = ${rows[0].id}
         `);
+        logger.info(`Updated ${c.name} in jabchannels`);
       }
-      return;
-    })
-    .then(() => {
       return;
     }))
     .catch(err => {
@@ -156,8 +182,43 @@ client.on('ready', async () => {
       throw err;
     });
   });
+} // logChannels
 
+//
+client.on('ready', async () => {
+  console.log('\x1b[32m%s\x1b[0m', `Bot is ready! ${client.user.username}`);
+  logger.info(`***************************`);
+  logger.info(`Bot started | ${Date.now()}`);
 
+  client.user.setActivity(`collecting stats`, "https://ice-creme.de");
+
+  logServerStats();
+  logChannels();
+
+  // *********************
+  const server = client.guilds.get('343771301405786113');
+  db.execute(config, database => database.query(`SELECT * FROM jabchannels`)
+  .then(rows => {
+
+    rows.forEach(c => {
+      let id = c.channelID;
+      console.log(`FROM DB ${id}`);
+      let channel = server.channels.get(id);
+      if (!channel) {
+        // set channel to deleted
+        database.query(`
+          UPDATE jabchannels SET deleted = true WHERE channelID = ${id}
+        `);
+        logger.info(`Updated channel ${id} to deleted`);
+      }
+    });
+
+  }))
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
+  // *********************
 
   // log daily userCount
   let now = new Date();
@@ -167,34 +228,9 @@ client.on('ready', async () => {
   }
   setTimeout(() => {
     console.log('it\'s 23:59');
-    const d = new Date();
-    const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
-
-    const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    // log global userCount
-    db.execute(config, database => database.query(`SELECT * FROM jabmemberCount WHERE date = '${dateSimple}'`)
-    .then(rows => {
-
-      if (rows.length < 1) {
-        // insert
-        database.query(`
-          INSERT INTO jabmemberCount (date, memberCount, updated)
-          VALUES ('${dateSimple}', ${server.memberCount}, '${date}')`
-        );
-      } else {
-        // update
-        database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
-      }
-      return;
-    }))
-    .catch(err => {
-      logger.error(err);
-      throw err;
-    });
+    logger.info('it\'s 23:59');
+    logUserCount();
   }, millisTill23);
-
-
 });
 
 
@@ -212,6 +248,7 @@ client.on('message', async message => {
   let cmd = client.commands.get(command.slice(prefix.length));
   if (cmd) cmd.run(client, message, args, db);
 });
+
 
 client.on('message', async message => {
   // Database
@@ -232,11 +269,13 @@ client.on('message', async message => {
         INSERT INTO jabmessageCount (date, messageCount, updated)
         VALUES ('${dateSimple}', 1, '${date}')`
       );
+      logger.info(`Inserted total messageCount ${dateSimple} into jabmesageCount @${date}`);
     } else {
       // update
       let messageCount = parseInt(rows[0].messageCount) + 1;
 
       database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date}' WHERE date = '${rows[0].date}'`);
+      logger.info(`Updated total messageCount ${dateSimple} in jabmesageCount @${date}`);
     }
     return;
   }))
@@ -262,6 +301,7 @@ client.on('message', async message => {
         INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated)
         VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${nickname}', '${nicknames}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
       `);
+      logger.info(`Inserted ${author.username}'s messageCount & infos into jabusers`);
     } else {
       let messageCount = parseInt(rows[0].messageCount) + 1;
       nicknames = rows[0].nicknames.split(',');
@@ -271,6 +311,7 @@ client.on('message', async message => {
       database.query(`
         UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
       `);
+      logger.info(`Updated ${author.username}'s messageCount & infos in jabusers`);
     }
 
   }))
