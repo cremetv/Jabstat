@@ -69,8 +69,7 @@ if (process.env.NODE_ENV !== 'production') {
 /****************
 * Ready
 ****************/
-const logUserCount = () => {
-  const server = client.guilds.get('343771301405786113');
+const logMemberCount = (server) => {
   const d = new Date();
   const dateSimple = `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`;
   const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -95,11 +94,11 @@ const logUserCount = () => {
     logger.error(err);
     throw err;
   });
-} // logUserCount
+} // logMemberCount
 
 
-const logServerStats = () => {
-  const server = client.guilds.get('343771301405786113');
+const logServerStats = (server) => {
+
   // DB general stats
   db.execute(config, database => database.query(`SELECT * FROM jabstats`)
   .then(rows => {
@@ -144,8 +143,7 @@ const logServerStats = () => {
 } // logServerStats
 
 
-const logChannels = () => {
-  const server = client.guilds.get('343771301405786113');
+const logChannels = (server) => {
   logger.info(`Start logging channels`);
   server.channels.forEach(c => {
     db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${c.id}'`)
@@ -191,12 +189,12 @@ client.on('ready', async () => {
   logger.info(`Bot started | ${Date.now()}`);
 
   client.user.setActivity(`collecting stats`, "https://ice-creme.de");
+  const server = client.guilds.get('343771301405786113');
 
-  logServerStats();
-  logChannels();
+  logServerStats(server);
+  logChannels(server);
 
   // *********************
-  const server = client.guilds.get('343771301405786113');
   db.execute(config, database => database.query(`SELECT * FROM jabchannels`)
   .then(rows => {
 
@@ -229,7 +227,7 @@ client.on('ready', async () => {
   setTimeout(() => {
     console.log('it\'s 23:59');
     logger.info('it\'s 23:59');
-    logUserCount();
+    logMemberCount(server);
   }, millisTill23);
 });
 
@@ -238,6 +236,48 @@ client.on('ready', async () => {
 /****************
 * Message
 ****************/
+const logMember = (member, messageAmount) => {
+  const d = new Date();
+  const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
+  const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+  const nickname = member.nickname;
+
+  if (!messageAmount) messageAmount = 0;
+
+  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${member.user.id}'`)
+  .then(rows => {
+
+    let nicknames = [];
+
+    if (rows.length < 1) {
+      if (nickname != null) nicknames.push(nickname);
+
+      database.query(`
+        INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted)
+        VALUES ('${member.user.id}', '${member.user.username}', '${member.user.discriminator}', '${nickname}', '${nicknames}', '${member.user.avatar}', ${member.user.bot}, '${member.user.lastMessageID}', ${messageAmount}, '${date}', '${member.presence.status}', ${member.deleted})
+      `);
+      logger.info(`Inserted ${member.user.username}'s messageCount & infos into jabusers`);
+    } else {
+      let messageCount = parseInt(rows[0].messageCount) + messageAmount;
+      nicknames = rows[0].nicknames.split(',');
+
+      if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
+
+      database.query(`
+        UPDATE jabusers SET username = '${member.user.username}', discriminator = '${member.user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${member.user.avatar}', bot = ${member.user.bot}, lastMessageID = '${member.user.lastMessageID}', messageCount = ${messageCount}, updated = '${date}', status = '${member.presence.status}', deleted = ${member.deleted} WHERE userID = ${member.user.id}
+      `);
+      logger.info(`Updated ${member.user.username}'s messageCount & infos in jabusers`);
+    }
+  }))
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
+
+} // logMember
+
+
 client.on('message', async message => {
   let messageArray = message.content.split(/\s+/g);
   let command = messageArray[0];
@@ -284,45 +324,44 @@ client.on('message', async message => {
     throw err;
   });
 
-
-  // log user messageCount
-  const author = message.author;
-
-  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${author.id}'`)
-  .then(rows => {
-
-    const nickname = message.guild.members.get(author.id).nickname;
-    let nicknames = [];
-
-    if (rows.length < 1) {
-      nicknames.push(nickname);
-
-      database.query(`
-        INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated)
-        VALUES ('${author.id}', '${author.username}', '${author.discriminator}', '${nickname}', '${nicknames}', '${author.avatar}', ${author.bot}, '${author.lastMessageID}', 1, '${date}')
-      `);
-      logger.info(`Inserted ${author.username}'s messageCount & infos into jabusers`);
-    } else {
-      let messageCount = parseInt(rows[0].messageCount) + 1;
-      nicknames = rows[0].nicknames.split(',');
-
-      if (!nicknames.includes(nickname)) nicknames.push(nickname);
-
-      database.query(`
-        UPDATE jabusers SET username = '${author.username}', discriminator = '${author.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${author.avatar}', bot = ${author.bot}, lastMessageID = '${author.lastMessageID}', messageCount = ${messageCount}, updated = '${date}' WHERE userID = ${author.id}
-      `);
-      logger.info(`Updated ${author.username}'s messageCount & infos in jabusers`);
-    }
-
-  }))
-  .catch(err => {
-    logger.error(err);
-    throw err;
-  });
-
-
+  logMember(message.member, 1);
 });
 
+
+
+/****************
+* Guild add/remove Member
+****************/
+client.on('guildMemberAdd', member => {
+  const server = client.guilds.get('343771301405786113');
+  console.log('GUILD MEMBER ADD');
+
+  logMember(member);
+  logMemberCount(server);
+});
+
+
+client.on('guildMemberRemove', member => {
+  const server = client.guilds.get('343771301405786113');
+  console.log('GUILD MEMBER REMOVE');
+  console.log(member.user.username);
+
+  // const nickname = member.nickname;
+  // logMember(nickname, member.user, 0, false, 'left');
+  logMember(member);
+  logMemberCount(server);
+});
+
+
+/****************
+* Guild Member update
+****************/
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  const server = client.guilds.get('343771301405786113');
+  // logMember(newMember.nickname, newMember.user, 0, true);
+  logMember(newMember);
+  logMemberCount(server);
+});
 
 // login
 client.login(botsettings.token);
