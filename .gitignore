@@ -3,3 +3,4 @@ botsettings.json
 /utility/config.js
 error.log
 combined.log
+*.log
