@@ -69,6 +69,9 @@ fs.readdir('./cmds/', (err, files) => {
 		let props = require(`./cmds/${f}`);
 		console.log(`${i + 1}: ${f} loaded!`);
 		client.commands.set(props.help.name, props);
+    if (props.help.alias) {
+      client.commands.set(props.help.alias, props);
+    }
 	});
 });
 

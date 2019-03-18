@@ -79,6 +79,7 @@ module.exports.run = async(client, message, args, db) => {
 
 module.exports.help = {
   name: 'user',
+  alias: 'u',
   description: 'show stats for a user',
   usage: '',
   admin: false
