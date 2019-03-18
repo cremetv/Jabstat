@@ -129,39 +129,53 @@ module.exports = {
   /*************
   * Channels
   *************/
-  logChannels: (server) => {
-    server.channels.forEach(c => {
-      db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${c.id}'`)
-      .then(rows => {
-        if (c.topic == undefined) c.topic = '';
-        if (c.nsfw == undefined) c.nsfw = false;
-        if (c.lastMessageID == undefined) c.lastMessageID = '';
-        if (rows.length < 1) {
-          database.query(`
-            INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID)
-            VALUES ('${c.id}', '${c.name}', ${c.position}, '${c.type}', '${c.topic}', ${c.nsfw}, '${c.lastMessageID}')`
-          );
-          logger.info(`${loggerAdd} Inserted ${c.name} into jabchannels`);
-        } else {
-          database.query(`
-            UPDATE jabchannels SET
-              channelID = '${c.id}',
-              name = '${c.name}',
-              position = ${c.position},
-              type = '${c.type}',
-              topic = '${c.topic}',
-              nsfw = ${c.nsfw},
-              lastMessageID = '${c.lastMessageID}'
-            WHERE id = ${rows[0].id}
-          `);
-          logger.info(`${loggerUpdate} Updated ${c.name} in jabchannels`);
-        }
-        return;
-      }))
-      .catch(err => {
-        logger.error(err);
-        throw err;
-      });
+  updateChannel: (server, channel, status) => {
+    const date = getDate();
+
+    db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${channel.id}'`)
+    .then(rows => {
+      if (channel.topic == undefined) channel.topic = '';
+      if (channel.nsfw == undefined) channel.nsfw = false;
+      if (channel.lastMessageID == undefined) channel.lastMessageID = '';
+      if (rows.length < 1) {
+        database.query(`
+          INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
+          VALUES ('${channel.id}', '${channel.name}', ${channel.position}, '${channel.type}', '${channel.topic}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
+        `);
+        logger.info(`${loggerAdd} Inserted ${channel.name} into jabchannels`);
+      } else {
+        database.query(`
+          UPDATE jabchannels SET
+            channelID = '${channel.id}',
+            name = '${channel.name}',
+            position = ${channel.position},
+            type = '${channel.type}',
+            topic = '${channel.topic}',
+            nsfw = ${channel.nsfw},
+            lastMessageID = '${channel.lastMessageID}',
+            updated = '${date.date}'
+          WHERE id = ${rows[0].id}
+        `);
+        logger.info(`${loggerUpdate} Updated ${channel.name} in jabchannels`);
+      }
+      return rows;
+    })
+    .then((rows) => {
+      let serverChannel = server.channels.get(channel.id);
+      if (status == 'remove' || !serverChannel) {
+        database.query(`
+          UPDATE jabchannels SET
+            updated = '${date.date}',
+            deleted = 1
+          WHERE id = ${rows[0].id}
+        `);
+        logger.info(`${loggerUpdate}${loggerRemove} Updated channel ${channel.name} to deleted`);
+      }
+      return;
+    }))
+    .catch(err => {
+      logger.error(err);
+      throw err;
     });
   },
 
@@ -172,18 +186,14 @@ module.exports = {
   updateChannelDeleted: (server) => {
     db.execute(config, database => database.query(`SELECT * FROM jabchannels`)
     .then(rows => {
-
-      rows.forEach(c => {
+      rows.forEach((c, i) => {
         let id = c.channelID;
         let channel = server.channels.get(id);
-        if (!channel) {
-          database.query(`
-            UPDATE jabchannels SET deleted = true WHERE channelID = ${id}
-          `);
+        if (!channel && rows[i]['deleted'] != 1) {
+          database.query(`UPDATE jabchannels SET deleted = true WHERE channelID = ${id}`);
           logger.info(`${loggerUpdate}${loggerRemove} Updated channel ${id} to deleted`);
         }
       });
-
     }))
     .catch(err => {
       logger.error(err);
@@ -211,8 +221,8 @@ module.exports = {
         if (nickname != null) nicknames.push(nickname);
 
         database.query(`
-          INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted)
-          VALUES ('${member.user.id}', '${member.user.username}', '${member.user.discriminator}', '${nickname}', '${nicknames}', '${member.user.avatar}', ${member.user.bot}, '${member.user.lastMessageID}', ${messageAmount}, '${date.date}', '${member.presence.status}', ${member.deleted})
+          INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted, banned)
+          VALUES ('${member.user.id}', '${member.user.username}', '${member.user.discriminator}', '${nickname}', '${nicknames}', '${member.user.avatar}', ${member.user.bot}, '${member.user.lastMessageID}', ${messageAmount}, '${date.date}', '${member.presence.status}', ${member.deleted}, 0)
         `);
         logger.info(`${loggerAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`);
       } else {
@@ -222,9 +232,45 @@ module.exports = {
         if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
 
         database.query(`
-          UPDATE jabusers SET username = '${member.user.username}', discriminator = '${member.user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${member.user.avatar}', bot = ${member.user.bot}, lastMessageID = '${member.user.lastMessageID}', messageCount = ${messageCount}, updated = '${date.date}', status = '${member.presence.status}', deleted = ${member.deleted} WHERE userID = ${member.user.id}
+          UPDATE jabusers SET username = '${member.user.username}', discriminator = '${member.user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${member.user.avatar}', bot = ${member.user.bot}, lastMessageID = '${member.user.lastMessageID}', messageCount = ${messageCount}, updated = '${date.date}', status = '${member.presence.status}', deleted = ${member.deleted}, banned = 0 WHERE userID = ${member.user.id}
         `);
         logger.info(`${loggerUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`);
+      }
+    }))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+  },
+
+
+  updateMemberBanned: (user, banned) => {
+    const date = getDate();
+    const nickname = null;
+
+    let consoleText = 'unbanned';
+    if (banned) consoleText = 'banned';
+
+    db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${user.id}'`)
+    .then(rows => {
+      let nicknames = [];
+      if (rows.length < 1) {
+        if (nickname != null) nicknames.push(nickname);
+        database.query(`
+          INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted, banned)
+          VALUES ('${user.id}', '${user.username}', '${user.discriminator}', '${nickname}', '${nicknames}', '${user.avatar}', ${user.bot}, '${user.lastMessageID}', 0, '${date.date}', 'offline', 1, ${banned})
+        `);
+        logger.info(`${loggerAdd} Inserted banned ${user.username}'s infos into jabusers`);
+      } else {
+        let messageCount = parseInt(rows[0].messageCount);
+        nicknames = rows[0].nicknames.split(',');
+
+        if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
+
+        database.query(`
+          UPDATE jabusers SET username = '${user.username}', discriminator = '${user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${user.avatar}', bot = ${user.bot}, lastMessageID = '${user.lastMessageID}', messageCount = ${messageCount}, updated = '${date.date}', status = 'offline', deleted = 1, banned = ${banned} WHERE userID = ${user.id}
+        `);
+        logger.info(`${loggerUpdate} Updated banned ${user.username}'s infos in jabusers`);
       }
     }))
     .catch(err => {
@@ -266,6 +312,6 @@ module.exports = {
 
 
   /*************
-  * 
+  *
   *************/
 }

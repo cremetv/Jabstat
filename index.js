@@ -100,11 +100,10 @@ let server;
 client.on('ready', async () => {
   server = client.guilds.get(jabrilID);
 
-  console.log(`************ ${server.memberCount}`);
-
   functions.logServerStats(server);
-  functions.logChannels(server);
-  // if channel isn't present anymore set deleted to true
+  server.channels.forEach(c => {
+    functions.updateChannel(server, c);
+  });
   functions.updateChannelDeleted(server);
   functions.logMemberCount(server);
 
@@ -136,6 +135,22 @@ client.on('message', async message => {
 });
 
 
+client.on('channelCreate', channel => {
+  functions.updateChannel(server, channel, 'create');
+});
+client.on('channelDelete', channel => {
+  functions.updateChannel(server, channel, 'remove');
+});
+client.on('channelUpdate', channel => {
+  functions.updateChannel(server, channel, 'update');
+});
+
+// client.on('guildBanAdd', (guild, user) => {
+//   functions.updateMemberBanned(user, 1);
+// });
+// client.on('guildBanRemove', (guild, user) => {
+//   functions.updateMemberBanned(user, 0);
+// });
 
 client.on('guildMemberAdd', member => {
   functions.logMember(member);
