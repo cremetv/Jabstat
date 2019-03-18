@@ -121,7 +121,7 @@ client.on('ready', async () => {
 client.on('message', async message => {
   const date = getDate();
 
-  functions.logMessageCount();
+  functions.logMessageCount(message);
   functions.logMember(message.member, 1);
 
   let messageArray = message.content.split(/\s+/g);

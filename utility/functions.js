@@ -221,8 +221,44 @@ module.exports = {
         if (nickname != null) nicknames.push(nickname);
 
         database.query(`
-          INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted, banned)
-          VALUES ('${member.user.id}', '${member.user.username}', '${member.user.discriminator}', '${nickname}', '${nicknames}', '${member.user.avatar}', ${member.user.bot}, '${member.user.lastMessageID}', ${messageAmount}, '${date.date}', '${member.presence.status}', ${member.deleted}, 0)
+          INSERT INTO jabusers (userID,
+            username,
+            discriminator,
+            nick,
+            nicknames,
+            avatar,
+            avatarURL,
+            displayColor,
+            displayHexColor,
+            bot,
+            createdAt,
+            createdTimestamp,
+            lastMessageID,
+            messageCount,
+            updated,
+            status,
+            game,
+            deleted,
+            banned)
+          VALUES ('${member.user.id}',
+          '${member.user.username}',
+          '${member.user.discriminator}',
+          '${nickname}',
+          '${nicknames}',
+          '${member.user.avatar}',
+          '${member.user.avatarURL}',
+          ${member.displayColor},
+          '${member.displayHexColor}',
+          ${member.user.bot},
+          '${member.user.createdAt}',
+          '${member.user.createdTimestamp}',
+          '${member.user.lastMessageID}',
+          ${messageAmount},
+          '${date.date}',
+          '${member.presence.status}',
+          '${member.presence.game}',
+          ${member.deleted},
+          0)
         `);
         logger.info(`${loggerAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`);
       } else {
@@ -232,7 +268,26 @@ module.exports = {
         if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
 
         database.query(`
-          UPDATE jabusers SET username = '${member.user.username}', discriminator = '${member.user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${member.user.avatar}', bot = ${member.user.bot}, lastMessageID = '${member.user.lastMessageID}', messageCount = ${messageCount}, updated = '${date.date}', status = '${member.presence.status}', deleted = ${member.deleted}, banned = 0 WHERE userID = ${member.user.id}
+          UPDATE jabusers SET
+            username = '${member.user.username}',
+            discriminator = '${member.user.discriminator}',
+            nick = '${nickname}',
+            nicknames = '${nicknames}',
+            avatar = '${member.user.avatar}',
+            avatarURL = '${member.user.avatarURL}',
+            displayColor = ${member.displayColor},
+            displayHexColor = '${member.displayHexColor}',
+            bot = ${member.user.bot},
+            createdAt = '${member.user.createdAt}',
+            createdTimestamp = '${member.user.createdTimestamp}',
+            lastMessageID = '${member.user.lastMessageID}',
+            messageCount = ${messageCount},
+            updated = '${date.date}',
+            status = '${member.presence.status}',
+            game = '${member.presence.game}',
+            deleted = ${member.deleted},
+            banned = 0
+          WHERE userID = ${member.user.id}
         `);
         logger.info(`${loggerUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`);
       }
@@ -257,8 +312,39 @@ module.exports = {
       if (rows.length < 1) {
         if (nickname != null) nicknames.push(nickname);
         database.query(`
-          INSERT INTO jabusers (userID, username, discriminator, nick, nicknames, avatar, bot, lastMessageID, messageCount, updated, status, deleted, banned)
-          VALUES ('${user.id}', '${user.username}', '${user.discriminator}', '${nickname}', '${nicknames}', '${user.avatar}', ${user.bot}, '${user.lastMessageID}', 0, '${date.date}', 'offline', 1, ${banned})
+          INSERT INTO jabusers
+          (userID,
+            username,
+            discriminator,
+            nick,
+            nicknames,
+            avatar,
+            avatarURL,
+            bot,
+            createdAt,
+            createdTimestamp,
+            lastMessageID,
+            messageCount,
+            updated,
+            status,
+            deleted,
+            banned)
+          VALUES ('${user.id}',
+          '${user.username}',
+          '${user.discriminator}',
+          '${nickname}',
+          '${nicknames}',
+          '${user.avatar}',
+          '${user.avatarURL}',
+          ${user.bot},
+          '${user.createdAt}',
+          '${user.createdTimestamp}',
+          '${user.lastMessageID}',
+          0,
+          '${date.date}',
+          'offline',
+          1,
+          ${banned})
         `);
         logger.info(`${loggerAdd} Inserted banned ${user.username}'s infos into jabusers`);
       } else {
@@ -268,7 +354,23 @@ module.exports = {
         if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
 
         database.query(`
-          UPDATE jabusers SET username = '${user.username}', discriminator = '${user.discriminator}', nick = '${nickname}', nicknames = '${nicknames}', avatar = '${user.avatar}', bot = ${user.bot}, lastMessageID = '${user.lastMessageID}', messageCount = ${messageCount}, updated = '${date.date}', status = 'offline', deleted = 1, banned = ${banned} WHERE userID = ${user.id}
+          UPDATE jabusers SET
+            username = '${user.username}',
+            discriminator = '${user.discriminator}',
+            nick = '${nickname}',
+            nicknames = '${nicknames}',
+            avatar = '${user.avatar}',
+            avatarURL = '${user.avatarURL}',
+            bot = ${user.bot},
+            createdAt = '${user.createdAt}',
+            createdTimestamp = '${user.createdTimestamp}',
+            lastMessageID = '${user.lastMessageID}',
+            messageCount = ${messageCount},
+            updated = '${date.date}',
+            status = 'offline',
+            deleted = 1,
+            banned = ${banned}
+          WHERE userID = ${user.id}
         `);
         logger.info(`${loggerUpdate} Updated banned ${user.username}'s infos in jabusers`);
       }
@@ -283,8 +385,9 @@ module.exports = {
   /*************
   * total message count
   *************/
-  logMessageCount: () => {
+  logMessageCount: (message) => {
     const date = getDate();
+    const userID = message.member.id;
 
     db.execute(config, database => database.query(`SELECT * FROM jabmessageCount WHERE date = '${date.dateSimple}'`)
     .then(rows => {
@@ -300,6 +403,29 @@ module.exports = {
 
         database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
         logger.info(`${loggerUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`);
+      }
+      return;
+    }))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+
+
+    db.execute(config, database => database.query(`SELECT * FROM jabuserMessageCount WHERE userID = '${userID}' AND date = '${date.dateSimple}'`)
+    .then(rows => {
+
+      if (rows.length < 1) {
+        database.query(`
+          INSERT INTO jabuserMessageCount (date, userID, messageCount, updated)
+          VALUES ('${date.dateSimple}', '${userID}', 1, '${date.date}')`
+        );
+        logger.info(`${loggerAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`);
+      } else {
+        let messageCount = parseInt(rows[0].messageCount) + 1;
+
+        database.query(`UPDATE jabuserMessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}'`);
+        logger.info(`${loggerUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`);
       }
       return;
     }))
