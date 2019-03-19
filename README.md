@@ -10,7 +10,7 @@ WIP
 - total invites
 - help command
 - global stat command
-
+- optimize member logging
 
 ## Done:
 - guild stats
