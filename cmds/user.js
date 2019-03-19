@@ -49,7 +49,7 @@ module.exports.run = async(client, message, args, db) => {
           'url': target.user.avatarURL
         },
         'author': {
-          'name': `stats for ${target.displayName}`,
+          'name': `stats for ${target.displayName} (WIP)`,
           'url': `https://ice-creme.de/jabstats/${target.id}`,
           'icon_url': target.user.avatarURL
         },

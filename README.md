@@ -4,12 +4,19 @@ Discord Statistic Bot for Cult of Jabrils
 WIP
 
 ## To Do:
+- most used channel
 - voice minutes
-- user activity
-- nickname alias array
+- most played games
+- total invites
+- help command
+- global stat command
+
 
 ## Done:
-- log guild stats
-- log total messageCount
-- log user messageCount
-- log all channels
+- guild stats
+- total message count
+- total member count
+- user message count
+- user details
+- all channels
+- nicknames
