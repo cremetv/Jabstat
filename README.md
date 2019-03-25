@@ -1,8 +1,6 @@
 # Jabstat
 Discord Statistic Bot for Cult of Jabrils
 
-test
-
 WIP
 
 ## To Do:
