@@ -4,3 +4,5 @@ botsettings.json
 error.log
 combined.log
 *.log
+combined.log
+error.log
