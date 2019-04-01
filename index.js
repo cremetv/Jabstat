@@ -41,6 +41,44 @@ db.execute = ( config, callback ) => {
 
 
 /****************
+* Web
+****************/
+const socket = require('socket.io');
+const express = require('express');
+const http = require('http');
+const hbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const path = require('path');
+
+const app = express();
+app.engine('hbs', hbs({
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  layoutsDir: `${__dirname}/web/layouts`
+}));
+app.set('views', path.join(__dirname, 'web/views'));
+app.set('view engine', 'hbs');
+app.use(express.static(path.join(__dirname, '/web/public')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const server = http.createServer(app).listen(3000, () => {
+  console.log(`Express server listening on port 3000`);
+});
+const io = socket.listen(server);
+
+app.get('/', (req, res) => {
+  res.send('index');
+});
+
+
+io.sockets.on('connection', (socket) => {
+  console.log('user connected');
+});
+
+
+
+/****************
 * Load Events
 ****************/
 fs.readdir("./events/", (err, files) => {
