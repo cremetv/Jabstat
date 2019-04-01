@@ -62,10 +62,10 @@ app.use(express.static(path.join(__dirname, '/web/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const server = http.createServer(app).listen(3000, () => {
+const webServer = http.createServer(app).listen(3000, () => {
   console.log(`Express server listening on port 3000`);
 });
-const io = socket.listen(server);
+const io = socket.listen(webServer);
 
 app.get('/', (req, res) => {
   res.send('index');
