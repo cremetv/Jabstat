@@ -2848,3 +2848,857 @@
 {"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
 {"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
 {"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:05:37","level":"info","service":"user-service"}
+{"message":"Bot started | 1554585740114","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:22:20","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554585834734","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:23:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:24:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:24:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:24:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:24:27","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586038949","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:27:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586065445","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:27:45","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586070637","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:27:50","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:27:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:27:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586135805","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:28:55","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:29:01","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:29:01","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586152340","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:29:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:29:15","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:29:15","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586652818","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:37:32","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:37:37","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:37:37","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586737911","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:38:57","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:39:01","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:39:01","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586765042","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:39:25","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:39:28","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:39:28","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586797530","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:39:57","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:40:01","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:40:01","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554586809988","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:40:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:40:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:40:12","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:40:42","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:40:42","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587050750","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:44:10","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:44:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:44:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587078531","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:44:38","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:44:43","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:44:43","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587156635","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:45:56","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:46:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:46:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:47:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:47:22","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587261421","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:47:41","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:47:43","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:47:43","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:47:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:47:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587339756","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:48:59","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:49:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:49:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:49:24","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:49:24","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587431666","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:50:31","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:50:35","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:50:35","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:50:45","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:50:45","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587464987","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:51:04","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:51:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:51:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:51:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587478835","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:51:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:51:21","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:51:21","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587493266","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:51:33","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:51:34","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:51:34","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:51:38","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:51:38","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587564576","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:52:44","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:52:47","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:52:47","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:52:53","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:52:53","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587605655","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:53:25","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:53:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:53:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587617772","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:53:37","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587660227","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:54:20","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587826548","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:57:06","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:57:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:57:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587838605","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:57:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:57:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:57:22","level":"info","service":"user-service"}
+{"message":"Bot started | 1554587892385","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 6.4.2019 in jabmemberCount @2019-04-06 21:58:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 6.4.2019 in jabmesageCount @2019-04-06 21:58:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 6.4.2019 for creme in jabuserMessageCount @2019-04-06 21:58:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[46m\u001b[30m%s\u001b[0m it's 23:59","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588050389","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted memberCount 7.4.2019 into jabmemberCount @2019-04-06 22:00:50","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted total messageCount 7.4.2019 into jabmesageCount @2019-04-06 22:00:57","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted messageCount 7.4.2019 for creme into jabuserMessageCount @2019-04-06 22:00:57","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588065332","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:01:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:01:07","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:01:07","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588407558","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:06:47","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:06:50","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:06:50","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588417053","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:06:57","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:06:59","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"Bot started | 1554588496832","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:08:16","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588525763","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:08:45","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:08:50","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:08:50","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588549853","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:09:15","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:09:15","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:09:09","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588701301","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:11:41","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:11:46","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:11:46","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588731079","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:12:11","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:12:13","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:12:13","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"Bot started | 1554588745449","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:12:25","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:12:29","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:12:29","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588874936","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:14:34","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554588885115","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:14:45","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:16:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:16:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:16:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:16:12","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589038546","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:17:18","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589055291","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:17:35","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:17:37","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:17:37","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"Bot started | 1554589095311","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:18:15","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589165912","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:19:25","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:19:31","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:19:31","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589182133","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:19:46","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:19:46","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:19:42","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:19:53","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:19:53","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589223558","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:20:23","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:20:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:20:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589294702","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:21:34","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:21:37","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589302378","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:21:42","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589307776","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:21:47","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:21:48","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:21:48","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589334360","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:22:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:22:24","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:22:24","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589431964","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:23:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589834269","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:30:34","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:30:37","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:30:37","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589867533","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:31:07","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589881315","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:31:21","level":"info","service":"user-service"}
+{"message":"Bot started | 1554589886329","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:31:26","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:31:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:31:27","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:31:42","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:31:42","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590018398","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:33:38","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:33:40","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:33:40","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:33:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:33:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:34:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:34:00","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590054032","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:34:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:34:24","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:34:24","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:34:24","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted messageCount 7.4.2019 for Jabstat into jabuserMessageCount @2019-04-06 22:34:24","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:35:05","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted messageCount 7.4.2019 for CheekiKurwa into jabuserMessageCount @2019-04-06 22:35:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated CheekiKurwa's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:35:28","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:35:28","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:39:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:39:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:39:33","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:39:33","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:39:33","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for Jabstat in jabuserMessageCount @2019-04-06 22:39:33","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590388123","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:39:48","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:39:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:39:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590407212","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:40:07","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:40:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:40:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:40:44","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:40:54","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:41:02","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:41:02","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:42:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:42:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated Jabstat's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590810899","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:46:50","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590897608","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:48:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:48:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:48:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590935078","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:48:55","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590942883","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:49:02","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted heppy emote into jabmotes @2019-04-06 22:49:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:49:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:49:09","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554590990159","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:49:50","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:49:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:49:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:53:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:53:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:53:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:53:05","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591348201","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:55:48","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:55:51","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:55:51","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted dancerboi emote into jabmotes @2019-04-06 22:56:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:56:00","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:56:00","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591376225","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:56:16","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:56:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:56:18","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:56:22","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted dancerboi emote into jabmotes @2019-04-06 22:56:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:56:22","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:56:26","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:56:26","level":"info","service":"user-service"}
+{"code":"PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR","fatal":false,"level":"error","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted dancerboi emote into jabmotes @2019-04-06 22:56:46","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:56:46","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:56:46","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted dancerboi emote into jabmotes @2019-04-06 22:57:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:57:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:57:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:57:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:57:17","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:57:31","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:57:31","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591548890","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:59:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591554571","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 22:59:14","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:59:16","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted banhammer emote into jabmotes @2019-04-06 22:59:19","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:59:19","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 22:59:19","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 22:59:16","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591624872","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 23:00:24","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591681883","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 23:01:21","level":"info","service":"user-service"}
+{"message":"Bot started | 1554591722692","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated serverStats","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated general in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test-channel in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated memberCount 7.4.2019 in jabmemberCount @2019-04-06 23:02:02","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated General in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated test in jabchannels","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 23:02:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 23:02:08","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 23:02:13","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 23:02:13","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted PolicePolarApyr emote into jabmotes @2019-04-06 23:02:30","level":"info","service":"user-service"}
+{"message":"\u001b[42m\u001b[30m + \u001b[0m Inserted thonkc emote into jabmotes @2019-04-06 23:02:30","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated total messageCount 7.4.2019 in jabmesageCount @2019-04-06 23:02:30","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated messageCount 7.4.2019 for creme in jabuserMessageCount @2019-04-06 23:02:30","level":"info","service":"user-service"}
+{"message":"\u001b[103m\u001b[30m | \u001b[0m Updated creme's messageCount & infos in jabusers","level":"info","service":"user-service"}

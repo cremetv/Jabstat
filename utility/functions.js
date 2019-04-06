@@ -433,7 +433,30 @@ module.exports = {
       logger.error(err);
       throw err;
     });
-  }
+  },
+
+
+  insertEmote: (emote, animated) => {
+    const date = getDate();
+    (animated === undefined) ? animated = false : null;
+
+    db.execute(config, database => database.query(`SELECT * FROM jabmotes WHERE emoteid = '${emote[2]}'`)
+    .then(rows => {
+
+      if (rows.length < 1) {
+        database.query(`
+          INSERT INTO jabmotes (name, emoteid, animated, updated)
+          VALUES ('${emote[1]}', '${emote[2]}', ${animated}, '${date.date}')`
+        );
+        logger.info(`${loggerAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
+      }
+      return;
+    }))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+  },
 
 
 
