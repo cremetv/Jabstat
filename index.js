@@ -165,6 +165,21 @@ client.on('ready', async () => {
 
 
 client.on('message', async message => {
+  // check for emotes in message
+  console.log(message.content);
+  let found = message.content.match(/<a?:([^:]*):([^>]*)>/g);
+
+  if (found != null) {
+    for (let i = 0; i < found.length; i++) {
+      let emote = found[i].match(/<a?:([^:]*):([^>]*)>/i);
+      console.log(emote);
+      emote[0].startsWith('<a') ? functions.insertEmote(emote, true) : functions.insertEmote(emote);
+    }
+  }
+
+  // check for animated emotes
+
+
   const date = getDate();
 
   functions.logMessageCount(message);
