@@ -68,7 +68,10 @@ const webServer = http.createServer(app).listen(3000, () => {
 const io = socket.listen(webServer);
 
 app.get('/', (req, res) => {
-  res.send('index');
+  // res.send('index');
+  res.render('index', {
+    title: 'index'
+  });
 });
 
 
