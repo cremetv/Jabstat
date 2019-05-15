@@ -13,7 +13,8 @@ module.exports.run = async(client, message, args, db) => {
 
   let totalMessages,
       lastMonthMessages,
-      lastUpdated;
+      lastUpdated,
+      emoteCount;
 
   if (target == null || target == undefined) return message.channel.send('no user found');
 
@@ -32,8 +33,58 @@ module.exports.run = async(client, message, args, db) => {
       AND updated >= NOW() - INTERVAL 30 DAY`)
     .then(rows => {
       lastMonthMessages = rows[0].mMessages;
+      return;
     })
     .then(() => {
+      // database.query(`
+      //   SELECT SUM(count) AS emotecount
+      //   FROM jabmotesCount
+      //   WHERE userID = '${target.id}'
+      //   AND updated >= NOW() - INTERVAL 30 DAY`)
+      // .then(rows => {
+      //   emoteCount = rows[0].emotecount;
+      // })
+      // .then(() => {
+      //   let joinedAt = new Date(target.joinedTimestamp);
+      //   let createdAt = new Date(target.user.createdTimestamp);
+      //
+      //   const embed = {
+      //     'description': `statistics for **${target.user.username}**#**${target.user.discriminator}**`,
+      //     'url': `https://ice-creme.de/jabstats/${target.id}`,
+      //     'color': 15277667,
+      //     'footer': {
+      //       'icon_url': client.user.avatarURL,
+      //       'text': `beep boop | last updated: ${lastUpdated.getFullYear()}-${('0' + (lastUpdated.getMonth() + 1)).slice(-2)}-${('0' + lastUpdated.getDate()).slice(-2)} ${('0' + lastUpdated.getHours()).slice(-2)}:${('0' + lastUpdated.getMinutes()).slice(-2)}:${('0' + lastUpdated.getSeconds()).slice(-2)}`
+      //     },
+      //     'thumbnail': {
+      //       'url': target.user.avatarURL
+      //     },
+      //     'author': {
+      //       'name': `stats for ${target.displayName} (WIP)`,
+      //       'url': `https://ice-creme.de/jabstats/${target.id}`,
+      //       'icon_url': target.user.avatarURL
+      //     },
+      //     'fields': [
+      //       {
+      //         'name': 'Messages',
+      //         'value': `• **${totalMessages}** total\n• **${lastMonthMessages}** last 30 days`
+      //       },
+      //       {
+      //         'name': 'Emote usage',
+      //         'value': `• **${emoteCount}** emotes used in the last 30 days`
+      //       },
+      //       {
+      //         'name': 'Misc',
+      //         'value': `• Joined Server on:  **${('0' + (joinedAt.getMonth() + 1)).slice(-2)}.${('0' + joinedAt.getDate()).slice(-2)}.${joinedAt.getFullYear()}**\n• Account created: **${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${('0' + createdAt.getDate()).slice(-2)}.${createdAt.getFullYear()}**`
+      //       },
+      //       {
+      //         'name': 'Links',
+      //         'value': `[View Profile](https://ice-creme.de/jabstats/${target.id}) | [General Server statistics](https://ice-creme.de/jabstats)`
+      //       }
+      //     ]
+      //   };
+      //   message.channel.send({ embed });
+      // });
       let joinedAt = new Date(target.joinedTimestamp);
       let createdAt = new Date(target.user.createdTimestamp);
 
@@ -58,6 +109,10 @@ module.exports.run = async(client, message, args, db) => {
             'name': 'Messages',
             'value': `• **${totalMessages}** total\n• **${lastMonthMessages}** last 30 days`
           },
+          // {
+          //   'name': 'Emote usage',
+          //   'value': `• **${emoteCount}** emotes used in the last 30 days`
+          // },
           {
             'name': 'Misc',
             'value': `• Joined Server on:  **${('0' + (joinedAt.getMonth() + 1)).slice(-2)}.${('0' + joinedAt.getDate()).slice(-2)}.${joinedAt.getFullYear()}**\n• Account created: **${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${('0' + createdAt.getDate()).slice(-2)}.${createdAt.getFullYear()}**`
@@ -69,6 +124,7 @@ module.exports.run = async(client, message, args, db) => {
         ]
       };
       message.channel.send({ embed });
+
     });
     return;
   }))

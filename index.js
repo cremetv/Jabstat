@@ -173,7 +173,8 @@ client.on('message', async message => {
     for (let i = 0; i < found.length; i++) {
       let emote = found[i].match(/<a?:([^:]*):([^>]*)>/i);
       console.log(emote);
-      emote[0].startsWith('<a') ? functions.insertEmote(emote, true) : functions.insertEmote(emote);
+      // emote[0].startsWith('<a') ? functions.insertEmote(emote, true) : functions.insertEmote(emote);
+      emote[0].startsWith('<a') ? functions.logEmote(message, emote, true) : functions.logEmote(message, emote);
     }
   }
 

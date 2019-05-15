@@ -436,27 +436,72 @@ module.exports = {
   },
 
 
-  insertEmote: (emote, animated) => {
+
+  logEmote: (message, emote, animated) => {
     const date = getDate();
     (animated === undefined) ? animated = false : null;
+    let emoteID;
+    const userID = message.member.id;
+    console.log('=========================');
 
-    db.execute(config, database => database.query(`SELECT * FROM jabmotes WHERE emoteid = '${emote[2]}'`)
-    .then(rows => {
+    const checkEmote = new Promise(function(res, rej) {
+      db.execute(config, database => database.query(`SELECT * FROM jabmotes WHERE emoteID = '${emote[2]}'`)
+      .then(rows => {
 
-      if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabmotes (name, emoteid, animated, updated)
-          VALUES ('${emote[1]}', '${emote[2]}', ${animated}, '${date.date}')`
-        );
-        logger.info(`${loggerAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
-      }
-      return;
-    }))
-    .catch(err => {
-      logger.error(err);
-      throw err;
+        if (rows.length < 1) {
+          console.log('doesnt exist');
+          database.query(`
+            INSERT INTO jabmotes (name, emoteID, animated, updated)
+            VALUES ('${emote[1]}', '${emote[2]}', ${animated}, '${date.date}')`
+          ).then(result => {
+            console.log('result: ' + result.insertId);
+            emoteID = result.insertId;
+            res(emoteID);
+          });
+          logger.info(`${loggerAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
+        } else {
+          console.log('already exist');
+          emoteID = rows[0].id;
+          res(emoteID);
+        }
+      }))
+      .catch(err => {
+        logger.error(err);
+        throw err;
+      });
     });
-  },
+
+    checkEmote.then(emoteID => {
+      console.log('emoteid: ' + emoteID);
+
+      db.execute(config, database => database.query(`SELECT * FROM jabmotesCount WHERE userID = '${userID}' AND date = '${date.dateSimple}' AND emoteID = ${emoteID}`)
+      .then(rows => {
+
+        if (rows.length < 1) {
+          database.query(`
+            INSERT INTO jabmotesCount (date, userID, emoteID, count, updated)
+            VALUES ('${date.dateSimple}', '${userID}', ${emoteID}, 1, '${date.date}')`
+          );
+          logger.info(`${loggerAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`);
+        } else {
+          let count = parseInt(rows[0].count) + 1;
+
+          database.query(`UPDATE jabmotesCount SET count = ${count}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}' AND emoteID = ${emoteID}`);
+          logger.info(`${loggerUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`);
+        }
+        return;
+      }))
+      .catch(err => {
+        logger.error(err);
+        throw err;
+      });
+
+      console.log('=========================');
+    }, err => {
+      logger.error(err);
+      console.log(err);
+    });
+  }
 
 
 
