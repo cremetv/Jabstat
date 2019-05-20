@@ -233,5 +233,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   functions.logMemberCount(server);
 });
 
+client.on('error', console.error);
+
 // login
 client.login(botsettings.token);
