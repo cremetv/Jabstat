@@ -11,6 +11,8 @@ WIP
 - help command
 - global stat command
 - optimize member logging
+- contest command
+- contest admin interface
 
 ## Done:
 - guild stats
