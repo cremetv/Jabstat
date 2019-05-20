@@ -21,7 +21,7 @@ module.exports.run = async(client, message, args, db) => {
       contestType = rows[0].type;
       contestVisibility = rows[0].visibility;
 
-      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${args[0]}'`)
+      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${args[0]}' ORDER BY startdate`)
       .then(rows => {
 
         if (rows.length < 1) {
@@ -43,7 +43,7 @@ module.exports.run = async(client, message, args, db) => {
         let embed = new Discord.RichEmbed()
         .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
         .setTitle(contestName)
-        .setDescription(`${contestDescription}\nThis is a ${contestType} contest`)
+        .setDescription(`${contestDescription}\n\nThis is a ${contestType} contest`)
         .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
         .addBlankField()
         .addField('Start', startdateStr, true)
