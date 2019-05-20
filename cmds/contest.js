@@ -36,9 +36,14 @@ module.exports.run = async(client, message, args, db) => {
 
           for (let i = 0; i < rows.length; i++) {
             let themeStart = new Date(rows[i].startdate);
+            let themeEnd = new Date(rows[i].enddate);
             // if the startdate of the theme is in the future && its a hidden contest hide the theme
             if (themeStart > currentDate && contestVisibility == 'hidden') {
               themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+            } else if (themeEnd < currentDate) {
+              themes.push(`- ~~${rows[i].name}~~`);
+            } else if (themeStart <= currentDate && themeEnd >= currentDate) {
+              themes.push(`- __**${rows[i].name}**__`);
             } else {
               themes.push(`- ${rows[i].name}`);
             }
@@ -80,6 +85,8 @@ module.exports.run = async(client, message, args, db) => {
         // if the contest enddate is in the past -> line through
         if (contestEndDate < currentDate) {
           contests.push(`\`${rows[i].id}\` | \t~~${rows[i].name}~~`);
+        } else if (contestStartDate <= currentDate && contestEndDate >= currentDate) {
+          contests.push(`\`${rows[i].id}\` | \t__**${rows[i].name}**__`);
         } else {
           contests.push(`\`${rows[i].id}\` | \t${rows[i].name}`);
         }
