@@ -7,11 +7,15 @@ module.exports.run = async(client, message, args, db) => {
 
   let startdate, enddate, contestName, contestDescription, contestType, contestVisibility, typeImage;
   let themes = [];
+  let participants = [];
 
   let currentDate = new Date();
 
+  // no arg => show current contest Or list if no current contests available
   if (!cmd) {
     message.channel.send('send current contest theme');
+
+  // contest ID => show contest details
   } else if (/^\d+$/.test(cmd)) {
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
     .then(rows => {
@@ -37,12 +41,15 @@ module.exports.run = async(client, message, args, db) => {
           for (let i = 0; i < rows.length; i++) {
             let themeStart = new Date(rows[i].startdate);
             let themeEnd = new Date(rows[i].enddate);
+
             // if the startdate of the theme is in the future && its a hidden contest hide the theme
             if (themeStart > currentDate && contestVisibility == 'hidden') {
               themes.push('- ' + '\\*'.repeat(rows[i].name.length));
             } else if (themeEnd < currentDate) {
+              // if the theme is already over => line through
               themes.push(`- ~~${rows[i].name}~~`);
             } else if (themeStart <= currentDate && themeEnd >= currentDate) {
+              // if the theme is right now => bold & underlined
               themes.push(`- __**${rows[i].name}**__`);
             } else {
               themes.push(`- ${rows[i].name}`);
@@ -51,17 +58,75 @@ module.exports.run = async(client, message, args, db) => {
 
         }
 
-        let embed = new Discord.RichEmbed()
-        .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
-        .setTitle(contestName)
-        .setDescription(`${contestDescription}\n\n*This is a ${contestType} contest*`)
-        .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
-        .addBlankField()
-        .addField('Start', startdateStr, true)
-        .addField('Deadline', enddateStr, true)
-        .addField('Themes:', `${themes.join('\n')}`)
-        .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
-        message.channel.send({embed: embed});
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
+        .then(rows => {
+
+          let getParticipants = new Promise((res, rej) => {
+            for (let i = 0; i < rows.length; i++) {
+              let participantID = rows[i].userID;
+              let participantSubmissionLink = rows[i].submissionLink
+
+              let getUser = new Promise((res1, rej1) => {
+                db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
+                .then(rows => {
+                  participants[rows[0].username] = participantSubmissionLink;
+                  res1();
+                }))
+                .catch(err => {
+                  throw err;
+                });
+              });
+
+
+              getUser.then(() => {
+                res();
+              }, (err) => {
+                console.error(err);
+              });
+            } // loop users
+          });
+
+
+          getParticipants.then(() => {
+            console.log('participants:');
+            console.log(participants);
+
+            // contest detail embed
+            let embed = new Discord.RichEmbed()
+            .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+            .setTitle(contestName)
+            .setDescription(`${contestDescription}\n\n*This is a ${contestType} contest*`)
+            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+            .addBlankField()
+            .addField('Start', startdateStr, true)
+            .addField('Deadline', enddateStr, true)
+            .addField('Themes:', `${themes.join('\n')}`)
+            .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
+
+            let participantString = [];
+
+            for (let key in participants) {
+              if (participants.hasOwnProperty(key)) {
+                participantString.push(`[${key}](${participants[key]})`);
+              }
+            }
+
+            // contest submission list
+            let participantEmbed = new Discord.RichEmbed()
+            .setDescription('click on the names to see the submission')
+            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+            .addField('Submissions:', `- ${participantString.join('\n- ')}`)
+            .setFooter(`beep boop`, client.user.avatarURL);
+
+            message.channel.send({embed: embed}).then(() => {
+              message.channel.send({embed: participantEmbed});
+            });
+          });
+
+        }))
+        .catch(err => {
+          throw err;
+        });
 
         return;
       }))
@@ -72,7 +137,64 @@ module.exports.run = async(client, message, args, db) => {
     .catch(err => {
       throw err;
     });
-  } else if (cmd == 'list') {
+
+  // submit something
+} else if (cmd == 'submit') {
+  // >contest submit contestID imageLink
+  // adds users submission to the contest list
+  let contestID = args[1];
+  // let submission = args[2];
+  let attachments = message.attachments;
+  let userDiscordID = message.author.id;
+  let submission;
+
+  attachments.forEach(att => {
+    let url = att.url;
+    console.log(url);
+    submission = url;
+  });
+
+  let msgGuildID = message.guild.id;
+  let msgChannelID = message.channel.id;
+  let msgID = message.id;
+  let submissionLink = `https://discordapp.com/channels/${msgGuildID}/${msgChannelID}/${msgID}`;
+
+  if (isNaN(contestID)) return message.channel.send('please provide a proper contestID');
+  if (!submission) return message.channel.send('please add an attachment to your submission');
+
+  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
+  .then(rows => {
+    let userID = rows[0].id;
+    let username = rows[0].username;
+
+    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+    .then(rows => {
+      if (rows.length > 0) {
+        message.channel.send('you already submitted something to this contest. You can delete it with `>contest submitdelete`')
+        // message.delete(); // lacking permissions
+        return;
+      }
+
+      database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestID}', ${userID}, '${submission}', '${submissionLink}')`);
+      message.react("👍");
+      console.log(`added ${username}'s submission to contest ${cmd}'`);
+
+    }))
+    .catch(err => {
+      throw err;
+    });
+  }))
+  .catch(err => {
+    throw err;
+  });
+
+  // remove submit
+} else if (cmd == 'submitdelete') {
+  // >contest deleteSubmit contestID
+  // removes users submission from contest
+
+  // contest list
+} else if (cmd == 'list') {
     let contests = [];
     db.execute(config, database => database.query(`SELECT * FROM contest ORDER BY startdate`)
     .then(rows => {
@@ -107,6 +229,8 @@ module.exports.run = async(client, message, args, db) => {
     .catch(err => {
       throw err;
     });
+
+  // contest help
   } else if (cmd == 'help') {
     message.channel.send('help command');
   } else {
