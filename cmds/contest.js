@@ -62,34 +62,36 @@ module.exports.run = async(client, message, args, db) => {
         .then(rows => {
 
           let getParticipants = new Promise((res, rej) => {
-            for (let i = 0; i < rows.length; i++) {
-              let participantID = rows[i].userID;
-              let participantSubmissionLink = rows[i].submissionLink
+            if (rows.length > 0) {
+              for (let i = 0; i < rows.length; i++) {
+                let participantID = rows[i].userID;
+                let participantSubmissionLink = rows[i].submissionLink
 
-              let getUser = new Promise((res1, rej1) => {
-                db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
-                .then(rows => {
-                  participants[rows[0].username] = participantSubmissionLink;
-                  res1();
-                }))
-                .catch(err => {
-                  throw err;
+                let getUser = new Promise((res1, rej1) => {
+                  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
+                  .then(rows => {
+                    participants[rows[0].username] = participantSubmissionLink;
+                    res1();
+                  }))
+                  .catch(err => {
+                    throw err;
+                  });
                 });
-              });
 
 
-              getUser.then(() => {
-                res();
-              }, (err) => {
-                console.error(err);
-              });
-            } // loop users
+                getUser.then(() => {
+                  res();
+                }, (err) => {
+                  console.error(err);
+                });
+              } // loop users
+            } else {
+              res();
+            }
           });
 
 
           getParticipants.then(() => {
-            console.log('participants:');
-            console.log(participants);
 
             // contest detail embed
             let embed = new Discord.RichEmbed()
@@ -190,8 +192,30 @@ module.exports.run = async(client, message, args, db) => {
 
   // remove submit
 } else if (cmd == 'submitdelete') {
-  // >contest deleteSubmit contestID
+  // >contest submitdelete contestID
   // removes users submission from contest
+  let userDiscordID = message.author.id;
+  let contestID = args[1];
+
+  if (!contestID) return message.channel.send('please provide a contest ID');
+
+  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
+  .then(rows => {
+    let userID = rows[0].id;
+
+    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+    .then(rows => {
+      if (rows.length < 1) return message.channel.send('you dont have a submission for this contest');
+      database.query(`DELETE FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`);
+      message.channel.send('submission deleted!');
+    }))
+    .catch(err => {
+      throw err;
+    });
+  }))
+  .catch(err => {
+    throw err;
+  });
 
   // contest list
 } else if (cmd == 'list') {
