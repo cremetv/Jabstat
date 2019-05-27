@@ -148,7 +148,7 @@ module.exports.run = async(client, message, args, db) => {
   // let submission = args[2];
   let attachments = message.attachments;
   let userDiscordID = message.author.id;
-  let submission;
+  let submission, contestStart, contestEnd;
 
   attachments.forEach(att => {
     let url = att.url;
@@ -161,33 +161,81 @@ module.exports.run = async(client, message, args, db) => {
   let msgID = message.id;
   let submissionLink = `https://discordapp.com/channels/${msgGuildID}/${msgChannelID}/${msgID}`;
 
-  if (isNaN(contestID)) return message.channel.send('please provide a proper contestID');
-  if (!submission) return message.channel.send('please add an attachment to your submission');
+  if (isNaN(contestID)) {
+    message.reply('please provide a proper contestID');
+    message.delete();
+    return;
+  }
 
-  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
-  .then(rows => {
-    let userID = rows[0].id;
-    let username = rows[0].username;
+  if (!submission) {
+    message.reply('please add an attachment to your submission');
+    message.delete();
+    return;
+  }
 
-    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+  // check if contest is currently active
+  let checkContest = new Promise((res, rej) => {
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestID}'`)
     .then(rows => {
-      if (rows.length > 0) {
-        message.channel.send('you already submitted something to this contest. You can delete it with `>contest submitdelete`')
-        // message.delete(); // lacking permissions
+      if (rows.length < 1) {
+        message.channel.send(`There is no contest with the ID ${contestID}`);
+        message.delete();
         return;
       }
 
-      database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestID}', ${userID}, '${submission}', '${submissionLink}')`);
-      message.react("👍");
-      console.log(`added ${username}'s submission to contest ${cmd}'`);
-
+      contestStart = rows[0].startdate;
+      contestEnd = rows[0].enddate;
+      res(contestStart, contestEnd);
     }))
     .catch(err => {
       throw err;
     });
-  }))
-  .catch(err => {
-    throw err;
+  });
+
+  checkContest.then((contestStart, contestEnd) => {
+
+    console.log(`currentDate: ${currentDate}`);
+    console.log(`contestStart: ${contestStart}`);
+    console.log(`contestEnd: ${contestEnd}`);
+
+    // if contest starts in the future
+    if (contestStart > currentDate) {
+      message.channel.send('This contest didn\'t even start yet.');
+      message.delete();
+      return;
+    // if contest is already closed
+    } else if (contestEnd < currentDate) {
+      message.channel.send('Too late. This contest is already over :sad_cett:');
+      message.delete();
+      return;
+    // go on
+    } else {
+      db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
+      .then(rows => {
+        let userID = rows[0].id;
+        let username = rows[0].username;
+
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+        .then(rows => {
+          if (rows.length > 0) {
+            message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete ID`')
+            message.delete(); // lacking permissions
+            return;
+          }
+
+          database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestID}', ${userID}, '${submission}', '${submissionLink}')`);
+          message.react("👍");
+          console.log(`added ${username}'s submission to contest ${cmd}'`);
+
+        }))
+        .catch(err => {
+          throw err;
+        });
+      }))
+      .catch(err => {
+        throw err;
+      });
+    }
   });
 
   // remove submit
@@ -259,6 +307,7 @@ module.exports.run = async(client, message, args, db) => {
     message.channel.send('help command');
   } else {
     message.channel.send('type `>contest help` for more informations');
+    message.delete();
   }
 
 }
