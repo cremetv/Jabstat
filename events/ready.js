@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = (client) => {
-  console.log(consoleLog, `Bot is ready! ${client.user.username}`);
+  console.log(consoleLog, `${client.user.username} is ready to steal your data >:)`);
   logger.info(`Bot started | ${Date.now()}`);
 
   let activity = [
