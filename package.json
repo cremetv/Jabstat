@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/cremetv/Jabstat#readme",
   "dependencies": {
+    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",

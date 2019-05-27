@@ -61,6 +61,7 @@ app.use(express.static(path.join(__dirname, '/web/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 const webServer = http.createServer(app).listen(3000, () => {
   console.log(`Express server listening on port 3000`);
 });
@@ -73,9 +74,34 @@ app.get('/', (req, res) => {
   });
 });
 
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
+const hash = bcrypt.hashSync('svsuccs', salt);
+
+
+app.get('/contest', (req, res) => {
+  res.render('contest', {
+    title: 'contest',
+    pw: 'svsuccs'
+  });
+});
+
 
 io.sockets.on('connection', (socket) => {
   console.log('user connected');
+
+  socket.on('verify', (data) => {
+
+    console.log(`received pw: ${data.pw}`);
+    console.log(`hash: ${hash}`);
+    console.log(bcrypt.compareSync(data.pw, hash));
+
+    if (bcrypt.compareSync(data.pw, hash)) {
+      console.log('logged in!');
+    } else {
+      console.log('wrong pw!');
+    }
+  });
 });
 
 
