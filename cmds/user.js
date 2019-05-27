@@ -90,7 +90,8 @@ module.exports.run = async(client, message, args, db) => {
 
       const embed = {
         'description': `statistics for **${target.user.username}**#**${target.user.discriminator}**`,
-        'url': `https://ice-creme.de/jabstats/${target.id}`,
+        // 'url': `https://ice-creme.de/jabstats/${target.id}`,
+        'url': 'https://jabstats.com/',
         'color': 15277667,
         'footer': {
           'icon_url': client.user.avatarURL,
@@ -101,7 +102,8 @@ module.exports.run = async(client, message, args, db) => {
         },
         'author': {
           'name': `stats for ${target.displayName} (WIP)`,
-          'url': `https://ice-creme.de/jabstats/${target.id}`,
+          // 'url': `https://ice-creme.de/jabstats/${target.id}`,
+          'url': 'https://jabstats.com/',
           'icon_url': target.user.avatarURL
         },
         'fields': [
@@ -119,7 +121,7 @@ module.exports.run = async(client, message, args, db) => {
           },
           {
             'name': 'Links',
-            'value': `[View Profile](https://ice-creme.de/jabstats/${target.id}) | [General Server statistics](https://ice-creme.de/jabstats)`
+            'value': `[View Profile](https://jabstats.com/) | [General Server statistics](https://jabstats.com/)`
           }
         ]
       };

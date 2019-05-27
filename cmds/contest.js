@@ -13,13 +13,10 @@ module.exports.run = async(client, message, args, db) => {
 
   // no arg => show current contest Or list if no current contests available
   if (!cmd) {
-    message.channel.send('send current contest theme');
 
-  // contest ID => show contest details
-  } else if (/^\d+$/.test(cmd)) {
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE NOW() BETWEEN startdate AND enddate`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`Couldn't find a contest with id: ${cmd}`);
+      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
 
       startdate = new Date(rows[0].startdate);
       startdateStr = ('0' + (startdate.getMonth() + 1)).slice(-2) + '/' + ('0' + startdate.getDate()).slice(-2) + '/' + startdate.getFullYear() + ' ' + ('0' + startdate.getHours()).slice(-2) + ':' + ('0' + startdate.getMinutes()).slice(-2);
@@ -140,6 +137,137 @@ module.exports.run = async(client, message, args, db) => {
       throw err;
     });
 
+  // contest ID => show contest details
+  } else if (/^\d+$/.test(cmd)) {
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
+    .then(rows => {
+      if (rows.length < 1) return message.channel.send(`Couldn't find a contest with id: ${cmd}`);
+
+      startdate = new Date(rows[0].startdate);
+      startdateStr = ('0' + (startdate.getMonth() + 1)).slice(-2) + '/' + ('0' + startdate.getDate()).slice(-2) + '/' + startdate.getFullYear() + ' ' + ('0' + startdate.getHours()).slice(-2) + ':' + ('0' + startdate.getMinutes()).slice(-2);
+      enddate = new Date(rows[0].enddate);
+      enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
+
+      contestName = rows[0].name;
+      contestDescription = rows[0].description;
+      contestType = rows[0].type;
+      contestVisibility = rows[0].visibility;
+
+      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${cmd}' ORDER BY startdate`)
+      .then(rows => {
+
+        if (rows.length < 1) {
+          themes.push('not set')
+        } else {
+
+          for (let i = 0; i < rows.length; i++) {
+            let themeStart = new Date(rows[i].startdate);
+            let themeEnd = new Date(rows[i].enddate);
+
+            // if the startdate of the theme is in the future && its a hidden contest hide the theme
+            if (themeStart > currentDate && contestVisibility == 'hidden') {
+              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+            } else if (themeEnd < currentDate) {
+              // if the theme is already over => line through
+              themes.push(`- ~~${rows[i].name}~~`);
+            } else if (themeStart <= currentDate && themeEnd >= currentDate) {
+              // if the theme is right now => bold & underlined
+              themes.push(`- __**${rows[i].name}**__`);
+            } else {
+              themes.push(`- ${rows[i].name}`);
+            }
+          }
+
+        }
+
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
+        .then(rows => {
+
+          let getParticipants = new Promise((res, rej) => {
+            if (rows.length > 0) {
+              for (let i = 0; i < rows.length; i++) {
+                let participantID = rows[i].userID;
+                let participantSubmissionLink = rows[i].submissionLink
+
+                let getUser = new Promise((res1, rej1) => {
+                  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
+                  .then(rows => {
+                    participants[rows[0].username] = participantSubmissionLink;
+                    res1();
+                  }))
+                  .catch(err => {
+                    throw err;
+                  });
+                });
+
+
+                getUser.then(() => {
+                  res();
+                }, (err) => {
+                  console.error(err);
+                });
+              } // loop users
+            } else {
+              res();
+            }
+          });
+
+
+          getParticipants.then(() => {
+
+            let contestTypeStr = '';
+
+            if (themes.length > 1) {
+              contestTypeStr = `\n\n*This is a ${contestType} contest*`;
+            }
+
+            // contest detail embed
+            let embed = new Discord.RichEmbed()
+            .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+            .setTitle(contestName)
+            .setDescription(`${contestDescription}${contestTypeStr}`)
+            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+            .addBlankField()
+            .addField('Start', startdateStr, true)
+            .addField('Deadline', enddateStr, true)
+            .addField('Themes:', `${themes.join('\n')}`)
+            .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
+
+            let participantString = [];
+
+            for (let key in participants) {
+              if (participants.hasOwnProperty(key)) {
+                participantString.push(`[${key}](${participants[key]})`);
+              }
+            }
+
+            // contest submission list
+            let participantEmbed = new Discord.RichEmbed()
+            .setDescription('click on the names to see the submission')
+            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+            .addField('Submissions:', `- ${participantString.join('\n- ')}`)
+            .setFooter(`beep boop`, client.user.avatarURL);
+
+            message.channel.send({embed: embed}).then(() => {
+              message.channel.send({embed: participantEmbed});
+            });
+          });
+
+        }))
+        .catch(err => {
+          throw err;
+        });
+
+        return;
+      }))
+      .catch(err => {
+        throw err;
+      });
+    }))
+    .catch(err => {
+      throw err;
+    });
+
   // submit something
 } else if (cmd == 'submit') {
   // >contest submit contestID imageLink
@@ -218,7 +346,7 @@ module.exports.run = async(client, message, args, db) => {
         db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
         .then(rows => {
           if (rows.length > 0) {
-            message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete ID`')
+            message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete [id]`')
             message.delete(); // lacking permissions
             return;
           }
@@ -270,7 +398,7 @@ module.exports.run = async(client, message, args, db) => {
     let contests = [];
     db.execute(config, database => database.query(`SELECT * FROM contest ORDER BY startdate`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There are no contests :sad_cett:`);
+      if (rows.length < 1) return message.channel.send(`There are no contests <:sad_cett:487733321741107200>`);
 
       for (let i = 0; i < rows.length; i++) {
         let contestStartDate = new Date(rows[i].startdate);
@@ -288,7 +416,7 @@ module.exports.run = async(client, message, args, db) => {
 
       let embed = new Discord.RichEmbed()
       .setAuthor('Contest list')
-      .setDescription('type `>contest ID` to get more informations')
+      .setDescription('type `>contest [id]` to get more informations')
       .addBlankField()
       // add Field "there are currently X contests" OR "there are no contests at the moment"
       .addField('All contests:', `${contests.join('\n')}`)
@@ -302,9 +430,16 @@ module.exports.run = async(client, message, args, db) => {
       throw err;
     });
 
-  // contest help
-  } else if (cmd == 'help') {
-    message.channel.send('help command');
+    // contest help
+  } else if (cmd == 'help' || cmd == 'h') {
+
+    let embed = new Discord.RichEmbed()
+    .setAuthor('Contest help')
+    .setDescription('```MD\n*use >contest or >c*\n\n>contest\n===\nshow the active contest\n\n>contest list\n===\nget a list of all contests\n\n>contest [id]\n===\nget detailed information about that contest\n\n>contest submit [id]\n===\nadd this to an attachment to submit something\n\n>contest submitdelete [id]\n===\ndelete your submission```')
+    .setColor('#3498db')
+    .setFooter(`beep boop`, client.user.avatarURL);
+    message.channel.send({embed: embed});
+
   } else {
     message.channel.send('type `>contest help` for more informations');
     message.delete();
