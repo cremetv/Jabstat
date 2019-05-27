@@ -5,6 +5,10 @@ const Database = require('./utility/database');
 const config = require('./utility/config');
 const winston = require('winston');
 
+const bcrypt = require('bcryptjs');
+const password = botsettings.password;
+const salt = botsettings.salt;
+
 const functions = require('./utility/functions');
 
 const prefix = botsettings.prefix;
@@ -63,7 +67,7 @@ app.use(bodyParser.json());
 
 
 const webServer = http.createServer(app).listen(3000, () => {
-  console.log(`Express server listening on port 3000`);
+  console.log(`Jabstats web interface on port 3000`);
 });
 const io = socket.listen(webServer);
 
@@ -73,10 +77,6 @@ app.get('/', (req, res) => {
     title: 'index'
   });
 });
-
-const bcrypt = require('bcryptjs');
-const salt = bcrypt.genSaltSync(10);
-const hash = bcrypt.hashSync('svsuccs', salt);
 
 
 app.get('/contest', (req, res) => {
@@ -186,6 +186,41 @@ client.on('ready', async () => {
     logger.info(`${consoleLog} it\'s 23:59`);
     functions.logMemberCount(server);
   }, millisTill23);
+
+
+  // store passwords
+  const hash = bcrypt.hashSync(password, salt);
+
+  db.execute(config, database => database.query(`SELECT * FROM passwords`)
+  .then(rows => {
+    if (rows.length < 1) {
+
+      db.execute(config, database => database.query(`INSERT INTO passwords (hash) VALUES ('${hash}')`)
+      .then(rows => {
+        console.log('stored password hash in database');
+      }))
+      .catch(err => {
+        throw err;
+      });
+    } else {
+      console.log('hash already stored');
+      let dbHash = rows[0].hash;
+
+      if (dbHash != hash) {
+        console.log('hash not the same');
+        db.execute(config, database => database.query(`UPDATE passwords SET hash = '${hash}' WHERE id = 1`)
+        .then(rows => {
+          console.log('updated password hash in database');
+        }))
+        .catch(err => {
+          throw err;
+        });
+      }
+    }
+  }))
+  .catch(err => {
+    throw err;
+  });
 });
 
 
