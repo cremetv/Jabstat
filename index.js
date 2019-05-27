@@ -8,6 +8,7 @@ const winston = require('winston');
 const bcrypt = require('bcryptjs');
 const password = botsettings.password;
 const salt = botsettings.salt;
+const hash = bcrypt.hashSync(password, salt);
 
 const functions = require('./utility/functions');
 
@@ -91,10 +92,6 @@ io.sockets.on('connection', (socket) => {
   console.log('user connected');
 
   socket.on('verify', (data) => {
-
-    console.log(`received pw: ${data.pw}`);
-    console.log(`hash: ${hash}`);
-    console.log(bcrypt.compareSync(data.pw, hash));
 
     if (bcrypt.compareSync(data.pw, hash)) {
       console.log('logged in!');
@@ -189,8 +186,6 @@ client.on('ready', async () => {
 
 
   // store passwords
-  const hash = bcrypt.hashSync(password, salt);
-
   db.execute(config, database => database.query(`SELECT * FROM passwords`)
   .then(rows => {
     if (rows.length < 1) {
