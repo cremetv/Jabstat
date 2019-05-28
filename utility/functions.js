@@ -244,10 +244,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${member.user.id}',
-          '${member.user.username}',
+          STRING_ESCAPE('${member.user.username}'),
           '${member.user.discriminator}',
-          '${nickname}',
-          '${nicknames}',
+          STRING_ESCAPE('${nickname}'),
+          STRING_ESCAPE('${nicknames}'),
           '${member.user.avatar}',
           '${member.user.avatarURL}',
           ${member.displayColor},
@@ -272,10 +272,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = '${member.user.username}',
+            username = STRING_ESCAPE('${member.user.username}'),
             discriminator = '${member.user.discriminator}',
-            nick = '${nickname}',
-            nicknames = '${nicknames}',
+            nick = STRING_ESCAPE('${nickname}'),
+            nicknames = STRING_ESCAPE('${nicknames}'),
             avatar = '${member.user.avatar}',
             avatarURL = '${member.user.avatarURL}',
             displayColor = ${member.displayColor},
@@ -333,10 +333,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${user.id}',
-          '${user.username}',
+          STRING_ESCAPE('${user.username}'),
           '${user.discriminator}',
-          '${nickname}',
-          '${nicknames}',
+          STRING_ESCAPE('${nickname}'),
+          STRING_ESCAPE('${nicknames}'),
           '${user.avatar}',
           '${user.avatarURL}',
           ${user.bot},
@@ -358,10 +358,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = '${user.username}',
+            username = STRING_ESCAPE('${user.username}'),
             discriminator = '${user.discriminator}',
-            nick = '${nickname}',
-            nicknames = '${nicknames}',
+            nick = STRING_ESCAPE('${nickname}'),
+            nicknames = STRING_ESCAPE('${nicknames}'),
             avatar = '${user.avatar}',
             avatarURL = '${user.avatarURL}',
             bot = ${user.bot},
