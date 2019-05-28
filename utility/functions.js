@@ -22,6 +22,32 @@ const getDate = () => {
   }
 }
 
+
+function mysql_real_escape_string (str) {
+    return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+        switch (char) {
+            case "\0":
+                return "\\0";
+            case "\x08":
+                return "\\b";
+            case "\x09":
+                return "\\t";
+            case "\x1a":
+                return "\\z";
+            case "\n":
+                return "\\n";
+            case "\r":
+                return "\\r";
+            case "\"":
+            case "'":
+            case "\\":
+            case "%":
+                return "\\"+char; // prepends a backslash to backslash, percent,
+                                  // and double/single quotes
+        }
+    });
+}
+
 /****************
 * Database Connection
 ****************/
@@ -90,14 +116,14 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
-          VALUES ('${server.id}', STRING_ESCAPE('${server.name}', 'json'), '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
+          VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
         `);
         logger.info(`${loggerAdd} Inserted serverStats`);
       } else {
         database.query(`
           UPDATE jabstats SET
             serverID = '${server.id}',
-            name = STRING_ESCAPE('${server.name}', 'json'),
+            name = '${mysql_real_escape_string(server.name)}',
             nameAcronym = '${server.nameAcronym}',
             memberCount = ${server.memberCount},
             available = ${server.available},
@@ -143,17 +169,17 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
-          VALUES ('${channel.id}', STRING_ESCAPE('${channel.name}', 'json'), ${channel.position}, '${channel.type}', STRING_ESCAPE('${channel.topic}', 'json'), ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
+          VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
         `);
         logger.info(`${loggerAdd} Inserted ${channel.name} into jabchannels`);
       } else {
         database.query(`
           UPDATE jabchannels SET
             channelID = '${channel.id}',
-            name = STRING_ESCAPE('${channel.name}', 'json'),
+            name = '${mysql_real_escape_string(channel.name)}',
             position = ${channel.position},
             type = '${channel.type}',
-            topic = STRING_ESCAPE('${channel.topic}', 'json'),
+            topic = '${mysql_real_escape_string(channel.topic)}',
             nsfw = ${channel.nsfw},
             lastMessageID = '${channel.lastMessageID}',
             updated = '${date.date}'
@@ -244,10 +270,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${member.user.id}',
-          STRING_ESCAPE('${member.user.username}', 'json'),
+          '${mysql_real_escape_string(member.user.username)}',
           '${member.user.discriminator}',
-          STRING_ESCAPE('${nickname}', 'json'),
-          STRING_ESCAPE('${nicknames}', 'json'),
+          '${mysql_real_escape_string(nickname)}',
+          '${mysql_real_escape_string(nicknames)}',
           '${member.user.avatar}',
           '${member.user.avatarURL}',
           ${member.displayColor},
@@ -272,10 +298,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = STRING_ESCAPE('${member.user.username}', 'json'),
+            username = '${mysql_real_escape_string(member.user.username)}',
             discriminator = '${member.user.discriminator}',
-            nick = STRING_ESCAPE('${nickname}', 'json'),
-            nicknames = STRING_ESCAPE('${nicknames}', 'json'),
+            nick = '${mysql_real_escape_string(nickname)}',
+            nicknames = '${mysql_real_escape_string(nicknames)}',
             avatar = '${member.user.avatar}',
             avatarURL = '${member.user.avatarURL}',
             displayColor = ${member.displayColor},
@@ -333,10 +359,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${user.id}',
-          STRING_ESCAPE('${user.username}', 'json'),
+          '${mysql_real_escape_string(user.username)}',
           '${user.discriminator}',
-          STRING_ESCAPE('${nickname}', 'json'),
-          STRING_ESCAPE('${nicknames}', 'json'),
+          '${mysql_real_escape_string(nickname)}',
+          '${mysql_real_escape_string(nicknames)}',
           '${user.avatar}',
           '${user.avatarURL}',
           ${user.bot},
@@ -358,10 +384,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = STRING_ESCAPE('${user.username}', 'json'),
+            username = '${mysql_real_escape_string(user.username)}',
             discriminator = '${user.discriminator}',
-            nick = STRING_ESCAPE('${nickname}', 'json'),
-            nicknames = STRING_ESCAPE('${nicknames}', 'json'),
+            nick = '${mysql_real_escape_string(nickname)}',
+            nicknames = '${mysql_real_escape_string(nicknames)}',
             avatar = '${user.avatar}',
             avatarURL = '${user.avatarURL}',
             bot = ${user.bot},
