@@ -132,6 +132,9 @@ module.exports = {
   updateChannel: (server, channel, status) => {
     const date = getDate();
 
+    // ignore some Channels
+    if (channel.id == '489143518716100629' || channel.id == '489146748720119818' || channel.id == '489146790482935808' || channel.id == '581980094373822484' || channel.id == '581980129182613505' || channel.id == '484167556303683585') return;
+
     db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${channel.id}'`)
     .then(rows => {
       if (channel.topic == undefined) channel.topic = '';
