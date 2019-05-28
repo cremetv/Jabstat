@@ -90,14 +90,14 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
-          VALUES ('${server.id}', STRING_ESCAPE('${server.name}'), '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
+          VALUES ('${server.id}', STRING_ESCAPE('${server.name}', 'json'), '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
         `);
         logger.info(`${loggerAdd} Inserted serverStats`);
       } else {
         database.query(`
           UPDATE jabstats SET
             serverID = '${server.id}',
-            name = STRING_ESCAPE('${server.name}'),
+            name = STRING_ESCAPE('${server.name}', 'json'),
             nameAcronym = '${server.nameAcronym}',
             memberCount = ${server.memberCount},
             available = ${server.available},
@@ -143,17 +143,17 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
-          VALUES ('${channel.id}', STRING_ESCAPE('${channel.name}'), ${channel.position}, '${channel.type}', STRING_ESCAPE('${channel.topic}'), ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
+          VALUES ('${channel.id}', STRING_ESCAPE('${channel.name}', 'json'), ${channel.position}, '${channel.type}', STRING_ESCAPE('${channel.topic}', 'json'), ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
         `);
         logger.info(`${loggerAdd} Inserted ${channel.name} into jabchannels`);
       } else {
         database.query(`
           UPDATE jabchannels SET
             channelID = '${channel.id}',
-            name = STRING_ESCAPE('${channel.name}'),
+            name = STRING_ESCAPE('${channel.name}', 'json'),
             position = ${channel.position},
             type = '${channel.type}',
-            topic = STRING_ESCAPE('${channel.topic}'),
+            topic = STRING_ESCAPE('${channel.topic}', 'json'),
             nsfw = ${channel.nsfw},
             lastMessageID = '${channel.lastMessageID}',
             updated = '${date.date}'
@@ -244,10 +244,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${member.user.id}',
-          STRING_ESCAPE('${member.user.username}'),
+          STRING_ESCAPE('${member.user.username}', 'json'),
           '${member.user.discriminator}',
-          STRING_ESCAPE('${nickname}'),
-          STRING_ESCAPE('${nicknames}'),
+          STRING_ESCAPE('${nickname}', 'json'),
+          STRING_ESCAPE('${nicknames}', 'json'),
           '${member.user.avatar}',
           '${member.user.avatarURL}',
           ${member.displayColor},
@@ -272,10 +272,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = STRING_ESCAPE('${member.user.username}'),
+            username = STRING_ESCAPE('${member.user.username}', 'json'),
             discriminator = '${member.user.discriminator}',
-            nick = STRING_ESCAPE('${nickname}'),
-            nicknames = STRING_ESCAPE('${nicknames}'),
+            nick = STRING_ESCAPE('${nickname}', 'json'),
+            nicknames = STRING_ESCAPE('${nicknames}', 'json'),
             avatar = '${member.user.avatar}',
             avatarURL = '${member.user.avatarURL}',
             displayColor = ${member.displayColor},
@@ -333,10 +333,10 @@ module.exports = {
             deleted,
             banned)
           VALUES ('${user.id}',
-          STRING_ESCAPE('${user.username}'),
+          STRING_ESCAPE('${user.username}', 'json'),
           '${user.discriminator}',
-          STRING_ESCAPE('${nickname}'),
-          STRING_ESCAPE('${nicknames}'),
+          STRING_ESCAPE('${nickname}', 'json'),
+          STRING_ESCAPE('${nicknames}', 'json'),
           '${user.avatar}',
           '${user.avatarURL}',
           ${user.bot},
@@ -358,10 +358,10 @@ module.exports = {
 
         database.query(`
           UPDATE jabusers SET
-            username = STRING_ESCAPE('${user.username}'),
+            username = STRING_ESCAPE('${user.username}', 'json'),
             discriminator = '${user.discriminator}',
-            nick = STRING_ESCAPE('${nickname}'),
-            nicknames = STRING_ESCAPE('${nicknames}'),
+            nick = STRING_ESCAPE('${nickname}', 'json'),
+            nicknames = STRING_ESCAPE('${nicknames}', 'json'),
             avatar = '${user.avatar}',
             avatarURL = '${user.avatarURL}',
             bot = ${user.bot},
