@@ -11,6 +11,11 @@ module.exports.run = async(client, message, args, db) => {
 
   let currentDate = new Date();
 
+
+
+
+
+
   // no arg => show current contest Or list if no current contests available
   if (!cmd) {
 
@@ -90,11 +95,17 @@ module.exports.run = async(client, message, args, db) => {
 
           getParticipants.then(() => {
 
+            let contestTypeStr = '';
+
+            if (themes.length > 1) {
+              contestTypeStr = `\n\n*This is a ${contestType} contest*`;
+            }
+
             // contest detail embed
             let embed = new Discord.RichEmbed()
             .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
             .setTitle(contestName)
-            .setDescription(`${contestDescription}\n\n*This is a ${contestType} contest*`)
+            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
             .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
             .addBlankField()
             .addField('Start', startdateStr, true)
@@ -225,7 +236,7 @@ module.exports.run = async(client, message, args, db) => {
             let embed = new Discord.RichEmbed()
             .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
             .setTitle(contestName)
-            .setDescription(`${contestDescription}${contestTypeStr}`)
+            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
             .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
             .addBlankField()
             .addField('Start', startdateStr, true)
