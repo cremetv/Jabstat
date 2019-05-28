@@ -1,0 +1,38 @@
+aside.stats {
+  background: darken($shade, 2%);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat {
+  width: 100%;
+  // border-radius: $br;
+  background: $dark;
+  padding: 1rem;
+  box-shadow: inset 0 0 0 0 $shade;
+
+  + .stat {
+    margin-top: 1rem;
+  }
+
+  &__title {
+    color: $typo;
+    font-size: .8rem;
+    font-weight: $fw-semibold;
+    margin-bottom: .5rem;
+  }
+
+  &__value {
+    color: darken($typo, 5%);
+    font-size: .8rem;
+    font-weight: $fw-normal;
+  }
+
+  &--error {
+    box-shadow: inset .25rem 0 0 0 $error;
+  }
+  &--success {
+    box-shadow: inset .25rem 0 0 0 $success;
+  }
+}

@@ -1,0 +1,143 @@
+aside.sidebar {
+  background: $dark;
+  display: flex;
+  flex-direction: column;
+
+  ul.server-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1;
+    padding: 1rem .5rem;
+    list-style: none;
+
+    li {
+      position: relative;
+      display: block;
+      width: 100%;
+
+      &:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: (1 / 1) * 100%;
+      }
+
+      + li {
+        margin-top: 1rem;
+      }
+
+      &.break {
+        background: $shade;
+        display: block;
+        height: 2px;
+        width: 30px;
+        align-self: center;
+      }
+
+      &.logo {
+        z-index: 0;
+        font-size: 9px;
+        font-weight: $fw-bold;
+        line-height: 15px;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        text-align: center;
+
+        a {
+          &:hover {
+            border-radius: 50%;
+          }
+        }
+
+        &:after {
+          content: '';
+          position: absolute;
+          width: 46px;
+          height: 46px;
+          top: 0;
+          left: 0;
+          border-radius: 50%;
+          transition: opacity .25s $cubic, transform .25s $cubic;
+          z-index: -1;
+        }
+
+        &.online {
+          &:after {
+            background: $success;
+            animation: pulse-animation 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+          }
+        }
+        &.offline {
+          &:after {
+            background: $error;
+            animation: pulse-animation 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+          }
+
+          a {
+            img {
+              filter: saturate(0);
+            }
+          }
+        }
+      }
+
+      &:not(.break):not(.logo):after {
+        content: '';
+        position: absolute;
+        margin: auto;
+        left: -.5rem;
+        top: 0;
+        bottom: 0;
+        height: 5px;
+        width: 5px;
+        background: #fff;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        opacity: 0;
+        transition: height .25s $cubic .25s, opacity .25s $cubic 0s;
+      }
+
+      &.active {
+        a {
+          border-radius: 30%;
+        }
+
+        &:not(.break):not(.logo):after {
+          opacity: 1;
+          height: 40px;
+          transition: height .25s $cubic 0s, opacity .25s $cubic 0s;
+        }
+      }
+
+      a {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: all .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        max-width: 46px;
+        max-height: 46px;
+
+        &:hover {
+          border-radius: 30%;
+        }
+
+        > img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: center;
+        }
+      }
+    }
+  }
+}

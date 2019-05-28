@@ -1,13 +1,115 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+<header>
+  <div class="site-title">
+    Jabstat
+  </div>
+  <div class="server-name">
+    Contests
+  </div>
+</header>
 
-    <input id="password" type="password" name="password">
-    <a href="#!" id="submit">verify</a>
 
-  </body>
-</html>
+<aside class="sidebar">
+  <ul class="server-list">
+    <li class="logo online">
+      <a href="/">
+        <img src="images/bot-logo.png" alt="Drawmania Logo">
+      </a>
+      Jabstat
+    </li>
+    <li class="break"></li>
+    <!-- {{#each servers}}
+    <li>
+      <a href="#!" class="server" data-server="{{this.id}}" data-servername="{{this.name}}">
+        <img src="https://cdn.discordapp.com/icons/{{this.id}}/{{this.icon}}.png" alt="{{this.name}} Icon">
+      </a>
+    </li>
+    {{/each}} -->
+  </ul>
+</aside>
+
+
+<main>
+  <div id="chat" class="chat">
+
+  </div>
+</main>
+
+
+<aside class="stats">
+  <div class="stat stat--messages">
+    <div class="stat__title">
+      Messages
+    </div>
+    <div class="stat__value">
+      0
+    </div>
+  </div>
+
+  <div class="stat test">
+    <div class="stat__title">
+      Stat z
+    </div>
+    <div class="stat__value">
+      513
+    </div>
+  </div>
+
+  <div class="stat stat--error">
+    <div class="stat__title">
+      Error stat
+    </div>
+    <div class="stat__value">
+      0
+    </div>
+  </div>
+
+  <div class="stat stat--success">
+    <div class="stat__title">
+      Success stat
+    </div>
+    <div class="stat__value">
+      16543
+    </div>
+  </div>
+</aside>
+
+
+<div class="user-profile">
+</div>
+
+
+<div class="user-input">
+  <!-- <div class="selection">
+    <div class="option selection--server">
+      <select name="serverId" id="serverId">
+
+      </select>
+    </div>
+
+    <div class="option selection--channel">
+      <select name="channelId" id="channelId">
+
+      </select>
+    </div>
+  </div> -->
+
+  <!-- <div class="input-bar">
+    <input type="text" id="input" name="input" placeholder="Type something">
+    <div class="emoji-wrap">
+      <div class="emoji-btn">x</div>
+      <div class="emoji-box">
+        <ul class="emoji-list">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <a href="#!" class="btn send-btn">send</a>
+  </div> -->
+</div>

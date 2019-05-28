@@ -1,0 +1,39 @@
+header {
+  background: $shade;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid $dark;
+
+  @include breakpoint('m') {
+    background: $main;
+    flex-direction: row;
+    padding: 0 1rem;
+  }
+
+  > div {
+    font-size: .9rem;
+    line-height: 1.5rem;
+    // width: 100%;
+
+    @include breakpoint('m') {
+      font-size: 1rem;
+      line-height: 3rem;
+      // width: auto;
+    }
+  }
+
+  .site-title {
+    color: lighten($typo, 20%);
+    font-weight: $fw-normal;
+  }
+
+  .server-name {
+
+    @include breakpoint('m') {
+      margin-left: 1rem;
+    }
+  }
+}

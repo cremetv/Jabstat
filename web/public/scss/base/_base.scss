@@ -1,0 +1,139 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid:
+  "header" 4rem
+  "main" 1fr
+  "main" 1fr
+  "input" 4rem
+  / 1fr;
+
+  @include breakpoint('m') {
+    grid:
+    "sidebar header header header" 3rem
+    "sidebar main main stats" 1fr
+    "sidebar main main stats" 1fr
+    "user input input stats" 4rem
+    / 70px 1fr 1fr 200px ;
+  }
+}
+
+header {
+  grid-area: header;
+}
+
+aside.sidebar {
+  position: fixed;
+  left: -100vw;
+
+  @include breakpoint('m') {
+    left: unset;
+    position: relative;
+    grid-area: sidebar;
+  }
+}
+
+main {
+  grid-area: main;
+}
+
+aside.stats {
+  position: fixed;
+  right: -100vw;
+
+  @include breakpoint('m') {
+    right: unset;
+    position: relative;
+    grid-area: stats;
+  }
+}
+
+.user-input {
+  grid-area: input;
+}
+
+.user-profile {
+  position: fixed;
+  left: -100vw;
+
+  @include breakpoint('m') {
+    left: unset;
+    position: relative;
+    grid-area: user;
+  }
+}
+
+
+/*
+* General Styles
+*/
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: darken($shade, 4%);
+  border: 1px solid $dark;
+  border-radius: $br;
+  color: lighten($typo, 10%);
+  transition: background .25s $cubic;
+  height: 2rem;
+  padding: 0 1rem;
+  font-size: .8rem;
+  font-weight: $fw-normal;
+
+  &:hover {
+    background: darken($shade, 2%);
+  }
+
+  &:active {
+    background: darken($shade, 6%);
+  }
+}
+
+select {
+  background: $main;
+  border-radius: $br;
+  border: 1px solid $dark;
+  height: 2rem;
+  padding: 0 .5rem;
+
+  &:active, &:focus {
+    outline: none;
+  }
+}
+
+input[type='text'] {
+  background: $light;
+  height: 2rem;
+  border: none;
+  border-radius: $br;
+  color: lighten($typo, 10%);
+  padding: 0 1rem;
+  width: 100%;
+  font-size: .8rem;
+
+  &::placeholder {
+    color: $typo;
+  }
+
+  &:active, &:focus {
+    outline: none;
+  }
+}
