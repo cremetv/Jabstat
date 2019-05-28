@@ -90,14 +90,14 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
-          VALUES ('${server.id}', '${server.name}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
+          VALUES ('${server.id}', STRING_ESCAPE('${server.name}'), '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
         `);
         logger.info(`${loggerAdd} Inserted serverStats`);
       } else {
         database.query(`
           UPDATE jabstats SET
             serverID = '${server.id}',
-            name = '${server.name}',
+            name = STRING_ESCAPE('${server.name}'),
             nameAcronym = '${server.nameAcronym}',
             memberCount = ${server.memberCount},
             available = ${server.available},
@@ -143,17 +143,17 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
-          VALUES ('${channel.id}', '${channel.name}', ${channel.position}, '${channel.type}', '${channel.topic}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
+          VALUES ('${channel.id}', STRING_ESCAPE('${channel.name}'), ${channel.position}, '${channel.type}', STRING_ESCAPE('${channel.topic}'), ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
         `);
         logger.info(`${loggerAdd} Inserted ${channel.name} into jabchannels`);
       } else {
         database.query(`
           UPDATE jabchannels SET
             channelID = '${channel.id}',
-            name = '${channel.name}',
+            name = STRING_ESCAPE('${channel.name}'),
             position = ${channel.position},
             type = '${channel.type}',
-            topic = '${channel.topic}',
+            topic = STRING_ESCAPE('${channel.topic}'),
             nsfw = ${channel.nsfw},
             lastMessageID = '${channel.lastMessageID}',
             updated = '${date.date}'
