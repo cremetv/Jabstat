@@ -15,7 +15,7 @@ const functions = require('./utility/functions');
 const prefix = botsettings.prefix;
 const consoleLog = '\x1b[46m\x1b[30m%s\x1b[0m';
 
-const jabrilID = '343771301405786113';
+const jabrilID = '430932202621108275';
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
