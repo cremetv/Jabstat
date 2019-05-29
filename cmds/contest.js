@@ -115,12 +115,13 @@ module.exports.run = async(client, message, args, db) => {
       enddate = new Date(rows[0].enddate);
       enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
 
+      contestId = rows[0].id;
       contestName = rows[0].name;
       contestDescription = rows[0].description;
       contestType = rows[0].type;
       contestVisibility = rows[0].visibility;
 
-      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${cmd}' ORDER BY startdate`)
+      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${contestId}' ORDER BY startdate`)
       .then(rows => {
 
         if (rows.length < 1) {
@@ -147,14 +148,28 @@ module.exports.run = async(client, message, args, db) => {
 
         }
 
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contestId}'`)
         .then(rows => {
 
-          let getParticipants = new Promise((res, rej) => {
-            if (rows.length > 0) {
-              for (let i = 0; i < rows.length; i++) {
-                let participantID = rows[i].userID;
-                let participantSubmissionLink = rows[i].submissionLink
+          function delay() {
+            return new Promise(resolve => setTimeout(resolve, 300));
+          }
+
+          async function delayedLog(item) {
+            await delay();
+          }
+
+          async function processUsers(array) {
+            // for (const contest in array) {
+            //
+            //   await delayedLog(contest);
+            // }
+
+            if (array.length > 0) {
+              for (let i = 0; i < array.length; i++) {
+
+                let participantID = array[i].userID;
+                let participantSubmissionLink = array[i].submissionLink
 
                 let getUser = new Promise((res1, rej1) => {
                   db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
@@ -169,15 +184,47 @@ module.exports.run = async(client, message, args, db) => {
 
 
                 getUser.then(() => {
-                  res();
+                  await delayedLog(array[i]);
                 }, (err) => {
                   console.error(err);
                 });
-              } // loop users
-            } else {
-              res();
+
+                // await delayedLog(array[i]);
+              }
             }
-          });
+            console.log('done!');
+          } // processContests
+
+          processUsers(rows);
+
+          // let getParticipants = new Promise((res, rej) => {
+          //   if (rows.length > 0) {
+          //     for (let i = 0; i < rows.length; i++) {
+          //       let participantID = rows[i].userID;
+          //       let participantSubmissionLink = rows[i].submissionLink
+          //
+          //       let getUser = new Promise((res1, rej1) => {
+          //         db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
+          //         .then(rows => {
+          //           participants[rows[0].username] = participantSubmissionLink;
+          //           res1();
+          //         }))
+          //         .catch(err => {
+          //           throw err;
+          //         });
+          //       });
+          //
+          //
+          //       getUser.then(() => {
+          //         res();
+          //       }, (err) => {
+          //         console.error(err);
+          //       });
+          //     } // loop users
+          //   } else {
+          //     res();
+          //   }
+          // });
 
 
           getParticipants.then(() => {
@@ -192,13 +239,13 @@ module.exports.run = async(client, message, args, db) => {
             let embed = new Discord.RichEmbed()
             .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
             .setTitle(contestName)
-            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
+            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${contestId}\` to your submission`)
             .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
             .addBlankField()
             .addField('Start', startdateStr, true)
             .addField('Deadline', enddateStr, true)
             .addField('Themes:', `${themes.join('\n')}`)
-            .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
+            .setFooter(`beep boop • contest ID: ${contestId}`, client.user.avatarURL);
 
             let participantString = [];
 
