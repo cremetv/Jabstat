@@ -20,6 +20,28 @@ module.exports.run = async(client, message, args, db) => {
   }
 
 
+  // function delay() {
+  //   return new Promise(resolve => setTimeout(resolve, 300));
+  // }
+  //
+  // async function delayedLog(item) {
+  //   await delay();
+  // }
+  //
+  // async function processContests(array) {
+  //   // for (const contest in array) {
+  //   //
+  //   //   await delayedLog(contest);
+  //   // }
+  //
+  //   for (let i = 0; i < array.length; i++) {
+  //
+  //     await delayedLog(array[i]);
+  //   }
+  //   console.log('done!');
+  // } // processContests
+
+
 
 
 
@@ -248,8 +270,6 @@ module.exports.run = async(client, message, args, db) => {
       } // processContests
 
       processUsers(rows);
-
-      // return;
     }))
     .catch(err => {
       throw err;
@@ -258,43 +278,28 @@ module.exports.run = async(client, message, args, db) => {
 
   // submit something
 } else if (cmd == 'submit') {
-  // >contest submit contestID imageLink
   // adds users submission to the contest list
-  let contestID = args[1];
-  // let submission = args[2];
-  let attachments = message.attachments;
-  let userDiscordID = message.author.id;
+  let contestId = args[1];
   let submission, contestStart, contestEnd;
 
-  attachments.forEach(att => {
-    let url = att.url;
-    console.log(url);
-    submission = url;
+  message.attachments.forEach(att => {
+    submission = att.url;
   });
 
-  let msgGuildID = message.guild.id;
-  let msgChannelID = message.channel.id;
-  let msgID = message.id;
-  let submissionLink = `https://discordapp.com/channels/${msgGuildID}/${msgChannelID}/${msgID}`;
+  let submissionLink = `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
 
-  if (isNaN(contestID)) {
-    message.reply('please provide a proper contestID');
-    message.delete();
-    return;
+  if (isNaN(contestId)) {
+    message.reply('please provide a proper contest Id');
+    return message.delete();
   }
-
-  if (!submission) {
-    message.reply('please add an attachment to your submission');
-    message.delete();
-    return;
-  }
+  if (!submission) return message.reply('please add an attachment to your submission');
 
   // check if contest is currently active
   let checkContest = new Promise((res, rej) => {
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestID}'`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
     .then(rows => {
       if (rows.length < 1) {
-        message.channel.send(`There is no contest with the ID ${contestID}`);
+        message.channel.send(`There is no contest with the ID ${contestId}`);
         message.delete();
         return;
       }
@@ -310,36 +315,29 @@ module.exports.run = async(client, message, args, db) => {
 
   checkContest.then((contestStart, contestEnd) => {
 
-    console.log(`currentDate: ${currentDate}`);
-    console.log(`contestStart: ${contestStart}`);
-    console.log(`contestEnd: ${contestEnd}`);
-
     // if contest starts in the future
     if (contestStart > currentDate) {
       message.channel.send('This contest didn\'t even start yet.');
-      message.delete();
-      return;
+      return message.delete();
     // if contest is already closed
     } else if (contestEnd < currentDate) {
       message.channel.send('Too late. This contest is already over :sad_cett:');
-      message.delete();
-      return;
+      return message.delete();
     // go on
     } else {
-      db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
+      db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
       .then(rows => {
         let userID = rows[0].id;
         let username = rows[0].username;
 
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
         .then(rows => {
           if (rows.length > 0) {
             message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete [id]`')
-            message.delete(); // lacking permissions
-            return;
+            return message.delete();
           }
 
-          database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestID}', ${userID}, '${submission}', '${submissionLink}')`);
+          database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${userID}, '${submission}', '${submissionLink}')`);
           message.react("👍");
           console.log(`added ${username}'s submission to contest ${cmd}'`);
 
@@ -356,21 +354,20 @@ module.exports.run = async(client, message, args, db) => {
 
   // remove submit
 } else if (cmd == 'submitdelete') {
-  // >contest submitdelete contestID
+  // >contest submitdelete contestId
   // removes users submission from contest
-  let userDiscordID = message.author.id;
-  let contestID = args[1];
+  let contestId = args[1];
 
-  if (!contestID) return message.channel.send('please provide a contest ID');
+  if (!contestId) return message.channel.send('please provide a contest ID');
 
-  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${userDiscordID}'`)
+  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
   .then(rows => {
     let userID = rows[0].id;
 
-    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`)
+    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
     .then(rows => {
       if (rows.length < 1) return message.channel.send('you dont have a submission for this contest');
-      database.query(`DELETE FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestID}'`);
+      database.query(`DELETE FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`);
       message.channel.send('submission deleted!');
     }))
     .catch(err => {
