@@ -115,6 +115,7 @@ module.exports.run = async(client, message, args, db) => {
       enddate = new Date(rows[0].enddate);
       enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
 
+      contestID = rows[0].id;
       contestName = rows[0].name;
       contestDescription = rows[0].description;
       contestType = rows[0].type;
@@ -147,7 +148,7 @@ module.exports.run = async(client, message, args, db) => {
 
         }
 
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
+        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contestID}'`)
         .then(rows => {
 
           let getParticipants = new Promise((res, rej) => {
@@ -192,13 +193,13 @@ module.exports.run = async(client, message, args, db) => {
             let embed = new Discord.RichEmbed()
             .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
             .setTitle(contestName)
-            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
+            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${contestID}\` to your submission`)
             .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
             .addBlankField()
             .addField('Start', startdateStr, true)
             .addField('Deadline', enddateStr, true)
             .addField('Themes:', `${themes.join('\n')}`)
-            .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
+            .setFooter(`beep boop • contest ID: ${contestID}`, client.user.avatarURL);
 
             let participantString = [];
 
