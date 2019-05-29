@@ -1,5 +1,6 @@
 const config = module.require('./../utility/config.js');
 const Discord = require('discord.js');
+const functions = require('./../utility/contest');
 
 module.exports.run = async(client, message, args, db) => {
 
@@ -11,6 +12,15 @@ module.exports.run = async(client, message, args, db) => {
 
   let currentDate = new Date();
 
+  const formatDate = (rawDate) => {
+    let date = new Date(rawDate);
+    let dateStr = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    return {
+      date: date,
+      dateStr: dateStr
+    }
+  }
+
 
 
 
@@ -18,6 +28,83 @@ module.exports.run = async(client, message, args, db) => {
 
   // no arg => show current contest Or list if no current contests available
   if (!cmd) {
+
+    functions.getContest(``, (res) => {
+
+      if (res.length < 1) return message.channel.send(`There is currently no contest running.`);
+
+      console.log(`res:`);
+      console.log(res);
+
+      processContests(res);
+
+      function delay() {
+        return new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      async function delayedLog(item) {
+        await delay();
+      }
+
+      async function processContests(array) {
+        // for (const contest in array) {
+        //
+        //   await delayedLog(contest);
+        // }
+
+        for (let i = 0; i < array.length; i++) {
+
+          startdate = formatDate(array[i].startdate);
+          enddate = formatDate(array[i].enddate);
+
+          console.log('====================');
+          console.log(startdate.date);
+          console.log(startdate.dateStr);
+          console.log(enddate.date);
+          console.log(enddate.dateStr);
+          console.log(array[i].name);
+          console.log(array[i].description);
+
+          let themes = [];
+
+          // get contest themes
+          // functions.getThemes(array[i].id, (res) => {
+          //   console.log('themes res:');
+          //   console.log(res);
+          //   if (res.length < 1) {
+          //     themes.push('not set');
+          //   } else {
+          //     for (let i = 0; i < res.length; i++) {
+          //       let themeStart = new Date(res[i].startdate);
+          //       let themeEnd = new Date(res[i].enddate);
+          //
+          //       // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          //       if (themeStart > currentDate && contestVisibility == 'hidden') {
+          //         themes.push('- ' + '\\*'.repeat(res[i].name.length));
+          //       } else if (themeEnd < currentDate) {
+          //         // if the theme is already over => line through
+          //         themes.push(`- ~~${res[i].name}~~`);
+          //       } else if (themeStart <= currentDate && themeEnd >= currentDate) {
+          //         // if the theme is right now => bold & underlined
+          //         themes.push(`- __**${res[i].name}**__`);
+          //       } else {
+          //         themes.push(`- ${res[i].name}`);
+          //       }
+          //     }
+          //   }
+          // });
+          // console.log('themes:');
+          // console.log(themes);
+
+          // get submissions
+          console.log('====================');
+
+          await delayedLog(array[i]);
+        }
+        console.log('done!');
+      } // processContests
+
+    });
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE NOW() BETWEEN startdate AND enddate`)
     .then(rows => {
