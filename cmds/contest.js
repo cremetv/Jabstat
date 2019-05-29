@@ -150,6 +150,8 @@ module.exports.run = async(client, message, args, db) => {
 
         db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contestID}'`)
         .then(rows => {
+          console.log('contestUsers:');
+          console.log(rows);
 
           let getParticipants = new Promise((res, rej) => {
             if (rows.length > 0) {
@@ -208,6 +210,12 @@ module.exports.run = async(client, message, args, db) => {
                 participantString.push(`[${key}](${participants[key]})`);
               }
             }
+
+            console.log('participants');
+            console.log(participants);
+
+            console.log('participant string');
+            console.log(participantString);
 
             // contest submission list
             let participantEmbed = new Discord.RichEmbed()
