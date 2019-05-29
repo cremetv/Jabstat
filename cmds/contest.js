@@ -7,8 +7,8 @@ module.exports.run = async(client, message, args, db) => {
   const cmd = args[0];
 
   let startdate, enddate, contestName, contestDescription, contestType, contestVisibility, typeImage;
-  let themes = [];
-  let participants = [];
+  // let themes = [];
+  // let participants = [];
 
   let currentDate = new Date();
 
@@ -29,14 +29,45 @@ module.exports.run = async(client, message, args, db) => {
   // no arg => show current contest Or list if no current contests available
   if (!cmd) {
 
-    functions.getContest(``, (res) => {
+    let contest, participants = [], themes = [];
 
-      if (res.length < 1) return message.channel.send(`There is currently no contest running.`);
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE NOW() BETWEEN startdate AND enddate`)
+    .then(rows => {
+      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
 
-      console.log(`res:`);
-      console.log(res);
+      startdate = formatDate(rows[0].startdate);
+      enddate = formatDate(rows[0].enddate);
 
-      processContests(res);
+      contest = rows[0];
+
+      return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+    })
+    .then(rows => {
+      if (rows.length < 1) {
+        themes.push('not set');
+      } else {
+        for (let i = 0; i < rows.length; i++) {
+          let themeStart = formatDate(rows[i].startdate);
+          let themeEnd = formatDate(rows[i].enddate);
+
+          // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          if (themeStart.date > currentDate && contestVisibility == 'hidden') {
+            themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+          } else if (themeEnd.date < currentDate) {
+            // if the theme is already over => line through
+            themes.push(`- ~~${rows[i].name}~~`);
+          } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+            // if the theme is right now => bold & underlined
+            themes.push(`- __**${rows[i].name}**__`);
+          } else {
+            themes.push(`- ${rows[i].name}`);
+          }
+        }
+      }
+
+      return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
+    })
+    .then(rows => {
 
       function delay() {
         return new Promise(resolve => setTimeout(resolve, 300));
@@ -46,334 +77,316 @@ module.exports.run = async(client, message, args, db) => {
         await delay();
       }
 
-      async function processContests(array) {
-        // for (const contest in array) {
-        //
-        //   await delayedLog(contest);
-        // }
+      async function processUsers(array) {
 
         for (let i = 0; i < array.length; i++) {
-
-          startdate = formatDate(array[i].startdate);
-          enddate = formatDate(array[i].enddate);
-
-          console.log('====================');
-          console.log(startdate.date);
-          console.log(startdate.dateStr);
-          console.log(enddate.date);
-          console.log(enddate.dateStr);
-          console.log(array[i].name);
-          console.log(array[i].description);
-
-          let themes = [];
-
-          // get contest themes
-          // functions.getThemes(array[i].id, (res) => {
-          //   console.log('themes res:');
-          //   console.log(res);
-          //   if (res.length < 1) {
-          //     themes.push('not set');
-          //   } else {
-          //     for (let i = 0; i < res.length; i++) {
-          //       let themeStart = new Date(res[i].startdate);
-          //       let themeEnd = new Date(res[i].enddate);
-          //
-          //       // if the startdate of the theme is in the future && its a hidden contest hide the theme
-          //       if (themeStart > currentDate && contestVisibility == 'hidden') {
-          //         themes.push('- ' + '\\*'.repeat(res[i].name.length));
-          //       } else if (themeEnd < currentDate) {
-          //         // if the theme is already over => line through
-          //         themes.push(`- ~~${res[i].name}~~`);
-          //       } else if (themeStart <= currentDate && themeEnd >= currentDate) {
-          //         // if the theme is right now => bold & underlined
-          //         themes.push(`- __**${res[i].name}**__`);
-          //       } else {
-          //         themes.push(`- ${res[i].name}`);
-          //       }
-          //     }
-          //   }
-          // });
-          // console.log('themes:');
-          // console.log(themes);
-
-          // get submissions
-          console.log('====================');
+          let participantId = array[i].userID;
+          let participantSubmissionLink = array[i].submissionLink;
+          db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
+          .then(rows => {
+            participants[rows[0].username] = participantSubmissionLink;
+          }))
+          .catch(err => {
+            throw err;
+          });
 
           await delayedLog(array[i]);
         }
-        console.log('done!');
-      } // processContests
 
-    });
+        let contestTypeStr = '';
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE NOW() BETWEEN startdate AND enddate`)
-    .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
-
-      startdate = new Date(rows[0].startdate);
-      startdateStr = ('0' + (startdate.getMonth() + 1)).slice(-2) + '/' + ('0' + startdate.getDate()).slice(-2) + '/' + startdate.getFullYear() + ' ' + ('0' + startdate.getHours()).slice(-2) + ':' + ('0' + startdate.getMinutes()).slice(-2);
-      enddate = new Date(rows[0].enddate);
-      enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
-
-      contestID = rows[0].id;
-      contestName = rows[0].name;
-      contestDescription = rows[0].description;
-      contestType = rows[0].type;
-      contestVisibility = rows[0].visibility;
-
-      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${cmd}' ORDER BY startdate`)
-      .then(rows => {
-
-        if (rows.length < 1) {
-          themes.push('not set')
-        } else {
-
-          for (let i = 0; i < rows.length; i++) {
-            let themeStart = new Date(rows[i].startdate);
-            let themeEnd = new Date(rows[i].enddate);
-
-            // if the startdate of the theme is in the future && its a hidden contest hide the theme
-            if (themeStart > currentDate && contestVisibility == 'hidden') {
-              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
-            } else if (themeEnd < currentDate) {
-              // if the theme is already over => line through
-              themes.push(`- ~~${rows[i].name}~~`);
-            } else if (themeStart <= currentDate && themeEnd >= currentDate) {
-              // if the theme is right now => bold & underlined
-              themes.push(`- __**${rows[i].name}**__`);
-            } else {
-              themes.push(`- ${rows[i].name}`);
-            }
-          }
-
+        if (themes.length > 1) {
+          contestTypeStr = `\n\n*This is a ${contest.type} contest*`;
         }
 
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contestID}'`)
-        .then(rows => {
-          console.log('contestUsers:');
-          console.log(rows);
+        // contest detail embed
+        let embed = new Discord.RichEmbed()
+        .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+        .setTitle(contest.name)
+        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission`)
+        .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
+        .addBlankField()
+        .addField('Start', startdate.dateStr, true)
+        .addField('Deadline', enddate.dateStr, true)
+        .addField('Themes:', `${themes.join('\n')}`)
+        .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-          let getParticipants = new Promise((res, rej) => {
-            if (rows.length > 0) {
-              for (let i = 0; i < rows.length; i++) {
-                let participantID = rows[i].userID;
-                let participantSubmissionLink = rows[i].submissionLink
+        let participantString = [];
 
-                let getUser = new Promise((res1, rej1) => {
-                  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
-                  .then(rows => {
-                    participants[rows[0].username] = participantSubmissionLink;
-                    res1();
-                  }))
-                  .catch(err => {
-                    throw err;
-                  });
-                });
+        for (let key in participants) {
+          if (participants.hasOwnProperty(key)) {
+            participantString.push(`[${key}](${participants[key]})`);
+          }
+        }
 
+        // contest submission list
+        let participantEmbed = new Discord.RichEmbed()
+        .setDescription('click on the names to see the submission')
+        .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
+        .addField('Submissions:', `- ${participantString.join('\n- ')}`)
+        .setFooter(`beep boop`, client.user.avatarURL);
 
-                getUser.then(() => {
-                  res();
-                }, (err) => {
-                  console.error(err);
-                });
-              } // loop users
-            } else {
-              res();
-            }
-          });
-
-
-          getParticipants.then(() => {
-
-            let contestTypeStr = '';
-
-            if (themes.length > 1) {
-              contestTypeStr = `\n\n*This is a ${contestType} contest*`;
-            }
-
-            // contest detail embed
-            let embed = new Discord.RichEmbed()
-            .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
-            .setTitle(contestName)
-            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${contestID}\` to your submission`)
-            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
-            .addBlankField()
-            .addField('Start', startdateStr, true)
-            .addField('Deadline', enddateStr, true)
-            .addField('Themes:', `${themes.join('\n')}`)
-            .setFooter(`beep boop • contest ID: ${contestID}`, client.user.avatarURL);
-
-            let participantString = [];
-
-            for (let key in participants) {
-              if (participants.hasOwnProperty(key)) {
-                participantString.push(`[${key}](${participants[key]})`);
-              }
-            }
-
-            console.log('participants');
-            console.log(participants);
-
-            console.log('participant string');
-            console.log(participantString);
-
-            // contest submission list
-            let participantEmbed = new Discord.RichEmbed()
-            .setDescription('click on the names to see the submission')
-            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
-            .addField('Submissions:', `- ${participantString.join('\n- ')}`)
-            .setFooter(`beep boop`, client.user.avatarURL);
-
-            message.channel.send({embed: embed}).then(() => {
-              message.channel.send({embed: participantEmbed});
-            });
-          });
-
-        }))
-        .catch(err => {
-          throw err;
+        message.channel.send({embed: embed}).then(() => {
+          message.channel.send({embed: participantEmbed});
         });
 
-        return;
-      }))
-      .catch(err => {
-        throw err;
-      });
+      } // processContests
+
+      processUsers(rows);
+
+      // return;
     }))
     .catch(err => {
       throw err;
     });
+
+
 
   // contest ID => show contest details
   } else if (/^\d+$/.test(cmd)) {
+
+
+    let contest, participants = [], themes = [];
+
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`Couldn't find a contest with id: ${cmd}`);
+      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
 
-      startdate = new Date(rows[0].startdate);
-      startdateStr = ('0' + (startdate.getMonth() + 1)).slice(-2) + '/' + ('0' + startdate.getDate()).slice(-2) + '/' + startdate.getFullYear() + ' ' + ('0' + startdate.getHours()).slice(-2) + ':' + ('0' + startdate.getMinutes()).slice(-2);
-      enddate = new Date(rows[0].enddate);
-      enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
+      startdate = formatDate(rows[0].startdate);
+      enddate = formatDate(rows[0].enddate);
 
-      contestName = rows[0].name;
-      contestDescription = rows[0].description;
-      contestType = rows[0].type;
-      contestVisibility = rows[0].visibility;
+      contest = rows[0];
 
-      db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${cmd}' ORDER BY startdate`)
-      .then(rows => {
+      return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+    })
+    .then(rows => {
+      if (rows.length < 1) {
+        themes.push('not set');
+      } else {
+        for (let i = 0; i < rows.length; i++) {
+          let themeStart = formatDate(rows[i].startdate);
+          let themeEnd = formatDate(rows[i].enddate);
 
-        if (rows.length < 1) {
-          themes.push('not set')
-        } else {
-
-          for (let i = 0; i < rows.length; i++) {
-            let themeStart = new Date(rows[i].startdate);
-            let themeEnd = new Date(rows[i].enddate);
-
-            // if the startdate of the theme is in the future && its a hidden contest hide the theme
-            if (themeStart > currentDate && contestVisibility == 'hidden') {
-              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
-            } else if (themeEnd < currentDate) {
-              // if the theme is already over => line through
-              themes.push(`- ~~${rows[i].name}~~`);
-            } else if (themeStart <= currentDate && themeEnd >= currentDate) {
-              // if the theme is right now => bold & underlined
-              themes.push(`- __**${rows[i].name}**__`);
-            } else {
-              themes.push(`- ${rows[i].name}`);
-            }
+          // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          if (themeStart.date > currentDate && contestVisibility == 'hidden') {
+            themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+          } else if (themeEnd.date < currentDate) {
+            // if the theme is already over => line through
+            themes.push(`- ~~${rows[i].name}~~`);
+          } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+            // if the theme is right now => bold & underlined
+            themes.push(`- __**${rows[i].name}**__`);
+          } else {
+            themes.push(`- ${rows[i].name}`);
           }
+        }
+      }
 
+      return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
+    })
+    .then(rows => {
+
+      function delay() {
+        return new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      async function delayedLog(item) {
+        await delay();
+      }
+
+      async function processUsers(array) {
+
+        for (let i = 0; i < array.length; i++) {
+          let participantId = array[i].userID;
+          let participantSubmissionLink = array[i].submissionLink;
+          db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
+          .then(rows => {
+            participants[rows[0].username] = participantSubmissionLink;
+          }))
+          .catch(err => {
+            throw err;
+          });
+
+          await delayedLog(array[i]);
         }
 
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
-        .then(rows => {
+        let contestTypeStr = '';
 
-          let getParticipants = new Promise((res, rej) => {
-            if (rows.length > 0) {
-              for (let i = 0; i < rows.length; i++) {
-                let participantID = rows[i].userID;
-                let participantSubmissionLink = rows[i].submissionLink
+        if (themes.length > 1) {
+          contestTypeStr = `\n\n*This is a ${contest.type} contest*`;
+        }
 
-                let getUser = new Promise((res1, rej1) => {
-                  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
-                  .then(rows => {
-                    participants[rows[0].username] = participantSubmissionLink;
-                    res1();
-                  }))
-                  .catch(err => {
-                    throw err;
-                  });
-                });
+        // contest detail embed
+        let embed = new Discord.RichEmbed()
+        .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+        .setTitle(contest.name)
+        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission`)
+        .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
+        .addBlankField()
+        .addField('Start', startdate.dateStr, true)
+        .addField('Deadline', enddate.dateStr, true)
+        .addField('Themes:', `${themes.join('\n')}`)
+        .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
+        let participantString = [];
 
-                getUser.then(() => {
-                  res();
-                }, (err) => {
-                  console.error(err);
-                });
-              } // loop users
-            } else {
-              res();
-            }
-          });
+        for (let key in participants) {
+          if (participants.hasOwnProperty(key)) {
+            participantString.push(`[${key}](${participants[key]})`);
+          }
+        }
 
+        // contest submission list
+        let participantEmbed = new Discord.RichEmbed()
+        .setDescription('click on the names to see the submission')
+        .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
+        .addField('Submissions:', `- ${participantString.join('\n- ')}`)
+        .setFooter(`beep boop`, client.user.avatarURL);
 
-          getParticipants.then(() => {
-
-            let contestTypeStr = '';
-
-            if (themes.length > 1) {
-              contestTypeStr = `\n\n*This is a ${contestType} contest*`;
-            }
-
-            // contest detail embed
-            let embed = new Discord.RichEmbed()
-            .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
-            .setTitle(contestName)
-            .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
-            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
-            .addBlankField()
-            .addField('Start', startdateStr, true)
-            .addField('Deadline', enddateStr, true)
-            .addField('Themes:', `${themes.join('\n')}`)
-            .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
-
-            let participantString = [];
-
-            for (let key in participants) {
-              if (participants.hasOwnProperty(key)) {
-                participantString.push(`[${key}](${participants[key]})`);
-              }
-            }
-
-            // contest submission list
-            let participantEmbed = new Discord.RichEmbed()
-            .setDescription('click on the names to see the submission')
-            .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
-            .addField('Submissions:', `- ${participantString.join('\n- ')}`)
-            .setFooter(`beep boop`, client.user.avatarURL);
-
-            message.channel.send({embed: embed}).then(() => {
-              message.channel.send({embed: participantEmbed});
-            });
-          });
-
-        }))
-        .catch(err => {
-          throw err;
+        message.channel.send({embed: embed}).then(() => {
+          message.channel.send({embed: participantEmbed});
         });
 
-        return;
-      }))
-      .catch(err => {
-        throw err;
-      });
+      } // processContests
+
+      processUsers(rows);
+
+      // return;
     }))
     .catch(err => {
       throw err;
     });
+
+
+
+    // db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
+    // .then(rows => {
+    //   if (rows.length < 1) return message.channel.send(`Couldn't find a contest with id: ${cmd}`);
+    //
+    //   startdate = new Date(rows[0].startdate);
+    //   startdateStr = ('0' + (startdate.getMonth() + 1)).slice(-2) + '/' + ('0' + startdate.getDate()).slice(-2) + '/' + startdate.getFullYear() + ' ' + ('0' + startdate.getHours()).slice(-2) + ':' + ('0' + startdate.getMinutes()).slice(-2);
+    //   enddate = new Date(rows[0].enddate);
+    //   enddateStr = ('0' + (enddate.getMonth() + 1)).slice(-2) + '/' + ('0' + enddate.getDate()).slice(-2) + '/' + enddate.getFullYear() + ' ' + ('0' + enddate.getHours()).slice(-2) + ':' + ('0' + enddate.getMinutes()).slice(-2);
+    //
+    //   contestName = rows[0].name;
+    //   contestDescription = rows[0].description;
+    //   contestType = rows[0].type;
+    //   contestVisibility = rows[0].visibility;
+    //
+    //   db.execute(config, database => database.query(`SELECT * FROM contestThemes WHERE contestId = '${cmd}' ORDER BY startdate`)
+    //   .then(rows => {
+    //
+    //     if (rows.length < 1) {
+    //       themes.push('not set')
+    //     } else {
+    //
+    //       for (let i = 0; i < rows.length; i++) {
+    //         let themeStart = new Date(rows[i].startdate);
+    //         let themeEnd = new Date(rows[i].enddate);
+    //
+    //         // if the startdate of the theme is in the future && its a hidden contest hide the theme
+    //         if (themeStart > currentDate && contestVisibility == 'hidden') {
+    //           themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+    //         } else if (themeEnd < currentDate) {
+    //           // if the theme is already over => line through
+    //           themes.push(`- ~~${rows[i].name}~~`);
+    //         } else if (themeStart <= currentDate && themeEnd >= currentDate) {
+    //           // if the theme is right now => bold & underlined
+    //           themes.push(`- __**${rows[i].name}**__`);
+    //         } else {
+    //           themes.push(`- ${rows[i].name}`);
+    //         }
+    //       }
+    //
+    //     }
+    //
+    //     db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${cmd}'`)
+    //     .then(rows => {
+    //
+    //       let getParticipants = new Promise((res, rej) => {
+    //         if (rows.length > 0) {
+    //           for (let i = 0; i < rows.length; i++) {
+    //             let participantID = rows[i].userID;
+    //             let participantSubmissionLink = rows[i].submissionLink
+    //
+    //             let getUser = new Promise((res1, rej1) => {
+    //               db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantID}'`)
+    //               .then(rows => {
+    //                 participants[rows[0].username] = participantSubmissionLink;
+    //                 res1();
+    //               }))
+    //               .catch(err => {
+    //                 throw err;
+    //               });
+    //             });
+    //
+    //
+    //             getUser.then(() => {
+    //               res();
+    //             }, (err) => {
+    //               console.error(err);
+    //             });
+    //           } // loop users
+    //         } else {
+    //           res();
+    //         }
+    //       });
+    //
+    //
+    //       getParticipants.then(() => {
+    //
+    //         let contestTypeStr = '';
+    //
+    //         if (themes.length > 1) {
+    //           contestTypeStr = `\n\n*This is a ${contestType} contest*`;
+    //         }
+    //
+    //         // contest detail embed
+    //         let embed = new Discord.RichEmbed()
+    //         .setAuthor('Contest!', (contestVisibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+    //         .setTitle(contestName)
+    //         .setDescription(`${contestDescription}${contestTypeStr}\n\nadd \`>contest submit ${cmd}\` to your submission`)
+    //         .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+    //         .addBlankField()
+    //         .addField('Start', startdateStr, true)
+    //         .addField('Deadline', enddateStr, true)
+    //         .addField('Themes:', `${themes.join('\n')}`)
+    //         .setFooter(`beep boop • contest ID: ${cmd}`, client.user.avatarURL);
+    //
+    //         let participantString = [];
+    //
+    //         for (let key in participants) {
+    //           if (participants.hasOwnProperty(key)) {
+    //             participantString.push(`[${key}](${participants[key]})`);
+    //           }
+    //         }
+    //
+    //         // contest submission list
+    //         let participantEmbed = new Discord.RichEmbed()
+    //         .setDescription('click on the names to see the submission')
+    //         .setColor((contestVisibility == 'hidden') ? '#e74c3c' : '#3498db')
+    //         .addField('Submissions:', `- ${participantString.join('\n- ')}`)
+    //         .setFooter(`beep boop`, client.user.avatarURL);
+    //
+    //         message.channel.send({embed: embed}).then(() => {
+    //           message.channel.send({embed: participantEmbed});
+    //         });
+    //       });
+    //
+    //     }))
+    //     .catch(err => {
+    //       throw err;
+    //     });
+    //
+    //     return;
+    //   }))
+    //   .catch(err => {
+    //     throw err;
+    //   });
+    // }))
+    // .catch(err => {
+    //   throw err;
+    // });
 
   // submit something
 } else if (cmd == 'submit') {
