@@ -55,6 +55,7 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
 
+      voteLink = rows[0].votelink;
       startdate = formatDate(rows[0].startdate);
       enddate = formatDate(rows[0].enddate);
 
@@ -118,12 +119,14 @@ module.exports.run = async(client, message, args, db) => {
         if (themes.length > 1) {
           contestTypeStr = `\n\n*This is a ${contest.type} contest*`;
         }
+        let voteLinkStr = '';
+        if (voteLink) voteLinkStr = `\n\n[Vote link](${voteLink})`;
 
         // contest detail embed
         let embed = new Discord.RichEmbed()
         .setAuthor('Contest!', (contest.visibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
         .setTitle(contest.name)
-        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission`)
+        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\nVoting will start after the deadline.${voteLinkStr}`)
         .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
         .addBlankField()
         .addField('Start', startdate.dateStr, true)
@@ -170,8 +173,9 @@ module.exports.run = async(client, message, args, db) => {
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
+      if (rows.length < 1) return message.channel.send(`There is no contest with the id \`${cmd}\`.`);
 
+      voteLink = rows[0].votelink;
       startdate = formatDate(rows[0].startdate);
       enddate = formatDate(rows[0].enddate);
 
@@ -236,11 +240,14 @@ module.exports.run = async(client, message, args, db) => {
           contestTypeStr = `\n\n*This is a ${contest.type} contest*`;
         }
 
+        let voteLinkStr = '';
+        if (voteLink) voteLinkStr = `\n\n[Vote link](${voteLink})`;
+
         // contest detail embed
         let embed = new Discord.RichEmbed()
         .setAuthor('Contest!', (contest.visibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
         .setTitle(contest.name)
-        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission`)
+        .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\nVoting will start after the deadline.${voteLinkStr}`)
         .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
         .addBlankField()
         .addField('Start', startdate.dateStr, true)
@@ -277,7 +284,7 @@ module.exports.run = async(client, message, args, db) => {
 
 
   // submit something
-} else if (cmd == 'submit') {
+} else if (cmd == 'submit' || cmd == 's') {
   // adds users submission to the contest list
   let contestId = args[1];
   let submission, contestStart, contestEnd;
@@ -353,7 +360,7 @@ module.exports.run = async(client, message, args, db) => {
   });
 
   // remove submit
-} else if (cmd == 'submitdelete') {
+} else if (cmd == 'submitdelete' || cmd == 'sd') {
   // >contest submitdelete contestId
   // removes users submission from contest
   let contestId = args[1];
@@ -379,7 +386,8 @@ module.exports.run = async(client, message, args, db) => {
   });
 
   // contest list
-} else if (cmd == 'list') {
+} else if (cmd == 'list' || cmd == 'l') {
+    let voteLink;
     let contests = [];
     db.execute(config, database => database.query(`SELECT * FROM contest ORDER BY startdate`)
     .then(rows => {
@@ -416,6 +424,173 @@ module.exports.run = async(client, message, args, db) => {
     });
 
     // contest help
+  } else if (cmd == 'startvote' || cmd == 'sv') {
+    if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.channel.send('You don\'t have permission to use this ');
+
+    let contestId = args[1];
+    if (isNaN(contestId)) {
+      message.reply('please provide a proper contest Id `>c startvote [id]`');
+      return message.delete();
+    }
+
+    console.log(`start vote: ${contestId}`);
+
+    let contest, participants = [], themes = [], proceed = true;
+
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
+    .then(rows => {
+      if (rows.length < 1) {
+        message.channel.send(`There is currently no contest running.`);
+        proceed = false;
+      }
+
+      if (rows[0].votelink) {
+        proceed = false;
+        message.channel.send(`There is already a voting.`);
+        let embed = new Discord.RichEmbed()
+        .setDescription(`[Go vote!](${rows[0].votelink})`);
+        message.channel.send({embed: embed})
+      }
+
+      startdate = formatDate(rows[0].startdate);
+      enddate = formatDate(rows[0].enddate);
+
+      contest = rows[0];
+
+      return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+    })
+    .then(rows => {
+      if (proceed) {
+        if (rows.length < 1) {
+          themes.push('not set');
+        } else {
+          for (let i = 0; i < rows.length; i++) {
+            let themeStart = formatDate(rows[i].startdate);
+            let themeEnd = formatDate(rows[i].enddate);
+
+            // if the startdate of the theme is in the future && its a hidden contest hide the theme
+            if (themeStart.date > currentDate && contest.visibility == 'hidden') {
+              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+            } else if (themeEnd.date < currentDate) {
+              // if the theme is already over => line through
+              themes.push(`- ~~${rows[i].name}~~`);
+            } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+              // if the theme is right now => bold & underlined
+              themes.push(`- __**${rows[i].name}**__`);
+            } else {
+              themes.push(`- ${rows[i].name}`);
+            }
+          }
+        }
+
+        return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
+      }
+    })
+    .then(rows => {
+      if (proceed) {
+        function delay() {
+          return new Promise(resolve => setTimeout(resolve, 300));
+        }
+
+        async function delayedLog(item) {
+          await delay();
+        }
+
+        async function processUsers(array) {
+
+          for (let i = 0; i < array.length; i++) {
+            let participantId = array[i].userID;
+            let participantSubmissionLink = array[i].submissionLink;
+            db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
+            .then(rows => {
+              participants[rows[0].username] = participantSubmissionLink;
+            }))
+            .catch(err => {
+              throw err;
+            });
+
+            await delayedLog(array[i]);
+          }
+
+          let voteEmotesRaw = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
+          function shuffle(a) {
+            var j, x, i;
+            for (i = a.length - 1; i > 0; i--) {
+              j = Math.floor(Math.random() * (i + 1));
+              x = a[i];
+              a[i] = a[j];
+              a[j] = x;
+            }
+            return a;
+          }
+
+          let voteEmotes = shuffle(voteEmotesRaw);
+
+          let participantString = [];
+
+          let i = 0;
+
+          for (let key in participants) {
+            if (participants.hasOwnProperty(key)) {
+              participantString.push(`${voteEmotes[i]} [${key}](${participants[key]})`);
+              i++;
+            }
+          }
+
+          //
+          function delay() {
+            return new Promise(resolve => setTimeout(resolve, 300));
+          }
+
+          async function delayedReact(item) {
+            await delay();
+          }
+          //
+
+          // contest detail embed
+          let embed = new Discord.RichEmbed()
+          .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
+          .setTitle(`Contest: ${contest.name}`)
+          .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
+          .setColor('#2ecc71')
+          .addBlankField()
+          .addField('Themes:', `${themes.join('\n')}`)
+          .addBlankField()
+          .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
+          .addBlankField()
+          .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
+
+          message.channel.send({embed: embed}).then(msg => {
+            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+            async function processReacts(array) {
+              for (let i = 0; i < array.length; i++) {
+                msg.react(`${voteEmotes[i]}`);
+                await delayedReact(array[i]);
+              }
+              console.log('done!');
+              db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
+              .then(() => {
+                console.log('inserted voteLink');
+              }))
+              .catch(err => {
+                throw err;
+              });
+            }
+            processReacts(participantString);
+          });
+
+        } // processContests
+
+        processUsers(rows);
+      }
+    }))
+    .catch(err => {
+      throw err;
+    });
+
+
+
+
   } else if (cmd == 'help' || cmd == 'h') {
 
     let embed = new Discord.RichEmbed()
