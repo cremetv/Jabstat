@@ -11,11 +11,13 @@ const salt = botsettings.salt;
 const hash = bcrypt.hashSync(password, salt);
 
 const functions = require('./utility/functions');
+const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 const consoleLog = '\x1b[46m\x1b[30m%s\x1b[0m';
 
 const jabrilID = '430932202621108275';
+// const jabrilID = '343771301405786113';
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
@@ -81,6 +83,9 @@ app.get('/', (req, res) => {
 
 
 app.get('/contest', (req, res) => {
+
+  // get contests
+
   res.render('contest', {
     title: 'contest'
   });
@@ -175,13 +180,32 @@ client.on('ready', async () => {
   functions.logMemberCount(server);
 
   // log daily userCount
-  let now = new Date();
-  let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 0) - now;
-  if (millisTill23 < 0) millisTill23 += 86400000;
-  setTimeout(() => {
-    logger.info(`${consoleLog} it\'s 23:59`);
-    functions.logMemberCount(server);
-  }, millisTill23);
+  const dailyLog = () => {
+    let now = new Date();
+    let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 0) - now;
+    if (millisTill23 < 0) millisTill23 += 86400000;
+    setTimeout(() => {
+      logger.info(`${consoleLog} it\'s 23:59`);
+      functions.logMemberCount(server);
+      dailyLog();
+    }, millisTill23);
+  }
+  dailyLog();
+
+
+  /****************
+  * Check for contest Deadlines
+  ****************/
+  const checkContests = () => {
+    let now = new Date();
+    let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 01, 0) - now;
+    if (hour < 0) hour += 3600000;
+    setTimeout(() => {
+      contestFunctions.checkDeadlines(client);
+      checkContests();
+    }, hour);
+  }
+  checkContests();
 
 
   // store passwords
