@@ -1,0 +1,75 @@
+<header>
+  <div class="site-title">
+    Jabstat
+  </div>
+  <div class="server-name">
+    Logs
+  </div>
+</header>
+
+
+<aside class="sidebar">
+  <ul class="server-list">
+    <li class="logo online">
+      <a href="/">
+        <img src="images/bot-logo.png" alt="Drawmania Logo">
+      </a>
+      Jabstat
+    </li>
+    <li class="break"></li>
+  </ul>
+</aside>
+
+
+<main class="justify-top">
+  <div id="chat" class="chat">
+
+
+    <div class="message">
+      <div class="message__text">
+        lorem ipsum
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<aside class="stats">
+
+</aside>
+
+
+<div class="user-profile">
+</div>
+
+
+<div class="user-input">
+
+</div>
+
+<script>
+  var infoLog = {{{json infoLog}}};
+  // console.log('info log:');
+  // console.log(infoLog);
+  // console.log(infoLog[0]);
+  let one = JSON.parse(infoLog[0]);
+  console.log(one);
+  console.log(one.message);
+
+  let i = 1;
+  for (line in infoLog) {
+    let obj = JSON.parse(infoLog[line]);
+    let d = new Date(obj.time);
+
+    let message = `
+    <div class="message" data-level="${obj.level}" data-logType="${obj.logType}">
+      <div class="message__details">${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}</div>
+      <div class="message__text">
+        ${obj.message}
+      </div>
+    </div>
+    `;
+    $('#chat').append(message);
+  }
+
+</script>

@@ -57,8 +57,8 @@ module.exports = {
 
   checkDeadlines: (client) => {
 
-    let contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
-    // let contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
+    // let contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
+    let contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
     let proceed = true;
     let contest, participants = [], themes = [];
 

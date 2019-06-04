@@ -17,8 +17,8 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-const jabrilID = '430932202621108275'; // Cult of Jabril(s)
-// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
+// const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+const jabrilID = '343771301405786113'; // cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
@@ -37,6 +37,7 @@ const path = require('path');
 const app = express();
 app.engine('hbs', hbs({
   extname: 'hbs',
+  helpers: require("./utility/helpers.js").helpers,
   defaultLayout: 'layout',
   layoutsDir: `${__dirname}/web/layouts`
 }));
@@ -51,6 +52,7 @@ const webServer = http.createServer(app).listen(3000, () => {
   logger.info(`${logColor.green}Jabstats web interface on port 3000${logColor.clear}`, {logType: 'log', time: Date.now()});
 });
 const io = socket.listen(webServer);
+
 
 app.get('/', (req, res) => {
   // res.send('index');
@@ -69,6 +71,54 @@ app.get('/contest', (req, res) => {
   });
 });
 
+app.get('/log', (req, res) => {
+
+  let infoPath = path.join(__dirname, 'info.log'),
+      errorPath = path.join(__dirname, 'error.log'),
+      // infoLog = [],
+      infoLog = {},
+      errorLog = '';
+
+  const getInfoLog = () => {
+    fs.readFile(infoPath, {encoding: 'utf-8'}, (err, data) => {
+      if (err) throw err;
+      let lines = data.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        // let el = {};
+        // el.log = lines[i];
+
+        // infoLog.push(el);
+        infoLog[i] = lines[i];
+      }
+      // infoLog[0] = infoLogArray;
+      // infoLog = data;
+      getErrorLog();
+    });
+  }
+
+  const getErrorLog = () => {
+    fs.readFile(errorPath, {encoding: 'utf-8'}, (err, data) => {
+      if (err) throw err;
+      errorLog = data;
+      renderLog();
+    });
+  }
+
+  const renderLog = () => {
+    // infoLog = `{"log": [${infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{')}]}`;
+    // infoLog = JSON.stringify(infoLog);
+    // infoLog = infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{');
+
+    res.render('log', {
+      title: 'log',
+      infoLog: infoLog,
+      errorLog: errorLog,
+    });
+  }
+
+  getInfoLog();
+
+});
 
 io.sockets.on('connection', (socket) => {
   logger.info(`${logColor.connect} user connected to webinterface`, {logType: 'connect', time: Date.now()});
