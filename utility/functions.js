@@ -1,27 +1,8 @@
-const Database = require('./../utility/database');
 const config = require('./../utility/config');
-const winston = require('winston');
-
-const consoleLog = '\x1b[46m\x1b[30m%s\x1b[0m';
-const consoleError = '\x1b[101m\x1b[30m %s \x1b[0m';
-const consoleAdd = '\x1b[42m\x1b[30m + \x1b[0m %s';
-const consoleUpdate = '\x1b[103m\x1b[30m | \x1b[0m %s';
-const consoleRemove = '\x1b[101m\x1b[30m - \x1b[0m %s';
-
-const loggerAdd = '\x1b[42m\x1b[30m + \x1b[0m';
-const loggerUpdate = '\x1b[103m\x1b[30m | \x1b[0m';
-const loggerRemove = '\x1b[101m\x1b[30m - \x1b[0m';
-
-const getDate = () => {
-  const d = new Date();
-  const dateSimple = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
-  const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  return {
-    dateSimple: dateSimple,
-    date: date
-  }
-}
-
+const db = require('./../utility/databaseconnection');
+const logger = require('./../utility/logger');
+const logColor = require('./../utility/logcolors');
+const getDate = require('./../utility/date');
 
 function mysql_real_escape_string (str) {
   if (!str) str = '';
@@ -49,36 +30,6 @@ function mysql_real_escape_string (str) {
     });
 }
 
-/****************
-* Database Connection
-****************/
-const db = new Database(config);
-db.execute = ( config, callback ) => {
-    const database = new Database( config );
-    return callback( database ).then(
-        result => database.close().then( () => result ),
-        err => database.close().then( () => { throw err; } )
-    );
-};
-
-/****************
-* Logger
-****************/
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
-  transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
-});
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
-}
 
 module.exports = {
 
@@ -94,10 +45,10 @@ module.exports = {
           INSERT INTO jabmemberCount (date, memberCount, updated)
           VALUES ('${date.dateSimple}', ${server.memberCount}, '${date.date}')`
         );
-        logger.info(`${loggerAdd} Inserted memberCount ${date.dateSimple} into jabmemberCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted memberCount ${date.dateSimple} into jabmemberCount @${date.date}`);
       } else {
         database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${loggerUpdate} Updated memberCount ${date.dateSimple} in jabmemberCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated memberCount ${date.dateSimple} in jabmemberCount @${date.date}`);
       }
       return;
     }))
@@ -119,7 +70,7 @@ module.exports = {
           INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
           VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
         `);
-        logger.info(`${loggerAdd} Inserted serverStats`);
+        logger.info(`${logColor.logAdd} Inserted serverStats`);
       } else {
         database.query(`
           UPDATE jabstats SET
@@ -142,7 +93,7 @@ module.exports = {
             verified = ${server.verified}
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${loggerUpdate} Updated serverStats`);
+        logger.info(`${logColor.logUpdate} Updated serverStats`);
       }
       return;
     }))
@@ -172,7 +123,7 @@ module.exports = {
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
           VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
         `);
-        logger.info(`${loggerAdd} Inserted ${channel.name} into jabchannels`);
+        logger.info(`${logColor.logAdd} Inserted ${channel.name} into jabchannels`);
       } else {
         database.query(`
           UPDATE jabchannels SET
@@ -186,7 +137,7 @@ module.exports = {
             updated = '${date.date}'
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${loggerUpdate} Updated ${channel.name} in jabchannels`);
+        logger.info(`${logColor.logUpdate} Updated ${channel.name} in jabchannels`);
       }
       return rows;
     })
@@ -199,7 +150,7 @@ module.exports = {
             deleted = 1
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${loggerUpdate}${loggerRemove} Updated channel ${channel.name} to deleted`);
+        logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${channel.name} to deleted`);
       }
       return;
     }))
@@ -221,7 +172,7 @@ module.exports = {
         let channel = server.channels.get(id);
         if (!channel && rows[i]['deleted'] != 1) {
           database.query(`UPDATE jabchannels SET deleted = true WHERE channelID = ${id}`);
-          logger.info(`${loggerUpdate}${loggerRemove} Updated channel ${id} to deleted`);
+          logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${id} to deleted`);
         }
       });
     }))
@@ -290,7 +241,7 @@ module.exports = {
           ${member.deleted},
           0)
         `);
-        logger.info(`${loggerAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`);
+        logger.info(`${logColor.logAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`);
       } else {
         let messageCount = parseInt(rows[0].messageCount) + messageAmount;
         nicknames = rows[0].nicknames.split(',');
@@ -319,7 +270,7 @@ module.exports = {
             banned = 0
           WHERE userID = ${member.user.id}
         `);
-        logger.info(`${loggerUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`);
+        logger.info(`${logColor.logUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`);
       }
     }))
     .catch(err => {
@@ -376,7 +327,7 @@ module.exports = {
           1,
           ${banned})
         `);
-        logger.info(`${loggerAdd} Inserted banned ${user.username}'s infos into jabusers`);
+        logger.info(`${logColor.logAdd} Inserted banned ${user.username}'s infos into jabusers`);
       } else {
         let messageCount = parseInt(rows[0].messageCount);
         nicknames = rows[0].nicknames.split(',');
@@ -402,7 +353,7 @@ module.exports = {
             banned = ${banned}
           WHERE userID = ${user.id}
         `);
-        logger.info(`${loggerUpdate} Updated banned ${user.username}'s infos in jabusers`);
+        logger.info(`${logColor.logUpdate} Updated banned ${user.username}'s infos in jabusers`);
       }
     }))
     .catch(err => {
@@ -427,12 +378,12 @@ module.exports = {
           INSERT INTO jabmessageCount (date, messageCount, updated)
           VALUES ('${date.dateSimple}', 1, '${date.date}')`
         );
-        logger.info(`${loggerAdd} Inserted total messageCount ${date.dateSimple} into jabmesageCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted total messageCount ${date.dateSimple} into jabmesageCount @${date.date}`);
       } else {
         let messageCount = parseInt(rows[0].messageCount) + 1;
 
         database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${loggerUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`);
       }
       return;
     }))
@@ -450,12 +401,12 @@ module.exports = {
           INSERT INTO jabuserMessageCount (date, userID, messageCount, updated)
           VALUES ('${date.dateSimple}', '${userID}', 1, '${date.date}')`
         );
-        logger.info(`${loggerAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`);
       } else {
         let messageCount = parseInt(rows[0].messageCount) + 1;
 
         database.query(`UPDATE jabuserMessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}'`);
-        logger.info(`${loggerUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`);
       }
       return;
     }))
@@ -488,7 +439,7 @@ module.exports = {
             emoteID = result.insertId;
             res(emoteID);
           });
-          logger.info(`${loggerAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
+          logger.info(`${logColor.logAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
         } else {
           console.log('already exist');
           emoteID = rows[0].id;
@@ -512,12 +463,12 @@ module.exports = {
             INSERT INTO jabmotesCount (date, userID, emoteID, count, updated)
             VALUES ('${date.dateSimple}', '${userID}', ${emoteID}, 1, '${date.date}')`
           );
-          logger.info(`${loggerAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`);
+          logger.info(`${logColor.logAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`);
         } else {
           let count = parseInt(rows[0].count) + 1;
 
           database.query(`UPDATE jabmotesCount SET count = ${count}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}' AND emoteID = ${emoteID}`);
-          logger.info(`${loggerUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`);
+          logger.info(`${logColor.logUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`);
         }
         return;
       }))

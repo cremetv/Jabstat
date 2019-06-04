@@ -1,9 +1,11 @@
 const botsettings = require('./botsettings.json');
 const Discord = require('discord.js');
 const fs = require('fs');
-const Database = require('./utility/database');
 const config = require('./utility/config');
-const winston = require('winston');
+const db = require('./utility/databaseconnection');
+const logger = require('./utility/logger');
+const logColor = require('./utility/logcolors');
+const getDate = require('./utility/date');
 
 const bcrypt = require('bcryptjs');
 const password = botsettings.password;
@@ -14,36 +16,26 @@ const functions = require('./utility/functions');
 const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
-const consoleLog = '\x1b[46m\x1b[30m%s\x1b[0m';
 
-const jabrilID = '430932202621108275';
-// const jabrilID = '343771301405786113';
+const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
 
-const getDate = () => {
-  const d = new Date();
-  const dateSimple = `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`;
-  const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  return {
-    dateSimple: dateSimple,
-    date: date
-  }
-}
 
 
 /****************
 * Database Connection
 ****************/
-const db = new Database(config);
-db.execute = ( config, callback ) => {
-    const database = new Database( config );
-    return callback( database ).then(
-        result => database.close().then( () => result ),
-        err => database.close().then( () => { throw err; } )
-    );
-};
+// const db = new Database(config);
+// db.execute = ( config, callback ) => {
+//     const database = new Database( config );
+//     return callback( database ).then(
+//         result => database.close().then( () => result ),
+//         err => database.close().then( () => { throw err; } )
+//     );
+// };
 
 
 /****************
@@ -145,25 +137,6 @@ fs.readdir('./cmds/', (err, files) => {
 });
 
 
-/****************
-* Logger
-****************/
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
-  transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
-});
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
-}
-
 
 
 
@@ -185,7 +158,7 @@ client.on('ready', async () => {
     let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 0) - now;
     if (millisTill23 < 0) millisTill23 += 86400000;
     setTimeout(() => {
-      logger.info(`${consoleLog} it\'s 23:59`);
+      logger.info(`it\'s 23:59`);
       functions.logMemberCount(server);
       dailyLog();
     }, millisTill23);
