@@ -24,20 +24,6 @@ const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
 
 
-
-/****************
-* Database Connection
-****************/
-// const db = new Database(config);
-// db.execute = ( config, callback ) => {
-//     const database = new Database( config );
-//     return callback( database ).then(
-//         result => database.close().then( () => result ),
-//         err => database.close().then( () => { throw err; } )
-//     );
-// };
-
-
 /****************
 * Web
 ****************/
@@ -62,7 +48,7 @@ app.use(bodyParser.json());
 
 
 const webServer = http.createServer(app).listen(3000, () => {
-  console.log(`Jabstats web interface on port 3000`);
+  logger.info(`${logColor.green}Jabstats web interface on port 3000${logColor.clear}`, {logType: 'log', time: Date.now()});
 });
 const io = socket.listen(webServer);
 
@@ -85,7 +71,7 @@ app.get('/contest', (req, res) => {
 
 
 io.sockets.on('connection', (socket) => {
-  console.log('user connected');
+  logger.info(`${logColor.connect} user connected to webinterface`, {logType: 'connect', time: Date.now()});
 
   socket.on('verify', (data) => {
 
@@ -103,7 +89,11 @@ io.sockets.on('connection', (socket) => {
 * Load Events
 ****************/
 fs.readdir("./events/", (err, files) => {
-  if (err) return console.error(err);
+  if (err) {
+    logger.error(err, {logType: 'error', time: Date.now()});
+    console.error(err);
+    return;
+  }
   files.forEach(file => {
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
@@ -116,19 +106,23 @@ fs.readdir("./events/", (err, files) => {
 * Load Commands
 ****************/
 fs.readdir('./cmds/', (err, files) => {
-	if (err) return console.log(err);
+  if (err) {
+    logger.error(err, {logType: 'error', time: Date.now()});
+    console.error(err);
+    return;
+  }
 
 	let jsfiles = files.filter(f => f.split('.').pop() === 'js');
 	if (jsfiles.length <= 0) {
-		console.log('No commands to load!');
+    logger.info('No commands to load!', {logType: 'warning', time: Date.now()});
 		return;
 	}
 
-	console.log(`Loading ${jsfiles.length} commands!`);
+  logger.info(`Loading ${jsfiles.length} commands!`, {logType: 'log', time: Date.now()});
 
 	jsfiles.forEach((f, i) => {
 		let props = require(`./cmds/${f}`);
-		console.log(`${i + 1}: ${f} loaded!`);
+    logger.info(`${i + 1}: ${f} loaded!`, {logType: 'log', time: Date.now()});
 		client.commands.set(props.help.name, props);
     if (props.help.alias) {
       client.commands.set(props.help.alias, props);
@@ -188,20 +182,20 @@ client.on('ready', async () => {
 
       db.execute(config, database => database.query(`INSERT INTO passwords (hash) VALUES ('${hash}')`)
       .then(rows => {
-        console.log('stored password hash in database');
+        logger.info(`${logColor.green}stored password hash in database${logColor.clear}`, {logType: 'log', time: Date.now()});
       }))
       .catch(err => {
         throw err;
       });
     } else {
-      console.log('hash already stored');
+      logger.info(`${logColor.yellow}hash already stored${logColor.clear}`, {logType: 'warning', time: Date.now()});
       let dbHash = rows[0].hash;
 
       if (dbHash != hash) {
-        console.log('hash not the same');
+        logger.info(`${logColor.yellow}hash not the same${logColor.clear}`, {logType: 'warning', time: Date.now()});
         db.execute(config, database => database.query(`UPDATE passwords SET hash = '${hash}' WHERE id = 1`)
         .then(rows => {
-          console.log('updated password hash in database');
+          logger.info(`${logColor.green}updated password hash in database${logColor.clear}`, {logType: 'log', time: Date.now()});
         }))
         .catch(err => {
           throw err;
@@ -277,7 +271,10 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   functions.logMemberCount(server);
 });
 
-client.on('error', console.error);
+client.on('error', err => {
+  logger.error(err, {logType: 'error', time: Date.now()});
+  console.error(err);
+});
 
 // login
 client.login(botsettings.token);

@@ -13,7 +13,14 @@ const logColors = {
   logUpdate: '\x1b[103m\x1b[30m | \x1b[0m',
   logRemove: '\x1b[101m\x1b[30m - \x1b[0m',
 
+  connect: '\x1b[42m\x1b[30m -> \x1b[0m',
+  disconnect: '\x1b[101m\x1b[30m <- \x1b[0m',
+
   blackBlue: '\x1b[46m\x1b[30m%s\x1b[0m',
+  green: '\x1b[92m',
+  yellow: '\x1b[93m',
+  red: '\x1b[91m',
+  clear: '\x1b[0m',
 };
 
 module.exports = logColors;

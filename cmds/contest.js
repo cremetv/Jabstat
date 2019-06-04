@@ -1,6 +1,8 @@
 const config = module.require('./../utility/config.js');
 const Discord = require('discord.js');
 const functions = require('./../utility/contest');
+const logger = require('./../utility/logger');
+const logColor = require('./../utility/logcolors');
 
 module.exports.run = async(client, message, args, db) => {
 
@@ -346,7 +348,7 @@ module.exports.run = async(client, message, args, db) => {
 
           database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${userID}, '${submission}', '${submissionLink}')`);
           message.react("👍");
-          console.log(`added ${username}'s submission to contest ${cmd}'`);
+          logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
 
         }))
         .catch(err => {
@@ -376,6 +378,7 @@ module.exports.run = async(client, message, args, db) => {
       if (rows.length < 1) return message.channel.send('you dont have a submission for this contest');
       database.query(`DELETE FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`);
       message.channel.send('submission deleted!');
+      logger.info(`\x1b[91m${username} removed his submission from contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
     }))
     .catch(err => {
       throw err;
@@ -570,7 +573,7 @@ module.exports.run = async(client, message, args, db) => {
               console.log('done!');
               db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
               .then(() => {
-                console.log('inserted voteLink');
+                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
               }))
               .catch(err => {
                 throw err;

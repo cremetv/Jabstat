@@ -45,15 +45,15 @@ module.exports = {
           INSERT INTO jabmemberCount (date, memberCount, updated)
           VALUES ('${date.dateSimple}', ${server.memberCount}, '${date.date}')`
         );
-        logger.info(`${logColor.logAdd} Inserted memberCount ${date.dateSimple} into jabmemberCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted memberCount ${date.dateSimple} into jabmemberCount @${date.date}`, {logType: 'addRow', time: Date.now()});
       } else {
         database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated memberCount ${date.dateSimple} in jabmemberCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated memberCount ${date.dateSimple} in jabmemberCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
       }
       return;
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -70,7 +70,7 @@ module.exports = {
           INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
           VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
         `);
-        logger.info(`${logColor.logAdd} Inserted serverStats`);
+        logger.info(`${logColor.logAdd} Inserted serverStats`, {logType: 'addRow', time: Date.now()});
       } else {
         database.query(`
           UPDATE jabstats SET
@@ -93,12 +93,12 @@ module.exports = {
             verified = ${server.verified}
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${logColor.logUpdate} Updated serverStats`);
+        logger.info(`${logColor.logUpdate} Updated serverStats`, {logType: 'updateRow', time: Date.now()});
       }
       return;
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -123,7 +123,7 @@ module.exports = {
           INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
           VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
         `);
-        logger.info(`${logColor.logAdd} Inserted ${channel.name} into jabchannels`);
+        logger.info(`${logColor.logAdd} Inserted ${channel.name} into jabchannels`, {logType: 'addRow', time: Date.now()});
       } else {
         database.query(`
           UPDATE jabchannels SET
@@ -137,7 +137,7 @@ module.exports = {
             updated = '${date.date}'
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${logColor.logUpdate} Updated ${channel.name} in jabchannels`);
+        logger.info(`${logColor.logUpdate} Updated ${channel.name} in jabchannels`, {logType: 'updateRow', time: Date.now()});
       }
       return rows;
     })
@@ -150,12 +150,12 @@ module.exports = {
             deleted = 1
           WHERE id = ${rows[0].id}
         `);
-        logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${channel.name} to deleted`);
+        logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${channel.name} to deleted`, {logType: 'updateRow', time: Date.now()});
       }
       return;
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -172,12 +172,12 @@ module.exports = {
         let channel = server.channels.get(id);
         if (!channel && rows[i]['deleted'] != 1) {
           database.query(`UPDATE jabchannels SET deleted = true WHERE channelID = ${id}`);
-          logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${id} to deleted`);
+          logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${id} to deleted`, {logType: 'updateRow', time: Date.now()});
         }
       });
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -241,7 +241,7 @@ module.exports = {
           ${member.deleted},
           0)
         `);
-        logger.info(`${logColor.logAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`);
+        logger.info(`${logColor.logAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`, {logType: 'addRow', time: Date.now()});
       } else {
         let messageCount = parseInt(rows[0].messageCount) + messageAmount;
         nicknames = rows[0].nicknames.split(',');
@@ -270,11 +270,11 @@ module.exports = {
             banned = 0
           WHERE userID = ${member.user.id}
         `);
-        logger.info(`${logColor.logUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`);
+        logger.info(`${logColor.logUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`, {logType: 'updateRow', time: Date.now()});
       }
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -327,7 +327,7 @@ module.exports = {
           1,
           ${banned})
         `);
-        logger.info(`${logColor.logAdd} Inserted banned ${user.username}'s infos into jabusers`);
+        logger.info(`${logColor.logAdd} Inserted banned ${user.username}'s infos into jabusers`, {logType: 'addRow', time: Date.now()});
       } else {
         let messageCount = parseInt(rows[0].messageCount);
         nicknames = rows[0].nicknames.split(',');
@@ -353,11 +353,11 @@ module.exports = {
             banned = ${banned}
           WHERE userID = ${user.id}
         `);
-        logger.info(`${logColor.logUpdate} Updated banned ${user.username}'s infos in jabusers`);
+        logger.info(`${logColor.logUpdate} Updated banned ${user.username}'s infos in jabusers`, {logType: 'updateRow', time: Date.now()});
       }
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -378,17 +378,17 @@ module.exports = {
           INSERT INTO jabmessageCount (date, messageCount, updated)
           VALUES ('${date.dateSimple}', 1, '${date.date}')`
         );
-        logger.info(`${logColor.logAdd} Inserted total messageCount ${date.dateSimple} into jabmesageCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted total messageCount ${date.dateSimple} into jabmesageCount @${date.date}`, {logType: 'addRow', time: Date.now()});
       } else {
         let messageCount = parseInt(rows[0].messageCount) + 1;
 
         database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
       }
       return;
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
 
@@ -401,17 +401,17 @@ module.exports = {
           INSERT INTO jabuserMessageCount (date, userID, messageCount, updated)
           VALUES ('${date.dateSimple}', '${userID}', 1, '${date.date}')`
         );
-        logger.info(`${logColor.logAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`);
+        logger.info(`${logColor.logAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`, {logType: 'addRow', time: Date.now()});
       } else {
         let messageCount = parseInt(rows[0].messageCount) + 1;
 
         database.query(`UPDATE jabuserMessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`);
+        logger.info(`${logColor.logUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
       }
       return;
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
   },
@@ -439,7 +439,7 @@ module.exports = {
             emoteID = result.insertId;
             res(emoteID);
           });
-          logger.info(`${logColor.logAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`);
+          logger.info(`${logColor.logAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`, {logType: 'addRow', time: Date.now()});
         } else {
           console.log('already exist');
           emoteID = rows[0].id;
@@ -447,7 +447,7 @@ module.exports = {
         }
       }))
       .catch(err => {
-        logger.error(err);
+        logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
       });
     });
@@ -463,23 +463,23 @@ module.exports = {
             INSERT INTO jabmotesCount (date, userID, emoteID, count, updated)
             VALUES ('${date.dateSimple}', '${userID}', ${emoteID}, 1, '${date.date}')`
           );
-          logger.info(`${logColor.logAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`);
+          logger.info(`${logColor.logAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`, {logType: 'addRow', time: Date.now()});
         } else {
           let count = parseInt(rows[0].count) + 1;
 
           database.query(`UPDATE jabmotesCount SET count = ${count}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}' AND emoteID = ${emoteID}`);
-          logger.info(`${logColor.logUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`);
+          logger.info(`${logColor.logUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
         }
         return;
       }))
       .catch(err => {
-        logger.error(err);
+        logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
       });
 
       console.log('=========================');
     }, err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       console.log(err);
     });
   }

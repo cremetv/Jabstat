@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
 const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
-// const consoleLog = '\x1b[46m\x1b[30m%s\x1b[0m';
 
 module.exports = (client) => {
   console.log(logColor.blackBlue, `${client.user.username} is ready to steal your data >:)`);
-  logger.info(`Bot started | ${Date.now()}`);
+  logger.info('\x1b[92mBot started\x1b[0m', {logType: 'start', time: Date.now()});
 
   let activity = [
     'collecting data',

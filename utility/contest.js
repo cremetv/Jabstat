@@ -32,7 +32,7 @@ module.exports = {
 
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
 
@@ -48,7 +48,7 @@ module.exports = {
 
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
 
@@ -56,14 +56,13 @@ module.exports = {
 
 
   checkDeadlines: (client) => {
-    console.log('check deadlines ***********');
 
-    let contestChannel = client.channels.get('582622116617125928');
-    // let contestChannel = client.channels.get('343771301405786113');
+    let contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
+    // let contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
     let proceed = true;
     let contest, participants = [], themes = [];
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
     .then(rows => {
       if (rows.length < 1) {
         proceed = false;
@@ -127,7 +126,7 @@ module.exports = {
               participants[rows[0].username] = participantSubmissionLink;
             }))
             .catch(err => {
-              logger.error(err);
+              logger.error(err, {logType: 'error', time: Date.now()});
               throw err;
             });
 
@@ -189,13 +188,12 @@ module.exports = {
                 msg.react(`${voteEmotes[i]}`);
                 await delayedReact(array[i]);
               }
-              console.log('done!');
               db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
               .then(() => {
-                console.log('inserted voteLink');
+                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
               }))
               .catch(err => {
-                logger.error(err);
+                logger.error(err, {logType: 'error', time: Date.now()});
                 throw err;
               });
             }
@@ -208,7 +206,7 @@ module.exports = {
       }
     }))
     .catch(err => {
-      logger.error(err);
+      logger.error(err, {logType: 'error', time: Date.now()});
       throw err;
     });
 
