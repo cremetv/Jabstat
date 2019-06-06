@@ -285,11 +285,16 @@ module.exports.run = async(client, message, args, db) => {
     });
 
 
-  // submit something
 } else if (cmd == 'submit' || cmd == 's') {
-  // adds users submission to the contest list
-  let contestId = args[1];
-  let submission, contestStart, contestEnd;
+  /****************
+  *
+  * Submit Contest Entry
+  * >c submit <id>
+  *
+  * command has to be executed with an attachment
+  *
+  ****************/
+  let submission, contest, user, contestId = args[1];
 
   message.attachments.forEach(att => {
     submission = att.url;
@@ -303,63 +308,119 @@ module.exports.run = async(client, message, args, db) => {
   }
   if (!submission) return message.reply('please add an attachment to your submission');
 
-  // check if contest is currently active
-  let checkContest = new Promise((res, rej) => {
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
-    .then(rows => {
-      if (rows.length < 1) {
-        message.channel.send(`There is no contest with the ID ${contestId}`);
-        message.delete();
-        return;
-      }
+  db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
+  .then(rows => {
+    if (rows.length < 1) {
+      throw new Error('no contest');
+      return null;
+    }
 
-      contestStart = rows[0].startdate;
-      contestEnd = rows[0].enddate;
-      res(contestStart, contestEnd);
-    }))
-    .catch(err => {
-      throw err;
-    });
-  });
+    contest = rows[0];
 
-  checkContest.then((contestStart, contestEnd) => {
+    if (contest.startdate > currentDate) {
+      throw new Error('did not start');
+      return null;
+    } else if (contest.enddate < currentDate) {
+      throw new Error('contest over');
+      return null;
+    }
 
-    // if contest starts in the future
-    if (contestStart > currentDate) {
+    return database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`);
+  })
+  .then(rows => {
+    user = rows[0];
+    return database.query(`SELECT * FROM contestUsers WHERE userID = '${user.id}' AND contestID = '${contestId}'`);
+  })
+  .then(rows => {
+    if (rows.length > 0) {
+      throw new Error('already submitted');
+      return null;
+    }
+
+    return database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${user.id}, '${submission}', '${submissionLink}')`);
+  })
+  .then(rows => {
+    message.react("👍");
+    logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
+  }))
+  .catch(err => {
+    if (err.message === 'no contest') {
+      message.channel.send('Couldn\'t find this contest');
+      message.delete();
+    } else if (err.message === 'did not start') {
       message.channel.send('This contest didn\'t even start yet.');
-      return message.delete();
-    // if contest is already closed
-    } else if (contestEnd < currentDate) {
-      message.channel.send('Too late. This contest is already over :sad_cett:');
-      return message.delete();
-    // go on
+      message.delete();
+    } else if (err.message === 'contest over') {
+      message.channel.send('Too late. This contest is already over');
+      message.delete();
+    } else if (err.message === 'already submitted') {
+      message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete <id>`');
+      message.delete();
     } else {
-      db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
-      .then(rows => {
-        let userID = rows[0].id;
-        let username = rows[0].username;
-
-        db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
-        .then(rows => {
-          if (rows.length > 0) {
-            message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete [id]`')
-            return message.delete();
-          }
-
-          database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${userID}, '${submission}', '${submissionLink}')`);
-          message.react("👍");
-          logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
-
-        }))
-        .catch(err => {
-          throw err;
-        });
-      }))
-      .catch(err => {
-        throw err;
-      });
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
     }
   });
+
+
+
+  // check if contest is currently active
+  // let checkContest = new Promise((res, rej) => {
+  //   db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
+  //   .then(rows => {
+  //     if (rows.length < 1) {
+  //       message.channel.send(`There is no contest with the ID ${contestId}`);
+  //       message.delete();
+  //       return;
+  //     }
+  //
+  //     contestStart = rows[0].startdate;
+  //     contestEnd = rows[0].enddate;
+  //     res(contestStart, contestEnd);
+  //   }))
+  //   .catch(err => {
+  //     throw err;
+  //   });
+  // });
+  //
+  // checkContest.then((contestStart, contestEnd) => {
+  //
+  //   // if contest starts in the future
+  //   if (contestStart > currentDate) {
+  //     message.channel.send('This contest didn\'t even start yet.');
+  //     return message.delete();
+  //   // if contest is already closed
+  //   } else if (contestEnd < currentDate) {
+  //     message.channel.send('Too late. This contest is already over :sad_cett:');
+  //     return message.delete();
+  //   // go on
+  //   } else {
+  //     db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
+  //     .then(rows => {
+  //       let userID = rows[0].id;
+  //       let username = rows[0].username;
+  //
+  //       db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
+  //       .then(rows => {
+  //         if (rows.length > 0) {
+  //           message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete [id]`')
+  //           return message.delete();
+  //         }
+  //
+  //         database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${userID}, '${submission}', '${submissionLink}')`);
+  //         message.react("👍");
+  //         logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
+  //
+  //       }))
+  //       .catch(err => {
+  //         throw err;
+  //       });
+  //     }))
+  //     .catch(err => {
+  //       throw err;
+  //     });
+  //   }
+  // });
 
 
 } else if (cmd == 'submitdelete' || cmd == 'sd') {
