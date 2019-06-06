@@ -410,43 +410,88 @@ module.exports.run = async(client, message, args, db) => {
     }
   });
 
-  // contest list
 } else if (cmd == 'list' || cmd == 'l') {
-    let voteLink;
-    let contests = [];
-    db.execute(config, database => database.query(`SELECT * FROM contest ORDER BY startdate`)
-    .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There are no contests <:sad_cett:487733321741107200>`);
+  /****************
+  *
+  * List contests
+  * >c list [option]
+  *
+  * available options:
+  * --open --closed --current --public --hidden --voting
+  *
+  ****************/
+  let contests = [], option = args[1], statement, title;
 
-      for (let i = 0; i < rows.length; i++) {
-        let contestStartDate = new Date(rows[i].startdate);
-        let contestEndDate = new Date(rows[i].enddate);
-
-        // if the contest enddate is in the past -> line through
-        if (contestEndDate < currentDate) {
-          contests.push(`\`${rows[i].id}\` | \t~~${rows[i].name}~~`);
-        } else if (contestStartDate <= currentDate && contestEndDate >= currentDate) {
-          contests.push(`\`${rows[i].id}\` | \t__**${rows[i].name}**__`);
-        } else {
-          contests.push(`\`${rows[i].id}\` | \t${rows[i].name}`);
-        }
+  switch (option) {
+    case '--open':
+      statement = 'WHERE enddate >= NOW()';
+      title = 'open contests\n';
+      break;
+    case '--closed':
+      statement = 'WHERE enddate <= NOW()';
+      title = 'already closed contests\n';
+      break;
+    case '--current':
+      statement = 'WHERE NOW() BETWEEN startdate AND enddate';
+      title = 'currently running contests\n';
+      break;
+    case '--public':
+      statement = 'WHERE visibility = "public"';
+      title = 'public contests\n';
+      break;
+    case '--hidden':
+      statement = 'WHERE visibility = "hidden"';
+      title = 'hidden contests\n';
+      break;
+    case '--voting':
+      statement = 'WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW()';
+      title = 'contests where you can vote\n';
+      break;
+    default:
+      statement = '';
+      title = '';
+      if (option) {
+        message.channel.send('option doesn\'t exist. here is the full list:');
       }
+  }
 
-      let embed = new Discord.RichEmbed()
-      .setAuthor('Contest list')
-      .setDescription('type `>contest [id]` to get more informations')
-      .addBlankField()
-      // add Field "there are currently X contests" OR "there are no contests at the moment"
-      .addField('All contests:', `${contests.join('\n')}`)
-      .setColor('#3498db')
-      .setFooter(`beep boop`, client.user.avatarURL);
-      message.channel.send({embed: embed});
+  db.execute(config, database => database.query(`SELECT * FROM contest ${statement} ORDER BY startdate`)
+  .then(rows => {
+    if (rows.length < 1) {
+      throw new Error('no contests');
+      return null;
+    }
 
-      return;
-    }))
-    .catch(err => {
-      throw err;
+    rows.forEach(contest => {
+      let contestStartDate = new Date(contest.startdate);
+      let contestEndDate = new Date(contest.enddate);
+      if (contestEndDate < currentDate) {
+        contests.push(`\`${contest.id}\` | \t~~${contest.name}~~`);
+      } else if (contestStartDate <= currentDate && contestEndDate >= currentDate) {
+        contests.push(`\`${contest.id}\` | \t__**${contest.name}**__`);
+      } else {
+        contests.push(`\`${contest.id}\` | \t${contest.name}`);
+      }
     });
+  })
+  .then(() => {
+    let embed = new Discord.RichEmbed()
+    .setAuthor('Contest list')
+    .setDescription(`${title}type \`>contest [id]\` to get more informations`)
+    .addBlankField()
+    .addField('All contests:', `${contests.join('\n')}`)
+    .setColor('#3498db')
+    .setFooter(`beep boop`, client.user.avatarURL);
+    message.channel.send({embed: embed});
+  }))
+  .catch(err => {
+    if (err.message === 'no contests') {
+      message.channel.send(`Couldn't find any contests`);
+    } else {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    }
+  });
 
     // contest help
   } else if (cmd == 'startvote' || cmd == 'sv') {
