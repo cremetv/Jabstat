@@ -22,46 +22,27 @@ module.exports.run = async(client, message, args, db) => {
   }
 
 
-  // function delay() {
-  //   return new Promise(resolve => setTimeout(resolve, 300));
-  // }
-  //
-  // async function delayedLog(item) {
-  //   await delay();
-  // }
-  //
-  // async function processContests(array) {
-  //   // for (const contest in array) {
-  //   //
-  //   //   await delayedLog(contest);
-  //   // }
-  //
-  //   for (let i = 0; i < array.length; i++) {
-  //
-  //     await delayedLog(array[i]);
-  //   }
-  //   console.log('done!');
-  // } // processContests
-
-
-
-
-
-
-  // no arg => show current contest Or list if no current contests available
   if (!cmd) {
-
+    /****************
+    *
+    * Show current contest if available
+    * >c
+    *
+    ****************/
     let contest, participants = [], themes = [];
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE NOW() BETWEEN startdate AND enddate`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There is currently no contest running.`);
-
-      voteLink = rows[0].votelink;
-      startdate = formatDate(rows[0].startdate);
-      enddate = formatDate(rows[0].enddate);
+      if (rows.length < 1) {
+        throw new Error('no contest');
+        return null;
+      }
 
       contest = rows[0];
+
+      voteLink = contest.votelink;
+      startdate = formatDate(contest.startdate);
+      enddate = formatDate(contest.enddate);
 
       return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
     })
@@ -155,19 +136,20 @@ module.exports.run = async(client, message, args, db) => {
           message.channel.send({embed: participantEmbed});
         });
 
-      } // processContests
+      }
 
       processUsers(rows);
-
-      // return;
     }))
     .catch(err => {
-      throw err;
+      if (err.message === 'no contest') {
+        message.channel.send(`There is currently no contest running.`);
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
     });
 
 
-
-  // contest ID => show contest details
   } else if (/^\d+$/.test(cmd)) {
     /****************
     *
@@ -289,7 +271,7 @@ module.exports.run = async(client, message, args, db) => {
     }))
     .catch(err => {
       if (err.message === 'no contest') {
-        message.channel.send(`There is no contest with the id \`${cmd}\`.`)
+        message.channel.send(`There is no contest with the id \`${cmd}\`.`);
       } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
