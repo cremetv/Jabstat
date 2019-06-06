@@ -477,7 +477,7 @@ module.exports.run = async(client, message, args, db) => {
   .then(() => {
     let embed = new Discord.RichEmbed()
     .setAuthor('Contest list')
-    .setDescription(`${title}type \`>contest [id]\` to get more informations`)
+    .setDescription(`${title}type \`>contest <id>\` to get more informations`)
     .addBlankField()
     .addField('All contests:', `${contests.join('\n')}`)
     .setColor('#3498db')
@@ -499,7 +499,7 @@ module.exports.run = async(client, message, args, db) => {
 
     let contestId = args[1];
     if (isNaN(contestId)) {
-      message.reply('please provide a proper contest Id `>c startvote [id]`');
+      message.reply('please provide a proper contest Id `>c startvote <id>`');
       return message.delete();
     }
 
@@ -665,7 +665,7 @@ module.exports.run = async(client, message, args, db) => {
 
     let embed = new Discord.RichEmbed()
     .setAuthor('Contest help')
-    .setDescription('```MD\n> use >contest or >c\n\n>contest\n===\nshow the active contest\n\n>contest list\n===\nget a list of all contests\n\n>contest [id]\n===\nget detailed information about that contest\n\n>contest submit [id]\n===\nadd this to an attachment to submit something\n\n>contest submitdelete [id]\n===\ndelete your submission```')
+    .setDescription('```MD\n> use >contest or >c\n\n>contest\n===\nshow the active contest\n\n>contest list [option]\n===\nget a list of all contests\noptions:--open --closed --current --public --hidden --voting\n\n>contest <id>\n===\nget detailed information about that contest\n\n>contest submit <id>\n===\nadd this to an attachment to submit something\n\n>contest submitdelete <id>\n===\ndelete your submission```')
     .setColor('#3498db')
     .setFooter(`beep boop`, client.user.avatarURL);
     message.channel.send({embed: embed});
