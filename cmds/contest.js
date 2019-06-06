@@ -361,31 +361,53 @@ module.exports.run = async(client, message, args, db) => {
     }
   });
 
-  // remove submit
 } else if (cmd == 'submitdelete' || cmd == 'sd') {
-  // >contest submitdelete contestId
-  // removes users submission from contest
-  let contestId = args[1];
+  /****************
+  *
+  * Delete contest submissions
+  * >c submitdelete [id]
+  *
+  ****************/
+  let contestId = args[1], user;
 
   if (!contestId) return message.channel.send('please provide a contest ID');
 
-  db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
+  db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
   .then(rows => {
-    let userID = rows[0].id;
+    let contestEnd = formatDate(rows[0].enddate);
 
-    db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
-    .then(rows => {
-      if (rows.length < 1) return message.channel.send('you dont have a submission for this contest');
-      database.query(`DELETE FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`);
-      message.channel.send('submission deleted!');
-      logger.info(`\x1b[91m${username} removed his submission from contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
-    }))
-    .catch(err => {
-      throw err;
-    });
+    if (contestEnd.date <= currentDate) {
+      throw new Error('contest ended');
+      return null;
+    }
+
+    return database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`);
+  })
+  .then(rows => {
+    user = rows[0];
+
+    return database.query(`SELECT * FROM contestUsers WHERE userID = '${user.id}' AND contestID = '${contestId}'`);
+  })
+  .then(rows => {
+    if (rows.length < 1) {
+      throw new Error('no submission');
+      return null;
+    }
+    return database.query(`DELETE FROM contestUsers WHERE userID = '${user.id}' AND contestID = '${contestId}'`);
+  })
+  .then(() => {
+    message.channel.send('submission deleted!');
+    logger.info(`\x1b[91m${user.username} removed his submission from contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
   }))
   .catch(err => {
-    throw err;
+    if (err.message === 'contest ended') {
+      message.channel.send('this contest ended already');
+    } else if (err.message === 'no submission') {
+      message.channel.send('you dont have a submission for this contest');
+    } else {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    }
   });
 
   // contest list
