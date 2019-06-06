@@ -59,155 +59,151 @@ module.exports = {
 
     let contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
     // let contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
-    let proceed = true;
     let contest, participants = [], themes = [];
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
     .then(rows => {
       if (rows.length < 1) {
-        proceed = false;
+        throw new Error('nothing found');
+        return null;
+      }
+
+      contest = rows[0];
+      return database.query(`SELECT * FROM contest WHERE id = '${contest.id}'`);
+    })
+    .then(rows => {
+      startdate = formatDate(rows[0].startdate);
+      enddate = formatDate(rows[0].enddate);
+
+      return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+    })
+    .then(rows => {{
+      if (rows.length < 1) {
+        themes.push('not set');
       } else {
-        contest = rows[0];
-        return database.query(`SELECT * FROM contest WHERE id = '${contest.id}'`);
+        for (let i = 0; i < rows.length; i++) {
+          let themeStart = formatDate(rows[i].startdate);
+          let themeEnd = formatDate(rows[i].enddate);
+
+          // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          if (themeStart.date > currentDate && contest.visibility == 'hidden') {
+            themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+          } else if (themeEnd.date < currentDate) {
+            // if the theme is already over => line through
+            themes.push(`- ~~${rows[i].name}~~`);
+          } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+            // if the theme is right now => bold & underlined
+            themes.push(`- __**${rows[i].name}**__`);
+          } else {
+            themes.push(`- ${rows[i].name}`);
+          }
+        }
       }
+
+      return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
     })
     .then(rows => {
-      if (proceed) {
-        startdate = formatDate(rows[0].startdate);
-        enddate = formatDate(rows[0].enddate);
-
-        return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+      function delay() {
+        return new Promise(resolve => setTimeout(resolve, 300));
       }
-    })
-    .then(rows => {
-      if (proceed) {
-        if (rows.length < 1) {
-          themes.push('not set');
-        } else {
-          for (let i = 0; i < rows.length; i++) {
-            let themeStart = formatDate(rows[i].startdate);
-            let themeEnd = formatDate(rows[i].enddate);
 
-            // if the startdate of the theme is in the future && its a hidden contest hide the theme
-            if (themeStart.date > currentDate && contest.visibility == 'hidden') {
-              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
-            } else if (themeEnd.date < currentDate) {
-              // if the theme is already over => line through
-              themes.push(`- ~~${rows[i].name}~~`);
-            } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
-              // if the theme is right now => bold & underlined
-              themes.push(`- __**${rows[i].name}**__`);
-            } else {
-              themes.push(`- ${rows[i].name}`);
-            }
+      async function delayedLog(item) {
+        await delay();
+      }
+
+      async function processUsers(array) {
+
+        for (let i = 0; i < array.length; i++) {
+          let participantId = array[i].userID;
+          let participantSubmissionLink = array[i].submissionLink;
+          db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
+          .then(rows => {
+            participants[rows[0].username] = participantSubmissionLink;
+          }))
+          .catch(err => {
+            logger.error(err, {logType: 'error', time: Date.now()});
+            throw err;
+          });
+
+          await delayedLog(array[i]);
+        }
+
+        let voteEmotesRaw = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
+        function shuffle(a) {
+          var j, x, i;
+          for (i = a.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
+            a[i] = a[j];
+            a[j] = x;
+          }
+          return a;
+        }
+
+        let voteEmotes = shuffle(voteEmotesRaw);
+
+        let participantString = [];
+
+        let i = 0;
+
+        for (let key in participants) {
+          if (participants.hasOwnProperty(key)) {
+            participantString.push(`${voteEmotes[i]} [${key}](${participants[key]})`);
+            i++;
           }
         }
 
-        return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
-      }
-    })
-    .then(rows => {
-      if (proceed) {
+        //
         function delay() {
           return new Promise(resolve => setTimeout(resolve, 300));
         }
 
-        async function delayedLog(item) {
+        async function delayedReact(item) {
           await delay();
         }
+        //
 
-        async function processUsers(array) {
+        // contest detail embed
+        let embed = new Discord.RichEmbed()
+        .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
+        .setTitle(`Contest: ${contest.name}`)
+        .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
+        .setColor('#2ecc71')
+        .addBlankField()
+        .addField('Themes:', `${themes.join('\n')}`)
+        .addBlankField()
+        .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
+        .addBlankField()
+        .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-          for (let i = 0; i < array.length; i++) {
-            let participantId = array[i].userID;
-            let participantSubmissionLink = array[i].submissionLink;
-            db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
-            .then(rows => {
-              participants[rows[0].username] = participantSubmissionLink;
+        contestChannel.send({embed: embed}).then(msg => {
+          voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+          async function processReacts(array) {
+            for (let i = 0; i < array.length; i++) {
+              msg.react(`${voteEmotes[i]}`);
+              await delayedReact(array[i]);
+            }
+            db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
+            .then(() => {
+              logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
             }))
             .catch(err => {
               logger.error(err, {logType: 'error', time: Date.now()});
               throw err;
             });
-
-            await delayedLog(array[i]);
           }
+          processReacts(participantString);
+        });
 
-          let voteEmotesRaw = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
-          function shuffle(a) {
-            var j, x, i;
-            for (i = a.length - 1; i > 0; i--) {
-              j = Math.floor(Math.random() * (i + 1));
-              x = a[i];
-              a[i] = a[j];
-              a[j] = x;
-            }
-            return a;
-          }
+      } // processContests
 
-          let voteEmotes = shuffle(voteEmotesRaw);
-
-          let participantString = [];
-
-          let i = 0;
-
-          for (let key in participants) {
-            if (participants.hasOwnProperty(key)) {
-              participantString.push(`${voteEmotes[i]} [${key}](${participants[key]})`);
-              i++;
-            }
-          }
-
-          //
-          function delay() {
-            return new Promise(resolve => setTimeout(resolve, 300));
-          }
-
-          async function delayedReact(item) {
-            await delay();
-          }
-          //
-
-          // contest detail embed
-          let embed = new Discord.RichEmbed()
-          .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
-          .setTitle(`Contest: ${contest.name}`)
-          .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
-          .setColor('#2ecc71')
-          .addBlankField()
-          .addField('Themes:', `${themes.join('\n')}`)
-          .addBlankField()
-          .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
-          .addBlankField()
-          .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
-
-          contestChannel.send({embed: embed}).then(msg => {
-            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-            async function processReacts(array) {
-              for (let i = 0; i < array.length; i++) {
-                msg.react(`${voteEmotes[i]}`);
-                await delayedReact(array[i]);
-              }
-              db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
-              .then(() => {
-                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
-              }))
-              .catch(err => {
-                logger.error(err, {logType: 'error', time: Date.now()});
-                throw err;
-              });
-            }
-            processReacts(participantString);
-          });
-
-        } // processContests
-
-        processUsers(rows);
-      }
+      processUsers(rows);
     }))
     .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
+      if (err.message != 'nothing found') {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
     });
 
   }, // checkDeadlines
