@@ -361,6 +361,7 @@ module.exports.run = async(client, message, args, db) => {
     }
   });
 
+
 } else if (cmd == 'submitdelete' || cmd == 'sd') {
   /****************
   *
@@ -409,6 +410,7 @@ module.exports.run = async(client, message, args, db) => {
       throw err;
     }
   });
+
 
 } else if (cmd == 'list' || cmd == 'l') {
   /****************
@@ -493,9 +495,15 @@ module.exports.run = async(client, message, args, db) => {
     }
   });
 
-    // contest help
+
   } else if (cmd == 'startvote' || cmd == 'sv') {
-    if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.channel.send('You don\'t have permission to use this ');
+    /****************
+    *
+    * Start voting
+    * >c startvote <id>
+    *
+    ****************/
+    if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.channel.send('You don\'t have permissions to use this');
 
     let contestId = args[1];
     if (isNaN(contestId)) {
@@ -503,166 +511,171 @@ module.exports.run = async(client, message, args, db) => {
       return message.delete();
     }
 
-    console.log(`start vote: ${contestId}`);
-
-    let contest, participants = [], themes = [], proceed = true;
+    let contest, participants = [], themes = [];
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
     .then(rows => {
       if (rows.length < 1) {
-        message.channel.send(`There is currently no contest running.`);
-        proceed = false;
+        throw new Error('no contest');
+        return null;
       }
-
-      if (rows[0].votelink) {
-        proceed = false;
-        message.channel.send(`There is already a voting.`);
-        let embed = new Discord.RichEmbed()
-        .setDescription(`[Go vote!](${rows[0].votelink})`);
-        message.channel.send({embed: embed})
-      }
-
-      startdate = formatDate(rows[0].startdate);
-      enddate = formatDate(rows[0].enddate);
 
       contest = rows[0];
+
+      if (contest.votelink) {
+        throw new Error('already voting');
+        return null;
+      }
+
+      startdate = formatDate(contest.startdate);
+      enddate = formatDate(contest.enddate);
 
       return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
     })
     .then(rows => {
-      if (proceed) {
-        if (rows.length < 1) {
-          themes.push('not set');
-        } else {
-          for (let i = 0; i < rows.length; i++) {
-            let themeStart = formatDate(rows[i].startdate);
-            let themeEnd = formatDate(rows[i].enddate);
+      if (rows.length < 1) {
+        themes.push('not set');
+      } else {
+        for (let i = 0; i < rows.length; i++) {
+          let themeStart = formatDate(rows[i].startdate);
+          let themeEnd = formatDate(rows[i].enddate);
 
-            // if the startdate of the theme is in the future && its a hidden contest hide the theme
-            if (themeStart.date > currentDate && contest.visibility == 'hidden') {
-              themes.push('- ' + '\\*'.repeat(rows[i].name.length));
-            } else if (themeEnd.date < currentDate) {
-              // if the theme is already over => line through
-              themes.push(`- ~~${rows[i].name}~~`);
-            } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
-              // if the theme is right now => bold & underlined
-              themes.push(`- __**${rows[i].name}**__`);
-            } else {
-              themes.push(`- ${rows[i].name}`);
-            }
+          // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          if (themeStart.date > currentDate && contest.visibility == 'hidden') {
+            themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+          } else if (themeEnd.date < currentDate) {
+            // if the theme is already over => line through
+            themes.push(`- ~~${rows[i].name}~~`);
+          } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+            // if the theme is right now => bold & underlined
+            themes.push(`- __**${rows[i].name}**__`);
+          } else {
+            themes.push(`- ${rows[i].name}`);
+          }
+        }
+      }
+
+      return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
+    })
+    .then(rows => {
+      function delay() {
+        return new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      async function delayedLog(item) {
+        await delay();
+      }
+
+      async function processUsers(array) {
+        for (let i = 0; i < array.length; i++) {
+          let participantId = array[i].userID;
+          let participantSubmissionLink = array[i].submissionLink;
+          db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
+          .then(rows => {
+            participants[rows[0].username] = participantSubmissionLink;
+          }))
+          .catch(err => {
+            logger.error(err, {logType: 'error', time: Date.now()});
+            throw err;
+          });
+
+          await delayedLog(array[i]);
+        }
+
+        let voteEmotesRaw = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
+        function shuffle(a) {
+          var j, x, i;
+          for (i = a.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
+            a[i] = a[j];
+            a[j] = x;
+          }
+          return a;
+        }
+
+        let voteEmotes = shuffle(voteEmotesRaw);
+
+        let participantString = [];
+
+        let i = 0;
+
+        for (let key in participants) {
+          if (participants.hasOwnProperty(key)) {
+            participantString.push(`${voteEmotes[i]} [${key}](${participants[key]})`);
+            i++;
           }
         }
 
-        return database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`);
-      }
-    })
-    .then(rows => {
-      if (proceed) {
+        //
         function delay() {
           return new Promise(resolve => setTimeout(resolve, 300));
         }
 
-        async function delayedLog(item) {
+        async function delayedReact(item) {
           await delay();
         }
+        //
 
-        async function processUsers(array) {
+        // contest detail embed
+        let embed = new Discord.RichEmbed()
+        .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
+        .setTitle(`Contest: ${contest.name}`)
+        .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
+        .setColor('#2ecc71')
+        .addBlankField()
+        .addField('Themes:', `${themes.join('\n')}`)
+        .addBlankField()
+        .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
+        .addBlankField()
+        .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-          for (let i = 0; i < array.length; i++) {
-            let participantId = array[i].userID;
-            let participantSubmissionLink = array[i].submissionLink;
-            db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
-            .then(rows => {
-              participants[rows[0].username] = participantSubmissionLink;
+        message.channel.send({embed: embed}).then(msg => {
+          voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+          async function processReacts(array) {
+            for (let i = 0; i < array.length; i++) {
+              msg.react(`${voteEmotes[i]}`);
+              await delayedReact(array[i]);
+            }
+            console.log('done!');
+            db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
+            .then(() => {
+              logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
             }))
             .catch(err => {
+              logger.error(err, {logType: 'error', time: Date.now()});
               throw err;
             });
-
-            await delayedLog(array[i]);
           }
+          processReacts(participantString);
+        });
 
-          let voteEmotesRaw = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
-          function shuffle(a) {
-            var j, x, i;
-            for (i = a.length - 1; i > 0; i--) {
-              j = Math.floor(Math.random() * (i + 1));
-              x = a[i];
-              a[i] = a[j];
-              a[j] = x;
-            }
-            return a;
-          }
+      } // processContests
 
-          let voteEmotes = shuffle(voteEmotesRaw);
-
-          let participantString = [];
-
-          let i = 0;
-
-          for (let key in participants) {
-            if (participants.hasOwnProperty(key)) {
-              participantString.push(`${voteEmotes[i]} [${key}](${participants[key]})`);
-              i++;
-            }
-          }
-
-          //
-          function delay() {
-            return new Promise(resolve => setTimeout(resolve, 300));
-          }
-
-          async function delayedReact(item) {
-            await delay();
-          }
-          //
-
-          // contest detail embed
-          let embed = new Discord.RichEmbed()
-          .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
-          .setTitle(`Contest: ${contest.name}`)
-          .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
-          .setColor('#2ecc71')
-          .addBlankField()
-          .addField('Themes:', `${themes.join('\n')}`)
-          .addBlankField()
-          .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
-          .addBlankField()
-          .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
-
-          message.channel.send({embed: embed}).then(msg => {
-            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-            async function processReacts(array) {
-              for (let i = 0; i < array.length; i++) {
-                msg.react(`${voteEmotes[i]}`);
-                await delayedReact(array[i]);
-              }
-              console.log('done!');
-              db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
-              .then(() => {
-                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
-              }))
-              .catch(err => {
-                throw err;
-              });
-            }
-            processReacts(participantString);
-          });
-
-        } // processContests
-
-        processUsers(rows);
-      }
+      processUsers(rows);
     }))
     .catch(err => {
-      throw err;
+      if (err.message === 'no contest') {
+        message.channel.send(`There is currently no contest running.`);
+      } else if (err.message === 'already voting') {
+        message.channel.send(`There is already a voting`);
+        let embed = new Discord.RichEmbed()
+        .setDescription(`[Go vote!](${contest.votelink})`);
+        message.channel.send({embed: embed})
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
     });
 
 
-
-
   } else if (cmd == 'help' || cmd == 'h') {
-
+    /****************
+    *
+    * Help List
+    * >c help
+    *
+    ****************/
     let embed = new Discord.RichEmbed()
     .setAuthor('Contest help')
     .setDescription('```MD\n> use >contest or >c\n\n>contest\n===\nshow the active contest\n\n>contest list [option]\n===\nget a list of all contests\noptions:--open --closed --current --public --hidden --voting\n\n>contest <id>\n===\nget detailed information about that contest\n\n>contest submit <id>\n===\nadd this to an attachment to submit something\n\n>contest submitdelete <id>\n===\ndelete your submission```')
