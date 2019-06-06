@@ -169,19 +169,26 @@ module.exports.run = async(client, message, args, db) => {
 
   // contest ID => show contest details
   } else if (/^\d+$/.test(cmd)) {
-
-
+    /****************
+    *
+    * Contest lookup command
+    * >c <id>
+    *
+    ****************/
     let contest, participants = [], themes = [];
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${cmd}'`)
     .then(rows => {
-      if (rows.length < 1) return message.channel.send(`There is no contest with the id \`${cmd}\`.`);
-
-      voteLink = rows[0].votelink;
-      startdate = formatDate(rows[0].startdate);
-      enddate = formatDate(rows[0].enddate);
+      if (rows.length < 1) {
+        throw new Error('no contest');
+        return null;
+      }
 
       contest = rows[0];
+
+      voteLink = contest.votelink;
+      startdate = formatDate(contest.startdate);
+      enddate = formatDate(contest.enddate);
 
       return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
     })
@@ -281,7 +288,12 @@ module.exports.run = async(client, message, args, db) => {
       processUsers(rows);
     }))
     .catch(err => {
-      throw err;
+      if (err.message === 'no contest') {
+        message.channel.send(`There is no contest with the id \`${cmd}\`.`)
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
     });
 
 
@@ -341,7 +353,7 @@ module.exports.run = async(client, message, args, db) => {
   })
   .then(rows => {
     message.react("👍");
-    logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
+    logger.info(`\x1b[92m${user.username} added a submission to contest ${contestId}\x1b[0m`, {logType: 'log', time: Date.now()});
   }))
   .catch(err => {
     if (err.message === 'no contest') {
@@ -361,66 +373,6 @@ module.exports.run = async(client, message, args, db) => {
       throw err;
     }
   });
-
-
-
-  // check if contest is currently active
-  // let checkContest = new Promise((res, rej) => {
-  //   db.execute(config, database => database.query(`SELECT * FROM contest WHERE id = '${contestId}'`)
-  //   .then(rows => {
-  //     if (rows.length < 1) {
-  //       message.channel.send(`There is no contest with the ID ${contestId}`);
-  //       message.delete();
-  //       return;
-  //     }
-  //
-  //     contestStart = rows[0].startdate;
-  //     contestEnd = rows[0].enddate;
-  //     res(contestStart, contestEnd);
-  //   }))
-  //   .catch(err => {
-  //     throw err;
-  //   });
-  // });
-  //
-  // checkContest.then((contestStart, contestEnd) => {
-  //
-  //   // if contest starts in the future
-  //   if (contestStart > currentDate) {
-  //     message.channel.send('This contest didn\'t even start yet.');
-  //     return message.delete();
-  //   // if contest is already closed
-  //   } else if (contestEnd < currentDate) {
-  //     message.channel.send('Too late. This contest is already over :sad_cett:');
-  //     return message.delete();
-  //   // go on
-  //   } else {
-  //     db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${message.author.id}'`)
-  //     .then(rows => {
-  //       let userID = rows[0].id;
-  //       let username = rows[0].username;
-  //
-  //       db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE userID = '${userID}' AND contestID = '${contestId}'`)
-  //       .then(rows => {
-  //         if (rows.length > 0) {
-  //           message.reply('you already submitted something to this contest. You can delete it with `>contest submitdelete [id]`')
-  //           return message.delete();
-  //         }
-  //
-  //         database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${userID}, '${submission}', '${submissionLink}')`);
-  //         message.react("👍");
-  //         logger.info(`\x1b[92m${username} added a submission to contest ${cmd}\x1b[0m`, {logType: 'log', time: Date.now()});
-  //
-  //       }))
-  //       .catch(err => {
-  //         throw err;
-  //       });
-  //     }))
-  //     .catch(err => {
-  //       throw err;
-  //     });
-  //   }
-  // });
 
 
 } else if (cmd == 'submitdelete' || cmd == 'sd') {
