@@ -77,7 +77,7 @@ module.exports = {
 
       return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
     })
-    .then(rows => {{
+    .then(rows => {
       if (rows.length < 1) {
         themes.push('not set');
       } else {
