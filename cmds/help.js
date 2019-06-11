@@ -3,7 +3,6 @@ const fs = require('fs');
 const Discord = require('discord.js');
 
 module.exports.run = async(client, message, args, con) => {
-
   const prefix = botsettings.prefix;
   let maxLength = 20;
 
@@ -44,8 +43,6 @@ module.exports.run = async(client, message, args, con) => {
       }
     });
   });
-
-
 }
 
 module.exports.help = {
