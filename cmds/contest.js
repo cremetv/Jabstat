@@ -688,7 +688,7 @@ module.exports.run = async(client, message, args, db) => {
 module.exports.help = {
   name: 'contest',
   alias: 'c',
-  description: 'use >contest help or all contest commands',
+  description: 'use >contest help for all contest commands',
   usage: '',
   admin: false
 }
