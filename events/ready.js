@@ -21,7 +21,7 @@ module.exports = (client) => {
   //   'how to steal data',
   //   'charts'
   // ];
-  let activity = ['>c help'];
+  let activity = ['>help'];
 
   client.user.setActivity(`${activity.random()}`, {type: 'PLAYING'});
 
