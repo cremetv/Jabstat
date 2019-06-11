@@ -216,9 +216,12 @@ client.on('ready', async () => {
   const checkContests = () => {
     let now = new Date();
     let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 01, 0) - now;
+    // let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 01, 0) - now; // minutes
     if (hour < 0) hour += 3600000;
+    // if (hour < 0) hour += 60000; // minutes
     setTimeout(() => {
       contestFunctions.checkDeadlines(client);
+      contestFunctions.checkEndVoting(client);
       checkContests();
     }, hour);
   }
@@ -260,6 +263,7 @@ client.on('ready', async () => {
 
 
 client.on('message', async message => {
+  if (message.guild === null || message.channel.type === 'dm') return;
   // check for emotes in message
   let found = message.content.match(/<a?:([^:]*):([^>]*)>/g);
 
