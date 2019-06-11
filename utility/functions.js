@@ -369,6 +369,8 @@ module.exports = {
   * total message count
   *************/
   logMessageCount: (message) => {
+    if (message.guild === null) return;
+    
     const date = getDate();
     const userID = message.member.id;
 
