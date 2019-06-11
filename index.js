@@ -221,7 +221,9 @@ client.on('ready', async () => {
     // if (hour < 0) hour += 60000; // minutes
     setTimeout(() => {
       contestFunctions.checkDeadlines(client);
-      contestFunctions.checkEndVoting(client);
+      setTimeout(() => {
+        contestFunctions.checkEndVoting(client);
+      }, 5000);
       checkContests();
     }, hour);
   }
