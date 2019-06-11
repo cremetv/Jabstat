@@ -239,8 +239,10 @@ module.exports = {
         return null;
       }
 
+      contestChannel.send('contests to end vote:');
       console.log('contests to end vote ****************');
       rows.forEach(contest => {
+        contestChannel.send(contest.name);
         console.log(contest.name);
       });
     }))
