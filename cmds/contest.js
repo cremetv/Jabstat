@@ -142,7 +142,7 @@ module.exports.run = async(client, message, args, db) => {
     }))
     .catch(err => {
       if (err.message === 'no contest') {
-        message.channel.send(`There is currently no contest running.`);
+        message.channel.send(`There is currently no contest running`);
       } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
@@ -271,7 +271,7 @@ module.exports.run = async(client, message, args, db) => {
     }))
     .catch(err => {
       if (err.message === 'no contest') {
-        message.channel.send(`There is no contest with the id \`${cmd}\`.`);
+        message.channel.send(`There is no contest with the id \`${cmd}\``);
       } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
@@ -342,7 +342,7 @@ module.exports.run = async(client, message, args, db) => {
       message.channel.send('Couldn\'t find this contest');
       message.delete();
     } else if (err.message === 'did not start') {
-      message.channel.send('This contest didn\'t even start yet.');
+      message.channel.send('This contest didn\'t even start yet');
       message.delete();
     } else if (err.message === 'contest over') {
       message.channel.send('Too late. This contest is already over');
@@ -688,7 +688,7 @@ module.exports.run = async(client, message, args, db) => {
 module.exports.help = {
   name: 'contest',
   alias: 'c',
-  description: 'more information for current contests',
+  description: 'use >contest help or all contest commands',
   usage: '',
   admin: false
 }

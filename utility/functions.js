@@ -110,6 +110,8 @@ module.exports = {
   updateChannel: (server, channel, status) => {
     const date = getDate();
 
+    if (channel.type === 'dm') return;
+
     // ignore some Channels
     if (channel.id == '489143518716100629' || channel.id == '489146748720119818' || channel.id == '489146790482935808' || channel.id == '581980094373822484' || channel.id == '581980129182613505' || channel.id == '484167556303683585' || channel.id == '581980156244131856') return;
 

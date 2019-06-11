@@ -139,6 +139,6 @@ module.exports.help = {
   name: 'user',
   alias: 'u',
   description: 'show stats for a user',
-  usage: '',
+  usage: '[@user | user | searchterm]',
   admin: false
 }
