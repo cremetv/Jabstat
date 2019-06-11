@@ -56,9 +56,9 @@ module.exports = {
 
 
   checkDeadlines: (client) => {
+    const contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
+    // const contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
 
-    let contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
-    // let contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
     let contest, participants = [], themes = [];
 
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
@@ -118,11 +118,19 @@ module.exports = {
           let participantSubmissionLink = array[i].submissionLink;
           db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE id = '${participantId}'`)
           .then(rows => {
+            if (rows.length < 1) {
+              throw new Error('no submissions');
+              return null;
+            }
             participants[rows[0].username] = participantSubmissionLink;
           }))
           .catch(err => {
-            logger.error(err, {logType: 'error', time: Date.now()});
-            throw err;
+            if (err.message == 'no submissions') {
+              console.log(`no submissions for contest: ${contest.name} found`);
+            } else {
+              logger.error(err, {logType: 'error', time: Date.now()});
+              throw err;
+            }
           });
 
           await delayedLog(array[i]);
@@ -163,11 +171,15 @@ module.exports = {
         }
         //
 
+        let tomorrow = new Date();
+        tomorrow.setHours(tomorrow.getHours() + 24);
+        tomorrow = ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '/' + ('0' + tomorrow.getDate()).slice(-2) + '/' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
+
         // contest detail embed
         let embed = new Discord.RichEmbed()
         .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
         .setTitle(`Contest: ${contest.name}`)
-        .setDescription(`${contest.description}\n\n*use the reactions to vote*`)
+        .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}`)
         .setColor('#2ecc71')
         .addBlankField()
         .addField('Themes:', `${themes.join('\n')}`)
@@ -200,12 +212,46 @@ module.exports = {
       processUsers(rows);
     }))
     .catch(err => {
-      if (err.message != 'nothing found') {
+      if (err.message == 'nothing found') {
+        console.log('no contest found to start voting');
+      } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
       }
     });
-
   }, // checkDeadlines
+
+
+  checkEndVoting: (client) => {
+    const contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
+    // const contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
+
+    let contest, participants = [], themes = [];
+
+    /****************
+    * check for contests to end voting
+    ****************/
+    // db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 2 HOUR AND enddate <= NOW() - INTERVAL 1.5 HOUR`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 HOUR`)
+    .then(rows => {
+      if (rows.length < 1) {
+        throw new Error('nothing found');
+        return null;
+      }
+
+      console.log('contests to end vote ****************');
+      rows.forEach(contest => {
+        console.log(contest.name);
+      });
+    }))
+    .catch(err => {
+      if (err.message == 'nothing found') {
+        console.log('no contest found to end voting');
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
+    });
+  }, // checkEndVoting
 
 }
