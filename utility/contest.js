@@ -232,7 +232,7 @@ module.exports = {
     * check for contests to end voting
     ****************/
     // db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 2 HOUR AND enddate <= NOW() - INTERVAL 1.5 HOUR`)
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 HOUR`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
@@ -244,6 +244,7 @@ module.exports = {
       rows.forEach(contest => {
         contestChannel.send(contest.name);
         console.log(contest.name);
+        return database.query(`UPDATE contest SET voted = 1 WHERE id = '${contest.id}'`);
       });
     }))
     .catch(err => {
