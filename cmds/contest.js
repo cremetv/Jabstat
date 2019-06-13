@@ -129,8 +129,7 @@ module.exports.run = async(client, message, args, db) => {
         let participantEmbed = new Discord.RichEmbed()
         .setDescription('click on the names to see the submission')
         .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
-        .addField('Submissions:', `- ${participantString.join('\n- ')}`)
-        .setFooter(`beep boop`, client.user.avatarURL);
+        .addField('Submissions:', `- ${participantString.join('\n- ')}`);
 
         message.channel.send({embed: embed}).then(() => {
           message.channel.send({embed: participantEmbed});
@@ -258,8 +257,7 @@ module.exports.run = async(client, message, args, db) => {
         let participantEmbed = new Discord.RichEmbed()
         .setDescription('click on the names to see the submission')
         .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
-        .addField('Submissions:', `- ${participantString.join('\n- ')}`)
-        .setFooter(`beep boop`, client.user.avatarURL);
+        .addField('Submissions:', `- ${participantString.join('\n- ')}`);
 
         message.channel.send({embed: embed}).then(() => {
           message.channel.send({embed: participantEmbed});
