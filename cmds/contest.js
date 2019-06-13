@@ -31,7 +31,7 @@ module.exports.run = async(client, message, args, db) => {
     ****************/
     let contest, participants = [], themes = [];
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND NOW() BETWEEN startdate AND enddate`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND NOW() BETWEEN startdate AND enddate`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
@@ -159,7 +159,7 @@ module.exports.run = async(client, message, args, db) => {
     ****************/
     let contest, participants = [], themes = [];
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND id = '${cmd}'`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND id = '${cmd}'`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
@@ -302,7 +302,7 @@ module.exports.run = async(client, message, args, db) => {
   }
   if (!submission) return message.reply('please add an attachment to your submission');
 
-  db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND id = '${contestId}'`)
+  db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND id = '${contestId}'`)
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contest');
@@ -368,7 +368,7 @@ module.exports.run = async(client, message, args, db) => {
 
   if (!contestId) return message.channel.send('please provide a contest ID');
 
-  db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND id = '${contestId}'`)
+  db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND id = '${contestId}'`)
   .then(rows => {
     let contestEnd = formatDate(rows[0].enddate);
 
@@ -421,38 +421,38 @@ module.exports.run = async(client, message, args, db) => {
 
   switch (option) {
     case '--open':
-      statement = 'WHERE enddate >= NOW()';
+      statement = 'WHERE active = 1 AND enddate >= NOW()';
       title = 'open contests\n';
       break;
     case '--closed':
-      statement = 'WHERE enddate <= NOW()';
+      statement = 'WHERE active = 1 AND enddate <= NOW()';
       title = 'already closed contests\n';
       break;
     case '--current':
-      statement = 'WHERE NOW() BETWEEN startdate AND enddate';
+      statement = 'WHERE active = 1 AND NOW() BETWEEN startdate AND enddate';
       title = 'currently running contests\n';
       break;
     case '--public':
-      statement = 'WHERE visibility = "public"';
+      statement = 'WHERE active = 1 AND visibility = "public"';
       title = 'public contests\n';
       break;
     case '--hidden':
-      statement = 'WHERE visibility = "hidden"';
+      statement = 'WHERE active = 1 AND visibility = "hidden"';
       title = 'hidden contests\n';
       break;
     case '--voting':
-      statement = 'WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW()';
+      statement = 'WHERE active = 1 AND votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW()';
       title = 'contests where you can vote\n';
       break;
     default:
-      statement = '';
+      statement = 'WHERE active = 1';
       title = '';
       if (option) {
         message.channel.send('option doesn\'t exist. here is the full list:');
       }
   }
 
-  db.execute(config, database => database.query(`SELECT * FROM contest ${statement} AND active = '1' ORDER BY startdate`)
+  db.execute(config, database => database.query(`SELECT * FROM contest ${statement} ORDER BY startdate`)
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contests');
@@ -508,7 +508,7 @@ module.exports.run = async(client, message, args, db) => {
 
     let contest, participants = [], themes = [];
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND id = '${contestId}'`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND id = '${contestId}'`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
