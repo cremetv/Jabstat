@@ -16,6 +16,9 @@ const formatDate = (rawDate) => {
   }
 }
 
+const selectedServer = '582622116617125928'; // Cult of Jabrils
+// const selectedServer = '343771301405786113'; // Cremes filthy bot testing area
+
 
 
 module.exports = {
@@ -56,8 +59,7 @@ module.exports = {
 
 
   checkDeadlines: (client) => {
-    const contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
-    // const contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
+    const contestChannel = client.channels.get(selectedServer);
 
     let contest, participants = [], themes = [];
 
@@ -223,8 +225,7 @@ module.exports = {
 
 
   checkEndVoting: (client) => {
-    const contestChannel = client.channels.get('582622116617125928'); // Cult of Jabril(s) #contest-chat
-    // const contestChannel = client.channels.get('343771301405786113'); // cremes filthy bot testing area # general
+    const contestChannel = client.channels.get(selectedServer);
 
     let contest, participants = [], themes = [];
 
