@@ -19,6 +19,8 @@ const formatDate = (rawDate) => {
 const selectedServer = '582622116617125928'; // Cult of Jabrils
 // const selectedServer = '343771301405786113'; // Cremes filthy bot testing area
 
+const contestant = '&588687670490824704'; // Cult of jabrils
+// const contestant = '&588700001090273295'; // cremes filthy bot testing area
 
 
 module.exports = {
@@ -190,23 +192,25 @@ module.exports = {
         .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-        contestChannel.send({embed: embed}).then(msg => {
-          voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-          async function processReacts(array) {
-            for (let i = 0; i < array.length; i++) {
-              msg.react(`${voteEmotes[i]}`);
-              await delayedReact(array[i]);
+        message.channel.send(`<@${contestant}>`).then(msg => {
+          contestChannel.send({embed: embed}).then(msg => {
+            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+            async function processReacts(array) {
+              for (let i = 0; i < array.length; i++) {
+                msg.react(`${voteEmotes[i]}`);
+                await delayedReact(array[i]);
+              }
+              db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
+              .then(() => {
+                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
+              }))
+              .catch(err => {
+                logger.error(err, {logType: 'error', time: Date.now()});
+                throw err;
+              });
             }
-            db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
-            .then(() => {
-              logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
-            }))
-            .catch(err => {
-              logger.error(err, {logType: 'error', time: Date.now()});
-              throw err;
-            });
-          }
-          processReacts(participantString);
+            processReacts(participantString);
+          });
         });
 
       } // processContests
@@ -240,10 +244,10 @@ module.exports = {
         return null;
       }
 
-      contestChannel.send('contests to end vote:');
+      // contestChannel.send('contests to end vote:');
       console.log('contests to end vote ****************');
       rows.forEach(contest => {
-        contestChannel.send(contest.name);
+        // contestChannel.send(contest.name);
         console.log(contest.name);
         return database.query(`UPDATE contest SET voted = 1 WHERE id = '${contest.id}'`);
       });

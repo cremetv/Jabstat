@@ -4,6 +4,9 @@ const functions = require('./../utility/contest');
 const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 
+const contestant = '&588687670490824704'; // Cult of jabrils
+// const contestant = '&588700001090273295'; // cremes filthy bot testing area
+
 module.exports.run = async(client, message, args, db) => {
 
   const cmd = args[0];
@@ -627,24 +630,26 @@ module.exports.run = async(client, message, args, db) => {
         .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-        message.channel.send({embed: embed}).then(msg => {
-          voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-          async function processReacts(array) {
-            for (let i = 0; i < array.length; i++) {
-              msg.react(`${voteEmotes[i]}`);
-              await delayedReact(array[i]);
+        message.channel.send(`<@${contestant}>`).then(msg => {
+          message.channel.send({embed: embed}).then(msg => {
+            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+            async function processReacts(array) {
+              for (let i = 0; i < array.length; i++) {
+                msg.react(`${voteEmotes[i]}`);
+                await delayedReact(array[i]);
+              }
+              console.log('done!');
+              db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
+              .then(() => {
+                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
+              }))
+              .catch(err => {
+                logger.error(err, {logType: 'error', time: Date.now()});
+                throw err;
+              });
             }
-            console.log('done!');
-            db.execute(config, database => database.query(`UPDATE contest SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
-            .then(() => {
-              logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
-            }))
-            .catch(err => {
-              logger.error(err, {logType: 'error', time: Date.now()});
-              throw err;
-            });
-          }
-          processReacts(participantString);
+            processReacts(participantString);
+          });
         });
 
       } // processContests
