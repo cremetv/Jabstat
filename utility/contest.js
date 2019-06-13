@@ -61,7 +61,7 @@ module.exports = {
 
     let contest, participants = [], themes = [];
 
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
@@ -69,7 +69,7 @@ module.exports = {
       }
 
       contest = rows[0];
-      return database.query(`SELECT * FROM contest WHERE active = 1 AND id = '${contest.id}'`);
+      return database.query(`SELECT * FROM contest WHERE active = '1' AND id = '${contest.id}'`);
     })
     .then(rows => {
       startdate = formatDate(rows[0].startdate);
@@ -232,7 +232,7 @@ module.exports = {
     * check for contests to end voting
     ****************/
     // db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 2 HOUR AND enddate <= NOW() - INTERVAL 1.5 HOUR`)
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = '1' AND votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
