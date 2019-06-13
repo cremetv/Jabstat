@@ -9,7 +9,7 @@ let currentDate = new Date();
 
 const formatDate = (rawDate) => {
   let date = new Date(rawDate);
-  let dateStr = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+  let dateStr = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
   return {
     date: date,
     dateStr: dateStr
@@ -177,7 +177,7 @@ module.exports = {
 
         let tomorrow = new Date();
         tomorrow.setHours(tomorrow.getHours() + 24);
-        tomorrow = ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '/' + ('0' + tomorrow.getDate()).slice(-2) + '/' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
+        tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '/' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '/' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
 
         // contest detail embed
         let embed = new Discord.RichEmbed()
@@ -237,7 +237,8 @@ module.exports = {
     * check for contests to end voting
     ****************/
     // db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 2 HOUR AND enddate <= NOW() - INTERVAL 1.5 HOUR`)
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
+    // db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate <= NOW() - INTERVAL 1 DAY`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
