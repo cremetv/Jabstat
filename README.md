@@ -38,3 +38,4 @@ WIP
 - :black_square_button: add functionality
 - :black_square_button: user profiles
 - :black_square_button: admin interface
+- :black_square_button: events in memberCount Chart (video uploads by jabril etc)
