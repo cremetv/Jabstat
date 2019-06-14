@@ -122,8 +122,8 @@ module.exports = {
       if (channel.lastMessageID == undefined) channel.lastMessageID = '';
       if (rows.length < 1) {
         database.query(`
-          INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, updated)
-          VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', '${date.date}')
+          INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, deleted, updated)
+          VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', 0, '${date.date}')
         `);
         logger.info(`${logColor.logAdd} Inserted ${channel.name} into jabchannels`, {logType: 'addRow', time: Date.now()});
       } else {
@@ -136,6 +136,7 @@ module.exports = {
             topic = '${mysql_real_escape_string(channel.topic)}',
             nsfw = ${channel.nsfw},
             lastMessageID = '${channel.lastMessageID}',
+            deleted = 0,
             updated = '${date.date}'
           WHERE id = ${rows[0].id}
         `);

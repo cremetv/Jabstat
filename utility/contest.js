@@ -16,11 +16,11 @@ const formatDate = (rawDate) => {
   }
 }
 
-const selectedServer = '582622116617125928'; // Cult of Jabrils
-// const selectedServer = '343771301405786113'; // Cremes filthy bot testing area
+// const selectedServer = '582622116617125928'; // Cult of Jabrils
+const selectedServer = '343771301405786113'; // Cremes filthy bot testing area
 
-const contestant = '&588687670490824704'; // Cult of jabrils
-// const contestant = '&588700001090273295'; // cremes filthy bot testing area
+// const contestant = '&588687670490824704'; // Cult of jabrils
+const contestant = '&588700001090273295'; // cremes filthy bot testing area
 
 
 module.exports = {
@@ -192,7 +192,7 @@ module.exports = {
         .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-        message.channel.send(`<@${contestant}>`).then(msg => {
+        contestChannel.send(`<@${contestant}>`).then(msg => {
           contestChannel.send({embed: embed}).then(msg => {
             voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
             async function processReacts(array) {
@@ -236,22 +236,66 @@ module.exports = {
     /****************
     * check for contests to end voting
     ****************/
-    // db.execute(config, database => database.query(`SELECT * FROM contest WHERE votelink IS NOT NULL AND enddate >= NOW() - INTERVAL 2 HOUR AND enddate <= NOW() - INTERVAL 1.5 HOUR`)
-    // db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate >= NOW() - INTERVAL 1 DAY AND enddate <= NOW() - INTERVAL 23 HOUR`)
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate <= NOW() - INTERVAL 1 DAY`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
         return null;
       }
-
-      // contestChannel.send('contests to end vote:');
-      console.log('contests to end vote ****************');
       rows.forEach(contest => {
-        // contestChannel.send(contest.name);
-        console.log(contest.name);
-        return database.query(`UPDATE contest SET voted = 1 WHERE id = '${contest.id}'`);
+
+        let voteMessageId = contest.votelink.split('/');
+        voteMessageId = voteMessageId[voteMessageId.length - 1];
+
+        contestChannel.send(`<@${contestant}> Voting for **${contest.name}** (${contest.id}) ended!`).then(msg => {
+          contestChannel.fetchMessage(voteMessageId).then(msg => {
+            console.log('fetched message*******************');
+            console.log(msg.content);
+            msg.reactions.forEach(reaction => {
+              let user = {};
+              user.emote = reaction.emoji.name;
+              user.count = reaction.emoji.reaction.count;
+
+              participants.push(user);
+
+              console.log('***************************');
+              console.log(reaction.emoji.name);
+              // contestChannel.send(reaction.emoji.name);
+              console.log('***************************');
+            });
+          })
+          .then(() => {
+
+            db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`)
+            .then(rows => {
+              for (let i = 0; i < rows.length; i++) {
+                participants[i].id = rows[i].userId;
+                participants[i].submission = rows[i].submission;
+              }
+            })
+            .then(() => {
+              console.log('participants after get users ************************');
+              console.log(participants);
+            }))
+            .catch(err => {
+              logger.error(err, {logType: 'error', time: Date.now()});
+              throw err;
+            });
+
+          })
+          .catch(err => {
+            logger.error(err, {logType: 'error', time: Date.now()});
+            throw err;
+          });
+        });
+
+        database.query(`UPDATE contest SET voted = 1 WHERE id = '${contest.id}'`);
+        database.query(`INSERT INTO contestResults (contestId) VALUES (${contest.id})`);
       });
+    })
+    .then(() => {
+      console.log('participants ***************************');
+      console.log(participants);
     }))
     .catch(err => {
       if (err.message == 'nothing found') {
