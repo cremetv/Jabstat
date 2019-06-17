@@ -332,7 +332,7 @@ module.exports.run = async(client, message, args, db) => {
       return null;
     }
 
-    return database.query(`INSERT INTO contestUsers (contestID, userID, submission, submissionLink) VALUES ('${contestId}', ${user.id}, '${submission}', '${submissionLink}')`);
+    return database.query(`INSERT INTO contestUsers (contestID, userID, discordId, submission, submissionLink) VALUES ('${contestId}', ${user.id}, '${user.userID}', '${submission}', '${submissionLink}')`);
   })
   .then(rows => {
     message.react("👍");
@@ -621,13 +621,12 @@ module.exports.run = async(client, message, args, db) => {
         let embed = new Discord.RichEmbed()
         .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
         .setTitle(`Contest: ${contest.name}`)
-        .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}`)
+        .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}\n*Date: DD.MM.YYYY UTC*`)
         .setColor('#2ecc71')
         .addBlankField()
         .addField('Themes:', `${themes.join('\n')}`)
         .addBlankField()
         .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
-        .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
         message.channel.send(`<@${contestant}>`).then(msg => {
