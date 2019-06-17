@@ -16,8 +16,36 @@ const formatDate = (rawDate) => {
   }
 }
 
+Object.compare = function (obj1, obj2) {
+	//Loop through properties in object 1
+	for (var p in obj1) {
+		//Check property exists on both objects
+		if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
+
+		switch (typeof (obj1[p])) {
+			//Deep compare objects
+			case 'object':
+				if (!Object.compare(obj1[p], obj2[p])) return false;
+				break;
+			//Compare function code
+			case 'function':
+				if (typeof (obj2[p]) == 'undefined' || (p != 'compare' && obj1[p].toString() != obj2[p].toString())) return false;
+				break;
+			//Compare values
+			default:
+				if (obj1[p] != obj2[p]) return false;
+		}
+	}
+
+	//Check object 2 for any extra properties
+	for (var p in obj2) {
+		if (typeof (obj1[p]) == 'undefined') return false;
+	}
+	return true;
+};
+
 // const selectedServer = '582622116617125928'; // Cult of Jabrils
-const selectedServer = '343771301405786113'; // Cremes filthy bot testing area
+const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
 
 // const contestant = '&588687670490824704'; // Cult of jabrils
 const contestant = '&588700001090273295'; // cremes filthy bot testing area
@@ -183,13 +211,12 @@ module.exports = {
         let embed = new Discord.RichEmbed()
         .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
         .setTitle(`Contest: ${contest.name}`)
-        .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}`)
+        .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}\n*Date: DD.MM.YYYY UTC*`)
         .setColor('#2ecc71')
         .addBlankField()
         .addField('Themes:', `${themes.join('\n')}`)
         .addBlankField()
         .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
-        .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
         contestChannel.send(`<@${contestant}>`).then(msg => {
@@ -249,19 +276,13 @@ module.exports = {
 
         contestChannel.send(`<@${contestant}> Voting for **${contest.name}** (${contest.id}) ended!`).then(msg => {
           contestChannel.fetchMessage(voteMessageId).then(msg => {
-            console.log('fetched message*******************');
-            console.log(msg.content);
+
             msg.reactions.forEach(reaction => {
               let user = {};
               user.emote = reaction.emoji.name;
               user.count = reaction.emoji.reaction.count;
 
               participants.push(user);
-
-              console.log('***************************');
-              console.log(reaction.emoji.name);
-              // contestChannel.send(reaction.emoji.name);
-              console.log('***************************');
             });
           })
           .then(() => {
@@ -269,13 +290,76 @@ module.exports = {
             db.execute(config, database => database.query(`SELECT * FROM contestUsers WHERE contestID = '${contest.id}'`)
             .then(rows => {
               for (let i = 0; i < rows.length; i++) {
-                participants[i].id = rows[i].userId;
+                let userDiscordId = rows[i].discordId;
+
+                participants[i].id = userDiscordId;
                 participants[i].submission = rows[i].submission;
               }
             })
             .then(() => {
-              console.log('participants after get users ************************');
-              console.log(participants);
+              // sort for count of emotes
+              participants.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
+
+              participants.reverse();
+              // let winners = participants.slice(0, 3);
+              let places = ['1st', '2nd', '3rd'];
+
+              var groupBy = function(xs, key) {
+                return xs.reduce(function(rv, x) {
+                  (rv[x[key]] = rv[x[key]] || []).push(x);
+                  return rv;
+                }, {});
+              };
+
+              const grouped = Object.entries(groupBy(participants, 'count'));
+              grouped.reverse();
+
+              let i = 0;
+              let winners = [];
+              let winnerImg;
+
+              for (const [count, users] of grouped) {
+              	let groupedUsers = [];
+              	users.forEach(user => {
+              		groupedUsers.push(`[<@${user.id}>](${user.submission})`);
+                  if (i = 0) {
+                    winnerImg = user.submission;
+                  }
+              	});
+              	// console.log(`${places[i]}: ${groupedUsers.join(', ')} (${count})`);
+              	winners.push(`${places[i]}: ${groupedUsers.join(', ')} (${count})`);
+              	i++;
+              }
+
+              winners = winners.slice(0, 3);
+
+
+              let embed = new Discord.RichEmbed()
+              .setAuthor(`We have a winner!`, 'https://ice-creme.de/images/jabstat/winner.jpg')
+              .setTitle(`Contest: ${contest.name}`)
+              .setDescription(`${contest.description}`)
+              .setThumbnail(winnerImg)
+              .setColor('#f1c40f')
+              .addBlankField()
+              .addField('Result:', `${winners.join('\n')}`)
+              .addBlankField()
+              .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
+
+              contestChannel.send({embed: embed});
+
+              switch (winners.length) {
+                case 3:
+                  database.query(`INSERT INTO contestResults (contestId, winner, winnerCount, second, secondCount, third, thirdCount) VALUES (${contest.id}, '${winners[0].id}', '${winners[0].count}', '${winners[1].id}', '${winners[1].count}', '${winners[2].id}', '${winners[2].count}')`);
+                  break;
+                case 2:
+                  database.query(`INSERT INTO contestResults (contestId, winner, winnerCount, second, secondCount) VALUES (${contest.id}, '${winners[0].id}', '${winners[0].count}', '${winners[1].id}', '${winners[1].count}')`);
+                  break;
+                case 1:
+                  database.query(`INSERT INTO contestResults (contestId, winner, winnerCount) VALUES (${contest.id}, '${winners[0].id}', '${winners[0].count}')`);
+                  break;
+                default:
+                  database.query(`INSERT INTO contestResults (contestId) VALUES (${contest.id})`);
+              }
             }))
             .catch(err => {
               logger.error(err, {logType: 'error', time: Date.now()});
@@ -290,12 +374,7 @@ module.exports = {
         });
 
         database.query(`UPDATE contest SET voted = 1 WHERE id = '${contest.id}'`);
-        database.query(`INSERT INTO contestResults (contestId) VALUES (${contest.id})`);
       });
-    })
-    .then(() => {
-      console.log('participants ***************************');
-      console.log(participants);
     }))
     .catch(err => {
       if (err.message == 'nothing found') {
@@ -306,5 +385,64 @@ module.exports = {
       }
     });
   }, // checkEndVoting
+
+
+  manageReactions: (client, messageReaction, user) => {
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate <= NOW() - INTERVAL 1 DAY`)
+    .then(rows => {
+      if (rows.length < 1) {
+        throw new Error('nothig found');
+        return null;
+      }
+
+      rows.forEach(contest => {
+        let votelink = contest.votelink;
+        let votelinkArr = votelink.split('/');
+        let votelinkId = votelinkArr[votelinkArr.length - 1];
+
+        if (messageReaction.message.id == votelinkId) {
+
+          messageReaction.message.channel.fetchMessage(messageReaction.message.id).then(msg => {
+            // get all users that reacted already
+            let reactionUsers = [];
+
+            msg.reactions.forEach(reaction => {
+              reaction.users.forEach(user => {
+                reactionUsers.push(user.username);
+              });
+            });
+
+            // check if a user is duplicated in the array
+            let sortedReactionUsers = reactionUsers.slice().sort();
+            let reactionResults = [];
+            for (let i = 0; i < sortedReactionUsers.length - 1; i++) {
+              if (sortedReactionUsers[i + 1] == sortedReactionUsers[i]) {
+                reactionResults.push(sortedReactionUsers[i]);
+              }
+            }
+
+            if (reactionResults.length >= 1) {
+              console.log(`${user.username} already voted! Removed it.`);
+              // messageReaction.message.channel.send(`<@${user.id}> you voted already!`).then(msg => {
+              //   setTimeout(() => {
+              //     msg.delete();
+              //   }, 2000);
+              // });
+              messageReaction.remove(user);
+              return;
+            }
+          });
+        }
+      });
+    }))
+    .catch(err => {
+      if (err.message == 'nothing found') {
+        console.log('no voting contest found to manage reactions');
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
+    });
+  }, // manageReactions
 
 }
