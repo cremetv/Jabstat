@@ -391,7 +391,7 @@ module.exports = {
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate <= NOW() - INTERVAL 1 DAY`)
     .then(rows => {
       if (rows.length < 1) {
-        throw new Error('nothig found');
+        throw new Error('nothing found');
         return null;
       }
 
@@ -404,33 +404,42 @@ module.exports = {
 
           messageReaction.message.channel.fetchMessage(messageReaction.message.id).then(msg => {
             // get all users that reacted already
-            let reactionUsers = [];
+            let reactionUsers = [], i = 0;
 
-            msg.reactions.forEach(reaction => {
-              reaction.users.forEach(user => {
-                reactionUsers.push(user.username);
+            const reactionHandling = new Promise((resolve, reject) => {
+              msg.reactions.forEach(reaction => {
+                reaction.fetchUsers().then(users => {
+                  users.forEach(user => {
+                    reactionUsers.push(user.username);
+                  });
+                }).then(() => {
+                  i++;
+                  if (i == msg.reactions.size) resolve();
+                });
               });
             });
 
-            // check if a user is duplicated in the array
-            let sortedReactionUsers = reactionUsers.slice().sort();
-            let reactionResults = [];
-            for (let i = 0; i < sortedReactionUsers.length - 1; i++) {
-              if (sortedReactionUsers[i + 1] == sortedReactionUsers[i]) {
-                reactionResults.push(sortedReactionUsers[i]);
+            reactionHandling.then(() => {
+              // check if a user is duplicated in the array
+              let sortedReactionUsers = reactionUsers.slice().sort();
+              let reactionResults = [];
+              for (let i = 0; i < sortedReactionUsers.length - 1; i++) {
+                if (sortedReactionUsers[i + 1] == sortedReactionUsers[i]) {
+                  reactionResults.push(sortedReactionUsers[i]);
+                }
               }
-            }
 
-            if (reactionResults.length >= 1) {
-              console.log(`${user.username} already voted! Removed it.`);
-              // messageReaction.message.channel.send(`<@${user.id}> you voted already!`).then(msg => {
-              //   setTimeout(() => {
-              //     msg.delete();
-              //   }, 2000);
-              // });
-              messageReaction.remove(user);
-              return;
-            }
+              if (reactionResults.length >= 1) {
+                console.log(`${user.username} already voted! Removed it.`);
+                messageReaction.message.channel.send(`<@${user.id}> you voted already!`).then(msg => {
+                  setTimeout(() => {
+                    msg.delete();
+                  }, 2000);
+                });
+                messageReaction.remove(user);
+                return;
+              }
+            });
           });
         }
       });
