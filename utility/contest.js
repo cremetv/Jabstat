@@ -300,8 +300,7 @@ module.exports = {
               // sort for count of emotes
               participants.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
 
-              participants.reverse();
-              // let winners = participants.slice(0, 3);
+              // participants.reverse();
               let places = ['1st', '2nd', '3rd'];
 
               var groupBy = function(xs, key) {
