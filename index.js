@@ -228,6 +228,7 @@ client.on('ready', async () => {
     if (hour < 0) hour += 3600000;
     // if (hour < 0) hour += 60000; // minutes
     setTimeout(() => {
+      contestFunctions.checkStarttimes(client);
       contestFunctions.checkDeadlines(client);
       setTimeout(() => {
         contestFunctions.checkEndVoting(client);
@@ -273,6 +274,7 @@ client.on('ready', async () => {
 
 
 client.on('messageReactionAdd', async (messageReaction, user) => {
+  if (user.bot) return;
   contestFunctions.manageReactions(client, messageReaction, user);
 });
 
