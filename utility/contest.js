@@ -141,7 +141,7 @@ module.exports = {
       let contestEmbed = new Discord.RichEmbed()
       .setAuthor('New Contest!', (contest.visibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
       .setTitle(`Contest: ${contest.name}`)
-      .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.${voteLinkStr}\n\n*Date: DD.MM.YYYY UTC*`)
+      .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.\n\n*Date: DD.MM.YYYY UTC*`)
       .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
       .addBlankField()
       .addField('Start', startdate.dateStr, true)
