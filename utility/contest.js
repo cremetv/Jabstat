@@ -89,7 +89,8 @@ module.exports = {
 
 
   checkStarttimes: (client) => {
-    console.log('check contest starttimes');
+    let contest, themes = [];
+
     db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND startdate <= NOW() AND startdate > NOW() - INTERVAL 1 HOUR`)
     .then(rows => {
       if (rows.length < 1) {
@@ -97,10 +98,57 @@ module.exports = {
         return null;
       }
 
-      rows.forEach(contest => {
-        console.log('***************');
-        console.log(`starting contest: ${contest.name}`);
-        console.log('***************');
+      contest = rows[0];
+      startdate = formatDate(contest.startdate);
+      enddate = formatDate(contest.enddate);
+
+      console.log('***************');
+      console.log(`starting contest: ${contest.name}`);
+      console.log('***************');
+
+      return database.query(`SELECT * FROM contestThemes WHERE contestId = '${contest.id}' ORDER BY startdate`);
+    })
+    .then(rows => {
+      if (rows.length < 1) {
+        themes.push('not set');
+      } else {
+        for (let i = 0; i < rows.length; i++) {
+          let themeStart = formatDate(rows[i].startdate);
+          let themeEnd = formatDate(rows[i].enddate);
+
+          // if the startdate of the theme is in the future && its a hidden contest hide the theme
+          if (themeStart.date > currentDate && contest.visibility == 'hidden') {
+            themes.push('- ' + '\\*'.repeat(rows[i].name.length));
+          } else if (themeEnd.date < currentDate) {
+            // if the theme is already over => line through
+            themes.push(`- ~~${rows[i].name}~~`);
+          } else if (themeStart.date <= currentDate && themeEnd.date >= currentDate) {
+            // if the theme is right now => bold & underlined
+            themes.push(`- __**${rows[i].name}**__`);
+          } else {
+            themes.push(`- ${rows[i].name}`);
+          }
+        }
+      }
+
+      let contestTypeStr = '';
+      if (themes.length > 1) {
+        contestTypeStr = `\n\n*This is a ${contest.type} contest*`;
+      }
+
+      let contestEmbed = new Discord.RichEmbed()
+      .setAuthor('New Contest!', (contest.visibility == 'hidden') ? 'https://ice-creme.de/images/jabstat/hidden-icon.jpg' : 'https://ice-creme.de/images/jabstat/public-icon.jpg')
+      .setTitle(`Contest: ${contest.name}`)
+      .setDescription(`${contest.description}${contestTypeStr}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.${voteLinkStr}\n\n*Date: DD.MM.YYYY UTC*`)
+      .setColor((contest.visibility == 'hidden') ? '#e74c3c' : '#3498db')
+      .addBlankField()
+      .addField('Start', startdate.dateStr, true)
+      .addField('Deadline', enddate.dateStr, true)
+      .addField('Themes:', `${themes.join('\n')}`)
+      .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
+
+      contestChannel.send(`<@${contestant}>`).then(msg => {
+        contestChannel.send({embed: contestEmbed});
       });
     }))
     .catch(err => {
