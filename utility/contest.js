@@ -9,7 +9,7 @@ let currentDate = new Date();
 
 const formatDate = (rawDate) => {
   let date = new Date(rawDate);
-  let dateStr = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+  let dateStr = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
   return {
     date: date,
     dateStr: dateStr
@@ -86,6 +86,32 @@ module.exports = {
     });
 
   }, // getThemes
+
+
+  checkStarttimes: (client) => {
+    console.log('check contest starttimes');
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND startdate <= NOW() AND startdate > NOW() - INTERVAL 1 HOUR`)
+    .then(rows => {
+      if (rows.length < 1) {
+        throw new Error('nothing found');
+        return null;
+      }
+
+      rows.forEach(contest => {
+        console.log('***************');
+        console.log(`starting contest: ${contest.name}`);
+        console.log('***************');
+      });
+    }))
+    .catch(err => {
+      if (err.message == 'nothing found') {
+        console.log('no contest found to start');
+      } else {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      }
+    });
+  }, // checkStarttimes
 
 
   checkDeadlines: (client) => {
@@ -205,7 +231,7 @@ module.exports = {
 
         let tomorrow = new Date();
         tomorrow.setHours(tomorrow.getHours() + 24);
-        tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '/' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '/' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
+        tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '.' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
 
         // contest detail embed
         let embed = new Discord.RichEmbed()
@@ -387,7 +413,7 @@ module.exports = {
 
 
   manageReactions: (client, messageReaction, user) => {
-    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL AND enddate <= NOW() - INTERVAL 1 DAY`)
+    db.execute(config, database => database.query(`SELECT * FROM contest WHERE active = 1 AND votelink IS NOT NULL AND voted IS NULL`)
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
@@ -428,7 +454,7 @@ module.exports = {
                 }
               }
 
-              if (reactionResults.length >= 1) {
+              if (reactionResults.length >= 1 && reactionResults.includes(user.username)) {
                 console.log(`${user.username} already voted! Removed it.`);
                 messageReaction.message.channel.send(`<@${user.id}> you voted already!`).then(msg => {
                   setTimeout(() => {
