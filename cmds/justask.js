@@ -26,7 +26,7 @@ module.exports.run = async(client, message, args, con) => {
 module.exports.help = {
   name: 'justask',
   alias: 'ask',
-  description: 'canvas test',
+  description: 'output a "Don\'t ask to ask, just ask" message',
   usage: '',
   admin: false
 }
