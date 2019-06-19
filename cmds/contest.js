@@ -17,7 +17,7 @@ module.exports.run = async(client, message, args, db) => {
 
   const formatDate = (rawDate) => {
     let date = new Date(rawDate);
-    let dateStr = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    let dateStr = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
     return {
       date: date,
       dateStr: dateStr
@@ -615,7 +615,7 @@ module.exports.run = async(client, message, args, db) => {
 
         let tomorrow = new Date();
         tomorrow.setHours(tomorrow.getHours() + 24);
-        tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '/' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '/' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
+        tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '.' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
 
         // contest detail embed
         let embed = new Discord.RichEmbed()
