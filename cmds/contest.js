@@ -4,8 +4,8 @@ const functions = require('./../utility/contest');
 const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 
-// const contestant = '&588687670490824704'; // Cult of jabrils
-const contestant = '&588700001090273295'; // cremes filthy bot testing area
+const contestant = '&588687670490824704'; // Cult of jabrils
+// const contestant = '&588700001090273295'; // cremes filthy bot testing area
 
 module.exports.run = async(client, message, args, db) => {
 

@@ -16,6 +16,14 @@ const formatDate = (rawDate) => {
   }
 }
 
+
+const selectedServer = '582622116617125928'; // Cult of Jabrils
+// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
+
+const contestant = '&588687670490824704'; // Cult of jabrils
+// const contestant = '&588700001090273295'; // cremes filthy bot testing area
+
+
 Object.compare = function (obj1, obj2) {
 	//Loop through properties in object 1
 	for (var p in obj1) {
@@ -43,12 +51,6 @@ Object.compare = function (obj1, obj2) {
 	}
 	return true;
 };
-
-// const selectedServer = '582622116617125928'; // Cult of Jabrils
-const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
-
-// const contestant = '&588687670490824704'; // Cult of jabrils
-const contestant = '&588700001090273295'; // cremes filthy bot testing area
 
 
 module.exports = {
