@@ -334,7 +334,7 @@ module.exports = {
   checkEndVoting: (client) => {
     const contestChannel = client.channels.get(selectedServer);
 
-    let contest, participants = [], themes = [];
+    let contest, participants = [], themes = [], y = 0;
 
     /****************
     * check for contests to end voting
@@ -389,7 +389,6 @@ module.exports = {
               const grouped = Object.entries(groupBy(participants, 'count'));
               grouped.reverse();
 
-              let i = 0;
               let winners = [];
               let winnerImg;
 
@@ -397,13 +396,13 @@ module.exports = {
               	let groupedUsers = [];
               	users.forEach(user => {
               		groupedUsers.push(`[<@${user.id}>](${user.submission})`);
-                  if (i = 0) {
+                  if (y = 0) {
                     winnerImg = user.submission;
                   }
               	});
               	// console.log(`${places[i]}: ${groupedUsers.join(', ')} (${count})`);
-              	winners.push(`${places[i]}: ${groupedUsers.join(', ')} (${count})`);
-              	i++;
+              	winners.push(`${places[y]}: ${groupedUsers.join(', ')} (${count})`);
+              	y++;
               }
 
               winners = winners.slice(0, 3);
