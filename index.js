@@ -17,11 +17,11 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-const jabrilID = '430932202621108275'; // Cult of Jabril(s)
-// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
+// const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+const jabrilID = '343771301405786113'; // cremes filthy bot testing area
 
-const selectedServer = '582622116617125928'; // Cult of Jabrils
-// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
+// const selectedServer = '582622116617125928'; // Cult of Jabrils
+const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
@@ -71,6 +71,82 @@ app.get('/contest', (req, res) => {
   res.render('contest', {
     title: 'contest'
   });
+});
+
+
+app.get('/emotes', (req, res) => {
+  let emotes = [], emoteCount = {};
+
+  db.execute(config, database => database.query(`SELECT * FROM jabmotes`)
+  .then(rows => {
+    rows.forEach(row => {
+      emotes.push(row);
+      // emoteCount[row.id] = row.name + 'YEET';
+    });
+
+    // return database.query(`SELECT * FROM jabmotesCount`);
+  })
+  .then(() => {
+
+    function delay() {
+      return new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    async function delayedLog(item) {
+      await delay();
+
+      let count = 0;
+
+      db.execute(config, database => database.query(`SELECT * FROM jabmotesCount WHERE emoteid = '${item.id}'`)
+      .then(rows => {
+        if (rows.length < 0) return;
+
+        rows.forEach(row => {
+          console.log('one count');
+          console.log(row.count);
+          count += parseInt(row.count);
+          console.log(`current count: ${count}`);
+        });
+      })
+      .then(() => {
+        emoteCount[item.id] = count;
+        console.log(`count: ${count}`);
+      }));
+    }
+
+    async function processEmotes(array) {
+      array.forEach(async (item) => {
+        await delayedLog(item);
+      });
+
+      console.log(emoteCount);
+      console.log('done!');
+      res.render('emotes', {
+        title: 'emotes',
+        emotes: emotes,
+        emoteCount: emoteCount
+      });
+    }
+
+    processEmotes(emotes);
+
+  }))
+  // .then(() => {
+  //   console.log(emotes);
+  //   res.render('emotes', {
+  //     title: 'emotes',
+  //     emotes: emotes,
+  //     emoteCount: emoteCount
+  //   });
+  // }))
+  .catch(err => {
+    throw err;
+  });
+
+  // res.render('emotes', {
+  //   title: 'emotes',
+  //   emotes: emotes
+  // });
 });
 
 app.get('/log', (req, res) => {

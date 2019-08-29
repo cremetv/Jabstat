@@ -1,0 +1,95 @@
+<header>
+  <div class="site-title">
+    Jabstat
+  </div>
+  <div class="server-name">
+    Emotes
+  </div>
+</header>
+
+
+<aside class="sidebar">
+  <ul class="server-list">
+    <li class="logo online">
+      <a href="/">
+        <img src="images/bot-logo.png" alt="Drawmania Logo">
+      </a>
+      Jabstat
+    </li>
+    <li class="break"></li>
+  </ul>
+</aside>
+
+
+<main class="justify-top">
+  <div id="chat" class="chat">
+
+
+    <div class="message">
+      <div class="message__text">
+        lorem ipsum
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<aside class="stats">
+
+</aside>
+
+
+<div class="user-profile">
+</div>
+
+
+<div class="user-input">
+
+</div>
+
+
+<script>
+  let emotes = {{{json emotes}}};
+  let emoteCount = {{{json emoteCount}}};
+
+  console.log(emotes);
+
+  for (let i = 0; i < emotes.length; i++) {
+    let emote = emotes[i];
+
+    // let message = `
+    // <div class="message">
+    //   <div class="message__details">asd</div>
+    //   <div class="message__text">
+    //     ${emote.name}<br>
+    //     ${emote.emoteid}<br>
+    //     <img src="https://cdn.discordapp.com/emojis/${emote.emoteid}.png" alt="" />
+    //   </div>
+    // </div>
+    // `;
+    let message = `<div>${emoteCount[emote.id]} - <img src="https://cdn.discordapp.com/emojis/${emote.emoteid}.png" alt="" /><br></div>`;
+    $('#chat').append(message);
+  }
+
+  // emoteCount.forEach(count => {
+  //   let message = `<div>${count.count}<br></div>`;
+  //   $('#chat').append(message);
+  // });
+
+  // let i = 1;
+  // for (line in infoLog) {
+  //   let obj = JSON.parse(infoLog[line]);
+  //   let d = new Date(obj.time);
+  //
+  //   let message = `
+  //   <div class="message">
+  //     <div class="message__details">asd</div>
+  //     <div class="message__text">
+  //       ${obj.message}
+  //     </div>
+  //   </div>
+  //   `;
+  //   $('#chat').append(message);
+  // }
+
+</script>
