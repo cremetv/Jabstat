@@ -368,6 +368,27 @@ client.on('message', async message => {
   }
 
 
+  // check newcomers
+  // let keywords = ['hello', 'hi', 'hey', 'i am', 'i\'m', 'years old', 'yo', 'new to programming', 'i want to learn', 'currently learning', 'self taught', 'learning', 'teaching myself'];
+  // const checkInput = () => {
+  // 	let str = input.value;
+  //
+  // 	console.log(`message: ${str}`);
+  //
+  // 	let prob = 0.0;
+  //
+  // 	keywords.forEach(word => {
+  // 		var regex = new RegExp(`\\b${word}\\b`, 'g');
+  // 		if (str.toLowerCase().match(regex)) prob += 0.25;
+  // 	});
+  //
+  // 	console.log(`Intro prob:`, prob);
+  // 	if (prob >= 0.5) {
+  // 		console.log('is an introduction');
+  // 	}
+  // }
+
+
   functions.logMessageCount(message);
   functions.logMember(message.member, 1);
 
