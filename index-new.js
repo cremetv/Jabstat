@@ -17,217 +17,30 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-const jabrilID = '430932202621108275'; // Cult of Jabril(s)
-// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
-
-const selectedServer = '582622116617125928'; // Cult of Jabrils
-// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
-
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
 
-/****************
-* Web
-****************/
-const socket = require('socket.io');
-const express = require('express');
-const http = require('http');
-const hbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const path = require('path');
-
-const app = express();
-app.engine('hbs', hbs({
-  extname: 'hbs',
-  helpers: require("./utility/helpers.js").helpers,
-  defaultLayout: 'layout',
-  layoutsDir: `${__dirname}/web/layouts`
-}));
-app.set('views', path.join(__dirname, 'web/views'));
-app.set('view engine', 'hbs');
-app.use(express.static(path.join(__dirname, '/web/public')));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-const webServer = http.createServer(app).listen(3000, () => {
-  logger.info(`${logColor.green}Jabstats web interface on port 3000${logColor.clear}`, {logType: 'log', time: Date.now()});
-});
-const io = socket.listen(webServer);
-
-
-app.get('/', (req, res) => {
-  // res.send('index');
-  res.render('index', {
-    title: 'index'
-  });
-});
-
-
-app.get('/contest', (req, res) => {
-
-  // get contests
-
-  res.render('contest', {
-    title: 'contest'
-  });
-});
-
-
-app.get('/emotes', (req, res) => {
-  let emotes = [], emoteCount = {};
-
-  db.execute(config, database => database.query(`SELECT * FROM jabmotes`)
-  .then(rows => {
-    rows.forEach(row => {
-      emotes.push(row);
-      // emoteCount[row.id] = row.name + 'YEET';
-    });
-
-    // return database.query(`SELECT * FROM jabmotesCount`);
-  })
-  .then(() => {
-
-    function delay() {
-      return new Promise(resolve => setTimeout(resolve, 300));
-    }
-
-    async function delayedLog(item) {
-      await delay();
-
-      let count = 0;
-
-      db.execute(config, database => database.query(`SELECT * FROM jabmotesCount WHERE emoteid = '${item.id}'`)
-      .then(rows => {
-        if (rows.length < 0) return;
-
-        rows.forEach(row => {
-          console.log('one count');
-          console.log(row.count);
-          count += parseInt(row.count);
-          console.log(`current count: ${count}`);
-        });
-      })
-      .then(() => {
-        emoteCount[item.id] = count;
-        console.log(`count: ${count}`);
-      }));
-    }
-
-    async function processEmotes(array) {
-      array.forEach(async (item) => {
-        await delayedLog(item);
-      });
-
-      console.log(emoteCount);
-      console.log('done!');
-      res.render('emotes', {
-        title: 'emotes',
-        emotes: emotes,
-        emoteCount: emoteCount
-      });
-    }
-
-    processEmotes(emotes);
-
-  }))
-  // .then(() => {
-  //   console.log(emotes);
-  //   res.render('emotes', {
-  //     title: 'emotes',
-  //     emotes: emotes,
-  //     emoteCount: emoteCount
-  //   });
-  // }))
-  .catch(err => {
-    throw err;
-  });
-
-  // res.render('emotes', {
-  //   title: 'emotes',
-  //   emotes: emotes
-  // });
-});
-
-app.get('/log', (req, res) => {
-
-  let infoPath = path.join(__dirname, 'info.log'),
-      errorPath = path.join(__dirname, 'error.log'),
-      // infoLog = [],
-      infoLog = {},
-      errorLog = '';
-
-  const getInfoLog = () => {
-    fs.readFile(infoPath, {encoding: 'utf-8'}, (err, data) => {
-      if (err) throw err;
-      let lines = data.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        // let el = {};
-        // el.log = lines[i];
-
-        // infoLog.push(el);
-        infoLog[i] = lines[i];
-      }
-      // infoLog[0] = infoLogArray;
-      // infoLog = data;
-      getErrorLog();
-    });
-  }
-
-  const getErrorLog = () => {
-    fs.readFile(errorPath, {encoding: 'utf-8'}, (err, data) => {
-      if (err) throw err;
-      errorLog = data;
-      renderLog();
-    });
-  }
-
-  const renderLog = () => {
-    // infoLog = `{"log": [${infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{')}]}`;
-    // infoLog = JSON.stringify(infoLog);
-    // infoLog = infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{');
-
-    res.render('log', {
-      title: 'log',
-      infoLog: infoLog,
-      errorLog: errorLog,
-    });
-  }
-
-  getInfoLog();
-
-});
-
-io.sockets.on('connection', (socket) => {
-  logger.info(`${logColor.connect} user connected to webinterface`, {logType: 'connect', time: Date.now()});
-
-  socket.on('verify', (data) => {
-
-    if (bcrypt.compareSync(data.pw, hash)) {
-      console.log('logged in!');
-    } else {
-      console.log('wrong pw!');
-    }
-  });
-});
-
+const web = require('./utility/web');
 
 
 /****************
 * Load Events
 ****************/
-fs.readdir("./events/", (err, files) => {
+fs.readdir('./events', (err, files) => {
   if (err) {
     logger.error(err, {logType: 'error', time: Date.now()});
     console.error(err);
     return;
   }
+
   files.forEach(file => {
-    const event = require(`./events/${file}`);
-    let eventName = file.split(".")[0];
+    const event = requre(`./events/${file}`);
+    let eventName = file.split('.')[0];
     client.on(eventName, event.bind(null, client));
   });
 });
+
+
 
 
 /****************
@@ -240,25 +53,23 @@ fs.readdir('./cmds/', (err, files) => {
     return;
   }
 
-	let jsfiles = files.filter(f => f.split('.').pop() === 'js');
-	if (jsfiles.length <= 0) {
+  let jsfiles = files.filter(f => f.split('.').pop() === 'js');
+  if (jsfiles.length <= 0) {
     logger.info('No commands to load!', {logType: 'warning', time: Date.now()});
-		return;
-	}
+    return;
+  }
 
   logger.info(`Loading ${jsfiles.length} commands!`, {logType: 'log', time: Date.now()});
 
-	jsfiles.forEach((f, i) => {
-		let props = require(`./cmds/${f}`);
+  jsfiles.forEach((f, i) => {
+    let props = require(`./cmds/${f}`);
     logger.info(`${i + 1}: ${f} loaded!`, {logType: 'log', time: Date.now()});
-		client.commands.set(props.help.name, props);
+    client.commands.set(props.help.name, props);
     if (props.help.alias) {
       client.commands.set(props.help.alias, props);
     }
-	});
+  });
 });
-
-
 
 
 
@@ -268,10 +79,12 @@ client.on('ready', async () => {
   server = client.guilds.get(jabrilID);
 
   const contestChannel = client.channels.get(selectedServer);
-  contestChannel.fetchMessages().then(msg => console.log('fetched old messages')).catch(err => {
-    logger.error(err, {logType: 'error', time: Date.now()});
-    throw err;
-  });
+  contestChannel.fetchMessages()
+    .then(msg => console.log('fetched old messages'))
+    .catch(err => {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    });
 
   functions.logServerStats(server);
   server.channels.forEach(c => {
@@ -294,15 +107,15 @@ client.on('ready', async () => {
   dailyLog();
 
 
+
   /****************
   * Check for contest Deadlines
   ****************/
   const checkContests = () => {
     let now = new Date();
     let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 01, 0) - now;
-    // let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 01, 0) - now; // minutes
     if (hour < 0) hour += 3600000;
-    // if (hour < 0) hour += 60000; // minutes
+
     setTimeout(() => {
       contestFunctions.checkStarttimes(client);
       contestFunctions.checkDeadlines(client);
@@ -349,10 +162,12 @@ client.on('ready', async () => {
 });
 
 
+
 client.on('messageReactionAdd', async (messageReaction, user) => {
   if (user.bot) return;
   contestFunctions.manageReactions(client, messageReaction, user);
 });
+
 
 
 client.on('message', async message => {
@@ -400,9 +215,8 @@ client.on('message', async message => {
 
   let cmd = client.commands.get(command.slice(prefix.length));
   if (cmd) cmd.run(client, message, args, db);
-
-
 });
+
 
 
 client.on('channelCreate', channel => {
@@ -415,12 +229,6 @@ client.on('channelUpdate', channel => {
   functions.updateChannel(server, channel, 'update');
 });
 
-// client.on('guildBanAdd', (guild, user) => {
-//   functions.updateMemberBanned(user, 1);
-// });
-// client.on('guildBanRemove', (guild, user) => {
-//   functions.updateMemberBanned(user, 0);
-// });
 
 client.on('guildMemberAdd', member => {
   functions.logMember(member);
