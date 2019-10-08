@@ -380,11 +380,15 @@ module.exports.run = async(client, message, args, db) => {
       let contestStartDate = new Date(contest.startdate);
       let contestEndDate = new Date(contest.enddate);
       if (contestEndDate < currentDate) {
+        // ended contest
         contests.push(`\`${contest.id}\` | \t~~${contest.name}~~`);
       } else if (contestStartDate <= currentDate && contestEndDate >= currentDate) {
+        // current contest
         contests.push(`\`${contest.id}\` | \t__**${contest.name}**__`);
       } else {
-        contests.push(`\`${contest.id}\` | \t${contest.name}`);
+        // future contest
+        // contests.push(`\`${contest.id}\` | \t${contest.name}`);
+        contests.push(`\`${contest.id}\` | \t||secret 👀||`);
       }
     });
   })
