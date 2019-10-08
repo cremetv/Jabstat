@@ -17,11 +17,11 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-// const jabrilID = '430932202621108275'; // Cult of Jabril(s)
-const jabrilID = '343771301405786113'; // cremes filthy bot testing area
+const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
 
-// const selectedServer = '582622116617125928'; // Cult of Jabrils
-const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
+const selectedServer = '582622116617125928'; // Cult of Jabrils
+// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
