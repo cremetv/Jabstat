@@ -213,7 +213,7 @@ module.exports.run = async(client, message, args, db) => {
       if (err.message === 'no contest') {
         message.channel.send(`There is no contest with the id \`${cmd}\``);
       } else if (err.message === 'not public yet') {
-        message.channel.send(`This content isn't public yet`);
+        message.channel.send(`This contest isn't public yet`);
       } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
