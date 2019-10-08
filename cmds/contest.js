@@ -145,6 +145,12 @@ module.exports.run = async(client, message, args, db) => {
       startdate = formatDate(contest.startdate);
       enddate = formatDate(contest.enddate);
 
+      let contestStartDate = new Date(contest.startdate);
+      if (contestStartDate > currentDate) {
+        throw new Error('not public yet');
+        return null;
+      }
+
       return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contest.id}'`);
     })
     .then(rows => {
@@ -206,6 +212,8 @@ module.exports.run = async(client, message, args, db) => {
     .catch(err => {
       if (err.message === 'no contest') {
         message.channel.send(`There is no contest with the id \`${cmd}\``);
+      } else if (err.message === 'not public yet') {
+        message.channel.send(`This content isn't public yet`);
       } else {
         logger.error(err, {logType: 'error', time: Date.now()});
         throw err;
