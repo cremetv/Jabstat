@@ -273,12 +273,11 @@ client.on('ready', async () => {
     throw err;
   });
 
-  functions.logServerStats(server);
-  server.channels.forEach(c => {
-    functions.updateChannel(server, c);
-  });
-  functions.updateChannelDeleted(server);
+  functions.logServerInfo(server);
+  functions.logChannels(server); // if no channel is given as argument => update all
+                                    // for example functions.logChannels(server, channel);
   functions.logMemberCount(server);
+  functions.logMembers(server); // functions.logMembers(server, member);
 
   // log daily userCount
   const dailyLog = () => {
@@ -288,6 +287,7 @@ client.on('ready', async () => {
     setTimeout(() => {
       logger.info(`it\'s 23:59`);
       functions.logMemberCount(server);
+      functions.logMembers(server);
       dailyLog();
     }, millisTill23);
   }
@@ -363,7 +363,8 @@ client.on('message', async message => {
   if (found != null) {
     for (let i = 0; i < found.length; i++) {
       let emote = found[i].match(/<a?:([^:]*):([^>]*)>/i);
-      emote[0].startsWith('<a') ? functions.logEmote(message, emote, true) : functions.logEmote(message, emote);
+      functions.logEmote(message, emote);
+      // emote[0].startsWith('<a') ? functions.logEmote(message, emote, true) : functions.logEmote(message, emote);
     }
   }
 
@@ -389,8 +390,7 @@ client.on('message', async message => {
   // }
 
 
-  functions.logMessageCount(message);
-  functions.logMember(message.member, 1);
+  functions.logMessages(message);
 
   let messageArray = message.content.split(/\s+/g);
   let command = messageArray[0];
@@ -405,38 +405,32 @@ client.on('message', async message => {
 });
 
 
+client.on('guildMemberAdd', member => {
+  functions.logMembers(server, member, false);
+  functions.logMemberCount(server);
+});
+client.on('guildMemberRemove', member => {
+  functions.logMembers(server, member, true);
+  functions.logMemberCount(server);
+});
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  functions.logMembers(server, newMember, false);
+});
+client.on('guildBanAdd', (guild, user) => {
+  functions.logMemberBan(user, true);
+});
+client.on('guildBanRemove', (guild, user) => {
+  functions.logMemberBan(user, false);
+});
+
 client.on('channelCreate', channel => {
-  functions.updateChannel(server, channel, 'create');
+  functions.logChannels(server, channel);
 });
 client.on('channelDelete', channel => {
-  functions.updateChannel(server, channel, 'remove');
+  functions.logChannels(server, channel, true);
 });
-client.on('channelUpdate', channel => {
-  functions.updateChannel(server, channel, 'update');
-});
-
-// client.on('guildBanAdd', (guild, user) => {
-//   functions.updateMemberBanned(user, 1);
-// });
-// client.on('guildBanRemove', (guild, user) => {
-//   functions.updateMemberBanned(user, 0);
-// });
-
-client.on('guildMemberAdd', member => {
-  functions.logMember(member);
-  functions.logMemberCount(server);
-});
-
-
-client.on('guildMemberRemove', member => {
-  functions.logMember(member);
-  functions.logMemberCount(server);
-});
-
-
-client.on('guildMemberUpdate', (oldMember, newMember) => {
-  functions.logMember(newMember);
-  functions.logMemberCount(server);
+client.on('channelUpdate', (oldChannel, newChannel) => {
+  functions.logChannels(server, newChannel);
 });
 
 client.on('error', err => {
