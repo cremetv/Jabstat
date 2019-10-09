@@ -67,7 +67,7 @@ module.exports = {
       });
 
       let game;
-      if (target.user.presence.game.name === null) {
+      if (target.user.presence.game === null) {
         game = '';
       } else {
         game = mysql_real_escape_string(target.user.presence.game.name);
