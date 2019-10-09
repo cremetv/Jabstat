@@ -277,6 +277,10 @@ client.on('ready', async () => {
   functions.logChannels(server); // if no channel is given as argument => update all
                                     // for example functions.logChannels(server, channel);
   functions.logMemberCount(server);
+  
+  server.members.forEach(member => {
+    functions.logMembers(server, member);
+  })
   // functions.logMembers(server); // functions.logMembers(server, member);
 
   // log daily userCount
