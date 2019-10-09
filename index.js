@@ -277,10 +277,6 @@ client.on('ready', async () => {
   functions.logChannels(server); // if no channel is given as argument => update all
                                     // for example functions.logChannels(server, channel);
   functions.logMemberCount(server);
-  
-  server.members.forEach(member => {
-    functions.logMembers(server, member);
-  })
   // functions.logMembers(server); // functions.logMembers(server, member);
 
   // log daily userCount
@@ -393,7 +389,7 @@ client.on('message', async message => {
   // 	}
   // }
 
-
+  functions.logMembers(server, message.member);
   functions.logMessages(message);
 
   let messageArray = message.content.split(/\s+/g);
@@ -410,15 +406,15 @@ client.on('message', async message => {
 
 
 client.on('guildMemberAdd', member => {
-  // functions.logMembers(server, member, false);
+  functions.logMembers(server, member, false);
   functions.logMemberCount(server);
 });
 client.on('guildMemberRemove', member => {
-  // functions.logMembers(server, member, true);
+  functions.logMembers(server, member, true);
   functions.logMemberCount(server);
 });
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-  // functions.logMembers(server, newMember, false);
+  functions.logMembers(server, newMember, false);
 });
 client.on('guildBanAdd', (guild, user) => {
   functions.logMemberBan(user, true);

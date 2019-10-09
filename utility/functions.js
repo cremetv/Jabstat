@@ -55,51 +55,34 @@ module.exports = {
   /*************
   * Member
   *************/
-  // logMembers: (server, member, status) => {
-  //   const date = getDate();
-  //   let targets = member ? [member] : server.members;
-  //   if (!status) status = false;
-  //
-  //   targets.forEach(target => {
-  //     let roles = [];
-  //     target.roles.forEach(role => {
-  //       roles.push(role.name);
-  //     });
-  //
-  //     let game;
-  //     if (target.user.presence.game === null) {
-  //       game = '';
-  //     } else {
-  //       game = mysql_real_escape_string(target.user.presence.game.name);
-  //     }
-  //
-  //     db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, introducedAt, updated)
-  //                                                     VALUES ('${target.user.id}', '${mysql_real_escape_string(target.user.username)}', '${target.user.discriminator}', '${mysql_real_escape_string(target.nickname)}', 'NICKNAMES', '${target.user.avatar}', '${target.user.avatarURL}', ${target.displayColor}, '${target.displayHexColor}', '${target.user.presence.status}', ${target.user.bot}, ${status}, '${target.user.createdAt}', '${target.user.createdTimestamp}', '${target.joinedAt}', '${target.joinedTimestamp}', 'AGREEDAT', 'INTRODUCEDAT', '${date.date}')
-  //                                                   ON DUPLICATE KEY UPDATE username = '${mysql_real_escape_string(target.user.username)}', discriminator = '${target.user.discriminator}', nick = '${mysql_real_escape_string(target.nickname)}', nicknames = 'NICKNAMES', avatar = '${target.user.avatar}', avatarURL = '${target.user.avatarURL}', displayColor = ${target.displayColor}, displayHexColor = '${target.displayHexColor}', status = '${target.user.presence.status}', bot = ${target.user.bot}, deleted = ${status}, createdAt = '${target.user.createdAt}', createdTimestamp = '${target.user.createdTimestamp}', joinedAt = '${target.joinedAt}', joinedTimestamp = '${target.joinedTimestamp}', agreedAt = 'AGREEDAT', introducedAt = 'INTRODUCEDAT', updated = '${date.date}'`)
-  //     .then(rows => {
-  //       logger.info(`${logColor.logUpdate} Updated ${target.user.username}`, {logType: 'updateRow', time: Date.now()});
-  //     }))
-  //     .catch(err => {
-  //       logger.error(err, {logType: 'error', time: Date.now()});
-  //       throw err;
-  //     });
-  //   });
-  // },
   logMembers: (server, member, status) => {
     const date = getDate();
+    let targets = member ? [member] : server.members;
     if (!status) status = false;
 
-    let target = member;
+    targets.forEach(target => {
+      let roles = [];
+      target.roles.forEach(role => {
+        roles.push(role.name);
+      });
 
-    db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, introducedAt, updated)
-                                                    VALUES ('${target.user.id}', '${mysql_real_escape_string(target.user.username)}', '${target.user.discriminator}', '${mysql_real_escape_string(target.nickname)}', 'NICKNAMES', '${target.user.avatar}', '${target.user.avatarURL}', ${target.displayColor}, '${target.displayHexColor}', '${target.user.presence.status}', ${target.user.bot}, ${status}, '${target.user.createdAt}', '${target.user.createdTimestamp}', '${target.joinedAt}', '${target.joinedTimestamp}', 'AGREEDAT', 'INTRODUCEDAT', '${date.date}')
-                                                  ON DUPLICATE KEY UPDATE username = '${mysql_real_escape_string(target.user.username)}', discriminator = '${target.user.discriminator}', nick = '${mysql_real_escape_string(target.nickname)}', nicknames = 'NICKNAMES', avatar = '${target.user.avatar}', avatarURL = '${target.user.avatarURL}', displayColor = ${target.displayColor}, displayHexColor = '${target.displayHexColor}', status = '${target.user.presence.status}', bot = ${target.user.bot}, deleted = ${status}, createdAt = '${target.user.createdAt}', createdTimestamp = '${target.user.createdTimestamp}', joinedAt = '${target.joinedAt}', joinedTimestamp = '${target.joinedTimestamp}', agreedAt = 'AGREEDAT', introducedAt = 'INTRODUCEDAT', updated = '${date.date}'`)
-    .then(rows => {
-      logger.info(`${logColor.logUpdate} Updated ${target.user.username}`, {logType: 'updateRow', time: Date.now()});
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
+      let game;
+      if (target.user.presence.game === null) {
+        game = '';
+      } else {
+        game = mysql_real_escape_string(target.user.presence.game.name);
+      }
+
+      db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, introducedAt, updated)
+                                                      VALUES ('${target.user.id}', '${mysql_real_escape_string(target.user.username)}', '${target.user.discriminator}', '${mysql_real_escape_string(target.nickname)}', 'NICKNAMES', '${target.user.avatar}', '${target.user.avatarURL}', ${target.displayColor}, '${target.displayHexColor}', '${target.user.presence.status}', ${target.user.bot}, ${status}, '${target.user.createdAt}', '${target.user.createdTimestamp}', '${target.joinedAt}', '${target.joinedTimestamp}', 'AGREEDAT', 'INTRODUCEDAT', '${date.date}')
+                                                    ON DUPLICATE KEY UPDATE username = '${mysql_real_escape_string(target.user.username)}', discriminator = '${target.user.discriminator}', nick = '${mysql_real_escape_string(target.nickname)}', nicknames = 'NICKNAMES', avatar = '${target.user.avatar}', avatarURL = '${target.user.avatarURL}', displayColor = ${target.displayColor}, displayHexColor = '${target.displayHexColor}', status = '${target.user.presence.status}', bot = ${target.user.bot}, deleted = ${status}, createdAt = '${target.user.createdAt}', createdTimestamp = '${target.user.createdTimestamp}', joinedAt = '${target.joinedAt}', joinedTimestamp = '${target.joinedTimestamp}', agreedAt = 'AGREEDAT', introducedAt = 'INTRODUCEDAT', updated = '${date.date}'`)
+      .then(rows => {
+        logger.info(`${logColor.logUpdate} Updated ${target.user.username}`, {logType: 'updateRow', time: Date.now()});
+      }))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
     });
   },
 
