@@ -150,11 +150,11 @@ module.exports.run = async(client, message, args, db) => {
     })
     .then(() => {
       let createdAt = new Date(target.user.createdTimestamp);
-      createdAt = `${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${('0' + createdAt.getDate()).slice(-2)}.${createdAt.getFullYear()}`;
+      createdAt = `${('0' + createdAt.getDate()).slice(-2)}.${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${createdAt.getFullYear()}`;
 
       let embed = new Discord.RichEmbed()
       .setAuthor(message.guild.name)
-      .setDescription(`stats for ${message.guild.name}`)
+      .setDescription(`stats for ${message.guild.name}\n*Dates: DD.MM.YYYY UTC*`)
       .setThumbnail(message.guild.iconURL)
       .setColor('#EF3340')
       .addField('Members', `Users: \`${message.guild.memberCount}\``)

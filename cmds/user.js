@@ -38,18 +38,18 @@ module.exports.run = async(client, message, args, db) => {
       let user = rows[0];
 
       joinedAt = new Date(target.joinedTimestamp);
-      joinedAt = `${('0' + (joinedAt.getMonth() + 1)).slice(-2)}.${('0' + joinedAt.getDate()).slice(-2)}.${joinedAt.getFullYear()}`;
+      joinedAt = `${('0' + joinedAt.getDate()).slice(-2)}.${('0' + (joinedAt.getMonth() + 1)).slice(-2)}.${joinedAt.getFullYear()}`;
 
       createdAt = new Date(target.user.createdTimestamp);
-      createdAt = `${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${('0' + createdAt.getDate()).slice(-2)}.${createdAt.getFullYear()}`;
+      createdAt = `${('0' + createdAt.getDate()).slice(-2)}.${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${createdAt.getFullYear()}`;
 
       if (user.agreedAt != null) {
         agreedAt = new Date(user.agreedAt);
-        agreedAt = `${('0' + (agreedAt.getMonth() + 1)).slice(-2)}.${('0' + agreedAt.getDate()).slice(-2)}.${agreedAt.getFullYear()}`;
+        agreedAt = `${('0' + agreedAt.getDate()).slice(-2)}.${('0' + (agreedAt.getMonth() + 1)).slice(-2)}.${agreedAt.getFullYear()}`;
       }
       if (user.introducedAt != null) {
         introducedAt = new Date(user.introducedAt);
-        introducedAt = `${('0' + (introducedAt.getMonth() + 1)).slice(-2)}.${('0' + introducedAt.getDate()).slice(-2)}.${introducedAt.getFullYear()}`;
+        introducedAt = `${('0' + introducedAt.getDate()).slice(-2)}.${('0' + (introducedAt.getMonth() + 1)).slice(-2)}.${introducedAt.getFullYear()}`;
       }
 
       return database.query(`SELECT channelId, SUM(messageCount) AS messages
@@ -103,7 +103,7 @@ module.exports.run = async(client, message, args, db) => {
     .then(() => {
       let embed = new Discord.RichEmbed()
       .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL)
-      .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**`)
+      .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**\n*Dates: DD.MM.YYYY UTC*`)
       .setThumbnail(target.user.avatarURL)
       .setColor('#EF3340')
       .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${introducedAt}**\naccount created on: **${createdAt}**`)
