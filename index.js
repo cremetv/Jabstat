@@ -418,6 +418,7 @@ client.on('guildMemberRemove', member => {
 });
 client.on('guildMemberUpdate', (oldMember, newMember) => {
   functions.logMembers(server, newMember, false);
+  functions.logRolechange(server, oldMember, newMember);
 });
 client.on('guildBanAdd', (guild, user) => {
   functions.logMemberBan(user, true);

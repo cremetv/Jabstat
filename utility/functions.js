@@ -263,4 +263,25 @@ module.exports = {
     }
   },
 
+
+
+
+  /*************
+  * check if introduced role gets applied
+  *************/
+  logRolechange: (server, oldMember, newMember) => {
+    const date = getDate();
+    if (!oldMember.roles.find(r => r.name.toLowerCase() === `i've introduced myself`) && newMember.roles.find(r => r.name.toLowerCase() === `i've introduced myself`)) {
+      console.log('user got introduced role!');
+
+      db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, introducedAt, updated)
+                                                      VALUES ('${newMember.user.id}', '${mysql_real_escape_string(newMember.user.username)}', '${newMember.user.discriminator}', '${mysql_real_escape_string(newMember.nickname)}', 'NICKNAMES', '${newMember.user.avatar}', '${newMember.user.avatarURL}', ${newMember.displayColor}, '${newMember.displayHexColor}', '${newMember.user.presence.status}', ${newMember.user.bot}, false, '${newMember.user.createdAt}', '${newMember.user.createdTimestamp}', '${newMember.joinedAt}', '${newMember.joinedTimestamp}', '${date.date}', '${date.date}', '${date.date}')
+                                                    ON DUPLICATE KEY UPDATE introducedAt = '${date.date}', updated = '${date.date}'`))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
+    }
+  },
+
 }
