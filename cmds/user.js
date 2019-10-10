@@ -22,8 +22,9 @@ module.exports.run = async(client, message, args, db) => {
       lastWeekMessages,
       lastDayMessages,
       lastUpdated,
-      emoteCount
-      usedChannels = [];
+      emoteCount,
+      usedChannels = [],
+      introLink;
 
   if (target == null || target == undefined) return message.channel.send('no user found');
 
@@ -98,15 +99,24 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       lastDayMessages = (rows.length < 1) ? 0 : rows[0].messages;
 
+      return database.query(`SELECT * FROM stat_introductions WHERE userId = '${target.id}'`);
+    })
+    .then(rows => {
+      if (rows.length > 0) {
+        let introChannel = client.channels.find(c => c.name.toLowerCase() === 'introduce-yourself');
+        introLink = `https://discordapp.com/channels/${message.guild.id}/${introChannel.id}/${rows[0].messageId}`;
+      }
       return;
     })
     .then(() => {
+      let intro = (introLink) ? `[${introducedAt}](${introLink})` : `${introducedAt}`;
+
       let embed = new Discord.RichEmbed()
       .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL)
       .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**\n*Dates: DD.MM.YYYY UTC*`)
       .setThumbnail(target.user.avatarURL)
       .setColor('#EF3340')
-      .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${introducedAt}**\naccount created on: **${createdAt}**`)
+      .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${intro}**\naccount created on: **${createdAt}**`)
       .addBlankField()
       .addField('Most active Channel', `<#${mostActiveChannel.channelId}> \`${mostActiveChannel.count} messages\``)
       .addBlankField()
