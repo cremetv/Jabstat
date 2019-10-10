@@ -377,12 +377,14 @@ module.exports.run = async(client, message, args, db) => {
       }
   }
 
-  db.execute(config, database => database.query(`SELECT * FROM cont_contests ${statement} ORDER BY startdate`)
+  db.execute(config, database => database.query(`SELECT * FROM cont_contests ${statement} ORDER BY startdate DESC LIMIT 10`)
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contests');
       return null;
     }
+
+    rows = rows.reverse();
 
     rows.forEach(contest => {
       let contestStartDate = new Date(contest.startdate);
