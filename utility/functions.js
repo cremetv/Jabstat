@@ -163,10 +163,10 @@ module.exports = {
     if (message.guild === null) return;
     const date = getDate();
 
-    db.execute(config, database => database.query(`SELECT * FROM stat_messages WHERE userId = '${message.author.id}' AND date = '${date.dateSimple}'`)
+    db.execute(config, database => database.query(`SELECT * FROM stat_messages WHERE userId = '${message.author.id}' AND channelId = '${message.channel.id}' AND date = '${date.dateSimple}'`)
     .then(rows => {
       if (rows.length < 1) {
-        database.query(`INSERT INTO stat_messages (userId, messageCount, date, updated) VALUES ('${message.author.id}', 1, '${date.dateSimple}', '${date.date}')`);
+        database.query(`INSERT INTO stat_messages (userId, channelId, messageCount, date, updated) VALUES ('${message.author.id}', '${message.channel.id}', 1, '${date.dateSimple}', '${date.date}')`);
       } else {
         database.query(`UPDATE stat_messages SET messageCount = messageCount + 1, updated = '${date.date}' WHERE userId = '${message.author.id}' AND date = '${date.dateSimple}'`);
       }
