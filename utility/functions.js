@@ -215,12 +215,12 @@ module.exports = {
     const date = getDate();
     let keywords = ['hello', 'hi', 'hey', 'my name is', 'i am', 'i\'m', 'years old', 'yo', 'new to programming', 'new to coding', 'i want to learn', 'currently learning', 'self taught', 'learning', 'teaching myself'];
 
-    let roles = [];
-    message.member.roles.forEach(role => {
-      roles.push(role.name);
-    });
+    // let roles = [];
+    // message.member.roles.forEach(role => {
+    //   roles.push(role.name);
+    // });
 
-    if (roles.includes('@everyone') && roles.length <= 1) {
+    if (message.member.roles.size <= 1) {
       console.log('check Introduction');
       let prob = 0.0;
 
