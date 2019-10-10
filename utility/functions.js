@@ -168,7 +168,7 @@ module.exports = {
       if (rows.length < 1) {
         database.query(`INSERT INTO stat_messages (userId, channelId, messageCount, date, updated) VALUES ('${message.author.id}', '${message.channel.id}', 1, '${date.dateSimple}', '${date.date}')`);
       } else {
-        database.query(`UPDATE stat_messages SET messageCount = messageCount + 1, updated = '${date.date}' WHERE userId = '${message.author.id}' AND date = '${date.dateSimple}'`);
+        database.query(`UPDATE stat_messages SET messageCount = messageCount + 1, updated = '${date.date}' WHERE userId = '${message.author.id}' AND channelId = '${message.channel.id}' AND date = '${date.dateSimple}'`);
       }
       return;
     }))
