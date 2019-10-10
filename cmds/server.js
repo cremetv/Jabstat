@@ -41,9 +41,6 @@ module.exports.run = async(client, message, args, db) => {
         topMembers.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topMembers.reverse();
         topMembers = topMembers.slice(0, 3);
-
-        console.log('top members');
-        console.log(topMembers);
       }
 
       return database.query(`SELECT userId, SUM(messageCount) AS messages
@@ -62,9 +59,6 @@ module.exports.run = async(client, message, args, db) => {
         topMembersLastMonth.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topMembersLastMonth.reverse();
         topMembersLastMonth = topMembersLastMonth.slice(0, 3);
-
-        console.log('top members last month');
-        console.log(topMembersLastMonth);
       }
 
       return database.query(`SELECT userId, SUM(messageCount) AS messages
@@ -83,9 +77,6 @@ module.exports.run = async(client, message, args, db) => {
         topMembersLastWeek.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topMembersLastWeek.reverse();
         topMembersLastWeek = topMembersLastWeek.slice(0, 3);
-
-        console.log('top members last week');
-        console.log(topMembersLastWeek);
       }
 
       return database.query(`SELECT userId, SUM(messageCount) AS messages
@@ -104,9 +95,6 @@ module.exports.run = async(client, message, args, db) => {
         topMembersToday.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topMembersToday.reverse();
         topMembersToday = topMembersToday.slice(0, 3);
-
-        console.log('top members today');
-        console.log(topMembersToday);
       }
 
       return database.query(`SELECT SUM(messageCount) AS messages
@@ -115,16 +103,12 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       totalMessages = (rows.length < 1) ? 0 : rows[0].messages;
 
-      console.log('total messages', totalMessages);
-
       return database.query(`SELECT SUM(messageCount) AS messages
                               FROM stat_messages
                               WHERE updated >= NOW() - INTERVAL 30 DAY`);
     })
     .then(rows => {
       lastMonthMessages = (rows.lenght < 1) ? 0 : rows[0].messages;
-
-      console.log('last month messages', lastMonthMessages);
 
       return database.query(`SELECT SUM(messageCount) AS messages
                               FROM stat_messages
@@ -133,16 +117,12 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       lastWeekMessages = (rows.length < 1) ? 0 : rows[0].messages;
 
-      console.log('last weeks messages', lastWeekMessages);
-
       return database.query(`SELECT SUM(messageCount) AS messages
                               FROM stat_messages
                               WHERE updated >= NOW() - INTERVAL 1 DAY`);
     })
     .then(rows => {
       lastDayMessages = (rows.length < 1) ? 0 : rows[0].messages;
-
-      console.log('last 24 hour messages', lastDayMessages);
 
       return database.query(`SELECT channelId, SUM(messageCount) AS messages
                               FROM stat_messages
@@ -163,12 +143,7 @@ module.exports.run = async(client, message, args, db) => {
         topChannel.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topChannel.reverse();
 
-        console.log('top channel');
-        console.log(topChannel[0]);
-
         channelName = client.channels.find(c => c.id === topChannel[0].channelId);
-
-        console.log('channelName', channelName);
       }
 
       return;
