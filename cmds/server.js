@@ -183,7 +183,7 @@ module.exports.run = async(client, message, args, db) => {
       .setThumbnail(message.guild.iconURL)
       .setColor('#EF3340')
       .addField('Members', `Users: \`${message.guild.memberCount}\``)
-      .addField('Top Channel', `#${channelName.name} \`${topChannel[0].count} messages\``)
+      .addField('Top Channel', `<#${topChannel[0].channelId}> \`${topChannel[0].count} messages\``)
       .addField('Messages', `__total__: **${totalMessages}**\n30 days: **${lastMonthMessages}**\n7 days: **${lastWeekMessages}**\n24 hours: **${lastDayMessages}**`, true)
       .addField('Emotes', '...', true)
       .addField('Server Info', `Server created on: \`${createdAt}\`\n\nServer owner: <@${message.guild.ownerID}>`)

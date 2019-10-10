@@ -108,7 +108,7 @@ module.exports.run = async(client, message, args, db) => {
       .setColor('#EF3340')
       .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${introducedAt}**\naccount created on: **${createdAt}**`)
       .addBlankField()
-      .addField('Most active Channel', `#${channelName.name} \`${mostActiveChannel.count} messages\``)
+      .addField('Most active Channel', `<#${mostActiveChannel.channelId}> \`${mostActiveChannel.count} messages\``)
       .addBlankField()
       .addField('Messages', `__total__: **${totalMessages}**\nlast 30 days: **${lastMonthMessages}**\nlast 7 days: **${lastWeekMessages}**\nlast 24 hours: **${lastDayMessages}**`, true)
       .addField('Emotes', '...', true)
