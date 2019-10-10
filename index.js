@@ -392,6 +392,7 @@ client.on('message', async message => {
   functions.logMembers(server, message.member);
   functions.logMessages(message);
 
+  if (message.channel.name.toLowerCase() === 'rules' && message.member.roles.find(r => r.name === 'newcomer')) functions.checkAgree(server, message);
   if (message.channel.name.toLowerCase() === 'introduce-yourself') functions.checkIntroduction(server, message);
 
   let messageArray = message.content.split(/\s+/g);

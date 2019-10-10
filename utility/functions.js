@@ -209,6 +209,27 @@ module.exports = {
 
 
   /*************
+  * check agree
+  *************/
+  checkAgree: (server, message) => {
+    if (message.content.toLowerCase() != '!agree') return;
+    const date = getDate();
+
+    console.log('update agree');
+
+    db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, updated)
+                                                    VALUES ('${message.member.user.id}', '${mysql_real_escape_string(message.member.user.username)}', '${message.member.user.discriminator}', '${mysql_real_escape_string(message.member.nickname)}', 'NICKNAMES', '${message.member.user.avatar}', '${message.member.user.avatarURL}', ${message.member.displayColor}, '${message.member.displayHexColor}', '${message.member.user.presence.status}', ${message.member.user.bot}, false, '${message.member.user.createdAt}', '${message.member.user.createdTimestamp}', '${message.member.joinedAt}', '${message.member.joinedTimestamp}', '${date.date}', '${date.date}')
+                                                  ON DUPLICATE KEY UPDATE agreedAt = '${date.date}', updated = '${date.date}'`))
+    .catch(err => {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    });
+  },
+
+
+
+
+  /*************
   * introductions    -> newcomer -> agree -> no role -> introduce -> I've introduced myself
   *************/
   checkIntroduction: (server, message) => {
