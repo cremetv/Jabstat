@@ -205,4 +205,41 @@ module.exports = {
     });
   },
 
+
+
+
+  /*************
+  * introductions    -> newcomer -> agree -> no role -> introduce -> I've introduced myself
+  *************/
+  checkIntroduction: (server, message) => {
+    const date = getDate();
+    let keywords = ['hello', 'hi', 'hey', 'my name is', 'i am', 'i\'m', 'years old', 'yo', 'new to programming', 'new to coding', 'i want to learn', 'currently learning', 'self taught', 'learning', 'teaching myself'];
+
+    let roles = [];
+    message.member.roles.forEach(role => {
+      roles.push(role.name);
+    });
+
+    if (roles.includes('@everyone') && roles.length <= 1) {
+      console.log('check Introduction');
+      let prob = 0.0;
+
+      keywords.forEach(word => {
+        let regex = new RegExp(`\\b${word}\\b`, 'g');
+        if (message.content.toLowerCase().match(regex)) prob += 0.25;
+      });
+
+      console.log('Intro prob:', prob);
+      if (prob >= 0.5) {
+        console.log('is an introduction');
+
+        db.execute(config, database => database.query(`INSERT INTO stat_introductions (userId, text, probability, date) VALUES ('${message.author.id}', '${mysql_real_escape_string(message.content)}', ${prob}, '${date.dateSimple}')`))
+        .catch(err => {
+          logger.error(err, {logType: 'error', time: Date.now()});
+          throw err;
+        });
+      }
+    }
+  },
+
 }

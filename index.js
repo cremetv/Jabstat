@@ -392,6 +392,8 @@ client.on('message', async message => {
   functions.logMembers(server, message.member);
   functions.logMessages(message);
 
+  if (message.channel.name.toLowerCase() === 'introduce-yourself') functions.checkIntroduction(server, message);
+
   let messageArray = message.content.split(/\s+/g);
   let command = messageArray[0];
   let args = messageArray.slice(1);
