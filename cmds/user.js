@@ -102,7 +102,7 @@ module.exports.run = async(client, message, args, db) => {
     })
     .then(() => {
       let embed = new Discord.RichEmbed()
-      .setAuthor(`stats for ${target.displayName} (WIP)`, target.user.avatarURL)
+      .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL)
       .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**`)
       .setThumbnail(target.user.avatarURL)
       .setColor('#EF3340')
