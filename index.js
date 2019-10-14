@@ -434,6 +434,7 @@ client.on('channelDelete', channel => {
   functions.logChannels(server, channel, true);
 });
 client.on('channelUpdate', (oldChannel, newChannel) => {
+  if (newChannel.id === '581980129182613505' || newChannel.id === '581980094373822484' || newChannel.id === '598887260607217675' || newChannel.id === '581980156244131856') return;
   functions.logChannels(server, newChannel);
 });
 
