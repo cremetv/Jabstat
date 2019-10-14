@@ -253,8 +253,9 @@ module.exports = {
       console.log('Intro prob:', prob);
       if (prob >= 0.5) {
         console.log('is an introduction');
+        console.log('message id', message.id);
 
-        db.execute(config, database => database.query(`INSERT INTO stat_introductions (userId, text, probability, date) VALUES ('${message.author.id}', '${mysql_real_escape_string(message.content)}', ${prob}, '${date.dateSimple}')`))
+        db.execute(config, database => database.query(`INSERT INTO stat_introductions (userId, text, messageId, probability, date) VALUES ('${message.author.id}', '${mysql_real_escape_string(message.content)}', '${message.id}', ${prob}, '${date.dateSimple}')`))
         .catch(err => {
           logger.error(err, {logType: 'error', time: Date.now()});
           throw err;
