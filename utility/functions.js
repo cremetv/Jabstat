@@ -38,19 +38,10 @@ module.exports = {
   *************/
   logMemberCount: (server) => {
     const date = getDate();
-    db.execute(config, database => database.query(`SELECT * FROM jabmemberCount WHERE date = '${date.dateSimple}'`)
+    db.execute(config, database => database.query(`INSERT INTO stat_memberCount (memberCount, date, updated) VALUES(${server.memberCount}, '${date.dateSimple}', '${date.date}')
+                                                    ON DUPLICATE KEY UPDATE memberCount = ${server.memberCount}, updated = '${date.date}'`)
     .then(rows => {
-      if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabmemberCount (date, memberCount, updated)
-          VALUES ('${date.dateSimple}', ${server.memberCount}, '${date.date}')`
-        );
-        logger.info(`${logColor.logAdd} Inserted memberCount ${date.dateSimple} into jabmemberCount @${date.date}`, {logType: 'addRow', time: Date.now()});
-      } else {
-        database.query(`UPDATE jabmemberCount SET memberCount = ${server.memberCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated memberCount ${date.dateSimple} in jabmemberCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
-      }
-      return;
+      logger.info(`${logColor.logUpdate} updated memberCount ${date.dateSimple} @${date.date}`, {logType: 'updateRow', time: Date.now()});
     }))
     .catch(err => {
       logger.error(err, {logType: 'error', time: Date.now()});
@@ -59,359 +50,125 @@ module.exports = {
   },
 
 
-  /*************
-  * general server stats
-  *************/
-  logServerStats: (server) => {
-    db.execute(config, database => database.query(`SELECT * FROM jabstats`)
-    .then(rows => {
-      if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabstats (serverID, name, nameAcronym, memberCount, available, icon, iconURL, region, large, afkTimeout, ownerID, createdAt, createdTimestamp, explicitContentFilter, splash, splashURL, verified)
-          VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', ${server.memberCount}, ${server.available}, '${server.icon}', '${server.iconURL}', '${server.region}', ${server.large}, ${server.afkTimeout}, '${server.ownerID}', '${server.createdAt}', '${server.createdTimestamp}', ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', ${server.verified})
-        `);
-        logger.info(`${logColor.logAdd} Inserted serverStats`, {logType: 'addRow', time: Date.now()});
-      } else {
-        database.query(`
-          UPDATE jabstats SET
-            serverID = '${server.id}',
-            name = '${mysql_real_escape_string(server.name)}',
-            nameAcronym = '${server.nameAcronym}',
-            memberCount = ${server.memberCount},
-            available = ${server.available},
-            icon = '${server.icon}',
-            iconURL = '${server.iconURL}',
-            region = '${server.region}',
-            large = ${server.large},
-            afkTimeout = ${server.afkTimeout},
-            ownerID = '${server.ownerID}',
-            createdAt = '${server.createdAt}',
-            createdTimestamp = '${server.createdTimestamp}',
-            explicitContentFilter = ${server.explicitContentFilter},
-            splash = '${server.splash}',
-            splashURL = '${server.splashURL}',
-            verified = ${server.verified}
-          WHERE id = ${rows[0].id}
-        `);
-        logger.info(`${logColor.logUpdate} Updated serverStats`, {logType: 'updateRow', time: Date.now()});
-      }
-      return;
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
-    });
-  },
-
-
-  /*************
-  * Channels
-  *************/
-  updateChannel: (server, channel, status) => {
-    const date = getDate();
-
-    if (channel.type === 'dm') return;
-
-    // ignore some Channels
-    if (channel.id == '489143518716100629' || channel.id == '489146748720119818' || channel.id == '489146790482935808' || channel.id == '581980094373822484' || channel.id == '581980129182613505' || channel.id == '484167556303683585' || channel.id == '581980156244131856') return;
-
-    db.execute(config, database => database.query(`SELECT * FROM jabchannels WHERE channelID = '${channel.id}'`)
-    .then(rows => {
-      if (channel.topic == undefined) channel.topic = '';
-      if (channel.nsfw == undefined) channel.nsfw = false;
-      if (channel.lastMessageID == undefined) channel.lastMessageID = '';
-      if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabchannels (channelID, name, position, type, topic, nsfw, lastMessageID, deleted, updated)
-          VALUES ('${channel.id}', '${mysql_real_escape_string(channel.name)}', ${channel.position}, '${channel.type}', '${mysql_real_escape_string(channel.topic)}', ${channel.nsfw}, '${channel.lastMessageID}', 0, '${date.date}')
-        `);
-        logger.info(`${logColor.logAdd} Inserted ${channel.name} into jabchannels`, {logType: 'addRow', time: Date.now()});
-      } else {
-        database.query(`
-          UPDATE jabchannels SET
-            channelID = '${channel.id}',
-            name = '${mysql_real_escape_string(channel.name)}',
-            position = ${channel.position},
-            type = '${channel.type}',
-            topic = '${mysql_real_escape_string(channel.topic)}',
-            nsfw = ${channel.nsfw},
-            lastMessageID = '${channel.lastMessageID}',
-            deleted = 0,
-            updated = '${date.date}'
-          WHERE id = ${rows[0].id}
-        `);
-        logger.info(`${logColor.logUpdate} Updated ${channel.name} in jabchannels`, {logType: 'updateRow', time: Date.now()});
-      }
-      return rows;
-    })
-    .then((rows) => {
-      let serverChannel = server.channels.get(channel.id);
-      if (status == 'remove' || !serverChannel) {
-        database.query(`
-          UPDATE jabchannels SET
-            updated = '${date.date}',
-            deleted = 1
-          WHERE id = ${rows[0].id}
-        `);
-        logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${channel.name} to deleted`, {logType: 'updateRow', time: Date.now()});
-      }
-      return;
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
-    });
-  },
-
-
-  /*************
-  * update channels to deleted
-  *************/
-  updateChannelDeleted: (server) => {
-    db.execute(config, database => database.query(`SELECT * FROM jabchannels`)
-    .then(rows => {
-      rows.forEach((c, i) => {
-        let id = c.channelID;
-        let channel = server.channels.get(id);
-        if (!channel && rows[i]['deleted'] != 1) {
-          database.query(`UPDATE jabchannels SET deleted = true WHERE channelID = ${id}`);
-          logger.info(`${logColor.logUpdate}${logColor.logRemove} Updated channel ${id} to deleted`, {logType: 'updateRow', time: Date.now()});
-        }
-      });
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
-    });
-  },
 
 
   /*************
   * Member
   *************/
-  logMember: (member, messageAmount) => {
+  logMembers: (server, member, status) => {
     const date = getDate();
+    let targets = member ? [member] : server.members;
+    if (!status) status = false;
 
-    const nickname = member.nickname;
+    targets.forEach(target => {
+      let roles = [];
+      target.roles.forEach(role => {
+        roles.push(role.name);
+      });
 
-    if (!messageAmount) messageAmount = 0;
-
-    db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${member.user.id}'`)
-    .then(rows => {
-
-      let nicknames = [];
-
-      if (rows.length < 1) {
-        if (nickname != null) nicknames.push(nickname);
-
-        database.query(`
-          INSERT INTO jabusers (userID,
-            username,
-            discriminator,
-            nick,
-            nicknames,
-            avatar,
-            avatarURL,
-            displayColor,
-            displayHexColor,
-            bot,
-            createdAt,
-            createdTimestamp,
-            lastMessageID,
-            messageCount,
-            updated,
-            status,
-            game,
-            deleted,
-            banned)
-          VALUES ('${member.user.id}',
-          '${mysql_real_escape_string(member.user.username)}',
-          '${member.user.discriminator}',
-          '${mysql_real_escape_string(nickname)}',
-          '${nicknames}',
-          '${member.user.avatar}',
-          '${member.user.avatarURL}',
-          ${member.displayColor},
-          '${member.displayHexColor}',
-          ${member.user.bot},
-          '${member.user.createdAt}',
-          '${member.user.createdTimestamp}',
-          '${member.user.lastMessageID}',
-          ${messageAmount},
-          '${date.date}',
-          '${member.presence.status}',
-          '${member.presence.game}',
-          ${member.deleted},
-          0)
-        `);
-        logger.info(`${logColor.logAdd} Inserted ${member.user.username}'s messageCount & infos into jabusers`, {logType: 'addRow', time: Date.now()});
+      let game;
+      if (target.user.presence.game === null) {
+        game = '';
       } else {
-        let messageCount = parseInt(rows[0].messageCount) + messageAmount;
-        nicknames = rows[0].nicknames.split(',');
-
-        if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
-
-        database.query(`
-          UPDATE jabusers SET
-            username = '${mysql_real_escape_string(member.user.username)}',
-            discriminator = '${member.user.discriminator}',
-            nick = '${mysql_real_escape_string(nickname)}',
-            nicknames = '${nicknames}',
-            avatar = '${member.user.avatar}',
-            avatarURL = '${member.user.avatarURL}',
-            displayColor = ${member.displayColor},
-            displayHexColor = '${member.displayHexColor}',
-            bot = ${member.user.bot},
-            createdAt = '${member.user.createdAt}',
-            createdTimestamp = '${member.user.createdTimestamp}',
-            lastMessageID = '${member.user.lastMessageID}',
-            messageCount = ${messageCount},
-            updated = '${date.date}',
-            status = '${member.presence.status}',
-            game = '${member.presence.game}',
-            deleted = ${member.deleted},
-            banned = 0
-          WHERE userID = ${member.user.id}
-        `);
-        logger.info(`${logColor.logUpdate} Updated ${member.user.username}'s messageCount & infos in jabusers`, {logType: 'updateRow', time: Date.now()});
+        game = mysql_real_escape_string(target.user.presence.game.name);
       }
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
+
+      db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, updated)
+                                                      VALUES ('${target.user.id}', '${mysql_real_escape_string(target.user.username)}', '${target.user.discriminator}', '${mysql_real_escape_string(target.nickname)}', '${target.user.avatar}', '${target.user.avatarURL}', ${target.displayColor}, '${target.displayHexColor}', '${target.user.presence.status}', ${target.user.bot}, ${status}, '${target.user.createdAt}', '${target.user.createdTimestamp}', '${target.joinedAt}', '${target.joinedTimestamp}', '${date.date}')
+                                                    ON DUPLICATE KEY UPDATE username = '${mysql_real_escape_string(target.user.username)}', discriminator = '${target.user.discriminator}', nick = '${mysql_real_escape_string(target.nickname)}', avatar = '${target.user.avatar}', avatarURL = '${target.user.avatarURL}', displayColor = ${target.displayColor}, displayHexColor = '${target.displayHexColor}', status = '${target.user.presence.status}', bot = ${target.user.bot}, deleted = ${status}, createdAt = '${target.user.createdAt}', createdTimestamp = '${target.user.createdTimestamp}', joinedAt = '${target.joinedAt}', joinedTimestamp = '${target.joinedTimestamp}', updated = '${date.date}'`)
+      .then(rows => {
+        logger.info(`${logColor.logUpdate} Updated ${target.user.username}`, {logType: 'updateRow', time: Date.now()});
+      }))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
     });
   },
 
 
-  updateMemberBanned: (user, banned) => {
-    const date = getDate();
-    const nickname = null;
-
-    let consoleText = 'unbanned';
-    if (banned) consoleText = 'banned';
-
-    db.execute(config, database => database.query(`SELECT * FROM jabusers WHERE userID = '${user.id}'`)
-    .then(rows => {
-      let nicknames = [];
-      if (rows.length < 1) {
-        if (nickname != null) nicknames.push(nickname);
-        database.query(`
-          INSERT INTO jabusers
-          (userID,
-            username,
-            discriminator,
-            nick,
-            nicknames,
-            avatar,
-            avatarURL,
-            bot,
-            createdAt,
-            createdTimestamp,
-            lastMessageID,
-            messageCount,
-            updated,
-            status,
-            deleted,
-            banned)
-          VALUES ('${user.id}',
-          '${mysql_real_escape_string(user.username)}',
-          '${user.discriminator}',
-          '${mysql_real_escape_string(nickname)}',
-          '${nicknames}',
-          '${user.avatar}',
-          '${user.avatarURL}',
-          ${user.bot},
-          '${user.createdAt}',
-          '${user.createdTimestamp}',
-          '${user.lastMessageID}',
-          0,
-          '${date.date}',
-          'offline',
-          1,
-          ${banned})
-        `);
-        logger.info(`${logColor.logAdd} Inserted banned ${user.username}'s infos into jabusers`, {logType: 'addRow', time: Date.now()});
-      } else {
-        let messageCount = parseInt(rows[0].messageCount);
-        nicknames = rows[0].nicknames.split(',');
-
-        if (!nicknames.includes(nickname) && nickname != null) nicknames.push(nickname);
-
-        database.query(`
-          UPDATE jabusers SET
-            username = '${mysql_real_escape_string(user.username)}',
-            discriminator = '${user.discriminator}',
-            nick = '${mysql_real_escape_string(nickname)}',
-            nicknames = '${nicknames}',
-            avatar = '${user.avatar}',
-            avatarURL = '${user.avatarURL}',
-            bot = ${user.bot},
-            createdAt = '${user.createdAt}',
-            createdTimestamp = '${user.createdTimestamp}',
-            lastMessageID = '${user.lastMessageID}',
-            messageCount = ${messageCount},
-            updated = '${date.date}',
-            status = 'offline',
-            deleted = 1,
-            banned = ${banned}
-          WHERE userID = ${user.id}
-        `);
-        logger.info(`${logColor.logUpdate} Updated banned ${user.username}'s infos in jabusers`, {logType: 'updateRow', time: Date.now()});
-      }
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
-    });
-  },
 
 
   /*************
-  * total message count
+  * general server info
   *************/
-  logMessageCount: (message) => {
+  logServerInfo: (server) => {
+      db.execute(config, database => database.query(`INSERT INTO stat_serverInfo (serverId, name, acronym, greeting, memberCount, available, iconURL, defaultRole, afkTimeout, explicitContentFilter, splash, splashURL, createdAt, createdTimestamp, large, ownerID, region)
+                                                      VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', '${server.greeting}', ${server.memberCount}, ${server.available}, '${server.iconURL}', '${server.defaultRole}', ${server.afkTimeout}, ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', '${server.createdAt}', '${server.createdTimestamp}', ${server.large}, '${server.ownerID}', '${server.region}')
+                                                      ON DUPLICATE KEY UPDATE name = '${mysql_real_escape_string(server.name)}', acronym = '${server.nameAcronym}', greeting = '${server.greeting}', memberCount = ${server.memberCount}, available = ${server.available}, iconURL = '${server.iconURL}', defaultRole = '${server.defaultRole}', afkTimeout = ${server.afkTimeout}, explicitContentFilter = ${server.explicitContentFilter}, splash = '${server.splash}', splashURL = '${server.splashURL}', createdAt = '${server.createdAt}', createdTimestamp = '${server.createdTimestamp}', large = ${server.large}, ownerID = '${server.ownerID}', region = '${server.region}'`)
+      .then(rows => {
+        logger.info(`${logColor.logUpdate} Updated serverStats`, {logType: 'updateRow', time: Date.now()});
+      }))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
+  },
+
+
+
+
+  /*************
+  * Channels
+  *************/
+  logChannels: (server, channel, status) => {
+    const date = getDate();
+    let targets = channel ? [channel] : server.channels;
+    if (!status) status = false;
+
+    targets.forEach(target => {
+      let topic = target.topic || '';
+      let nsfw = target.nsfw || '0';
+      let lastMessageID = target.lastMessageID || '';
+
+      db.execute(config, database => database.query(`INSERT INTO stat_channels (channelID, name, topic, position, type, nsfw, lastMessageID, deleted, updated)
+                                                      VALUES ('${target.id}', '${mysql_real_escape_string(target.name)}', '${mysql_real_escape_string(topic)}', ${target.position}, '${target.type}', ${nsfw}, '${lastMessageID}', ${status}, '${date.date}')
+                                                      ON DUPLICATE KEY UPDATE name = '${mysql_real_escape_string(target.name)}', topic = '${mysql_real_escape_string(topic)}', position = ${target.position}, type = '${target.type}', nsfw = ${nsfw}, lastMessageID = '${lastMessageID}', deleted = ${status}, updated = '${date.date}'`)
+      .then(rows => {
+        logger.info(`${logColor.logUpdate} Updated ${target.name} in stat_channels`, {logType: 'updateRow', time: Date.now()});
+      }))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
+    });
+  },
+
+
+
+
+  /*************
+  * change users ban status
+  *************/
+  logMemberBan: (user, ban) => {
+    const date = getDate();
+
+    db.execute(config, database => database.query(`UPDATE stat_members SET banned = ${ban} WHERE userId = '${user.id}'`)
+    .then(rows => {
+      logger.info(`${logColor.logUpdate} Updated ${user.username}'s ban status`, {logType: 'updateRow', time: Date.now()});
+    }))
+    .catch(err => {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    });
+  },
+
+
+
+
+  /*************
+  * message count
+  *************/
+  logMessages: message => {
     if (message.guild === null) return;
-
     const date = getDate();
-    const userID = message.member.id;
 
-    db.execute(config, database => database.query(`SELECT * FROM jabmessageCount WHERE date = '${date.dateSimple}'`)
+    db.execute(config, database => database.query(`SELECT * FROM stat_messages WHERE userId = '${message.author.id}' AND channelId = '${message.channel.id}' AND date = '${date.dateSimple}'`)
     .then(rows => {
-
       if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabmessageCount (date, messageCount, updated)
-          VALUES ('${date.dateSimple}', 1, '${date.date}')`
-        );
-        logger.info(`${logColor.logAdd} Inserted total messageCount ${date.dateSimple} into jabmesageCount @${date.date}`, {logType: 'addRow', time: Date.now()});
+        database.query(`INSERT INTO stat_messages (userId, channelId, messageCount, date, updated) VALUES ('${message.author.id}', '${message.channel.id}', 1, '${date.dateSimple}', '${date.date}')`);
       } else {
-        let messageCount = parseInt(rows[0].messageCount) + 1;
-
-        database.query(`UPDATE jabmessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated total messageCount ${date.dateSimple} in jabmesageCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
-      }
-      return;
-    }))
-    .catch(err => {
-      logger.error(err, {logType: 'error', time: Date.now()});
-      throw err;
-    });
-
-
-    db.execute(config, database => database.query(`SELECT * FROM jabuserMessageCount WHERE userID = '${userID}' AND date = '${date.dateSimple}'`)
-    .then(rows => {
-
-      if (rows.length < 1) {
-        database.query(`
-          INSERT INTO jabuserMessageCount (date, userID, messageCount, updated)
-          VALUES ('${date.dateSimple}', '${userID}', 1, '${date.date}')`
-        );
-        logger.info(`${logColor.logAdd} Inserted messageCount ${date.dateSimple} for ${message.member.user.username} into jabuserMessageCount @${date.date}`, {logType: 'addRow', time: Date.now()});
-      } else {
-        let messageCount = parseInt(rows[0].messageCount) + 1;
-
-        database.query(`UPDATE jabuserMessageCount SET messageCount = ${messageCount}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}'`);
-        logger.info(`${logColor.logUpdate} Updated messageCount ${date.dateSimple} for ${message.member.user.username} in jabuserMessageCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
+        database.query(`UPDATE stat_messages SET messageCount = messageCount + 1, updated = '${date.date}' WHERE userId = '${message.author.id}' AND channelId = '${message.channel.id}' AND date = '${date.dateSimple}'`);
       }
       return;
     }))
@@ -423,75 +180,109 @@ module.exports = {
 
 
 
-  logEmote: (message, emote, animated) => {
+
+  /*************
+  * emotes
+  *************/
+  logEmote: (message, emote) => {
     const date = getDate();
-    (animated === undefined) ? animated = false : null;
-    let emoteID;
-    const userID = message.member.id;
-    console.log('=========================');
+    // if (!animated) animated = false;
 
-    const checkEmote = new Promise(function(res, rej) {
-      db.execute(config, database => database.query(`SELECT * FROM jabmotes WHERE emoteID = '${emote[2]}'`)
-      .then(rows => {
-
-        if (rows.length < 1) {
-          console.log('doesnt exist');
-          database.query(`
-            INSERT INTO jabmotes (name, emoteID, animated, updated)
-            VALUES ('${emote[1]}', '${emote[2]}', ${animated}, '${date.date}')`
-          ).then(result => {
-            console.log('result: ' + result.insertId);
-            emoteID = result.insertId;
-            res(emoteID);
-          });
-          logger.info(`${logColor.logAdd} Inserted ${emote[1]} emote into jabmotes @${date.date}`, {logType: 'addRow', time: Date.now()});
-        } else {
-          console.log('already exist');
-          emoteID = rows[0].id;
-          res(emoteID);
-        }
-      }))
-      .catch(err => {
-        logger.error(err, {logType: 'error', time: Date.now()});
-        throw err;
-      });
-    });
-
-    checkEmote.then(emoteID => {
-      console.log('emoteid: ' + emoteID);
-
-      db.execute(config, database => database.query(`SELECT * FROM jabmotesCount WHERE userID = '${userID}' AND date = '${date.dateSimple}' AND emoteID = ${emoteID}`)
-      .then(rows => {
-
-        if (rows.length < 1) {
-          database.query(`
-            INSERT INTO jabmotesCount (date, userID, emoteID, count, updated)
-            VALUES ('${date.dateSimple}', '${userID}', ${emoteID}, 1, '${date.date}')`
-          );
-          logger.info(`${logColor.logAdd} Inserted emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} into jabmotesCount @${date.date}`, {logType: 'addRow', time: Date.now()});
-        } else {
-          let count = parseInt(rows[0].count) + 1;
-
-          database.query(`UPDATE jabmotesCount SET count = ${count}, updated = '${date.date}' WHERE userID = '${userID}' AND date = '${rows[0].date}' AND emoteID = ${emoteID}`);
-          logger.info(`${logColor.logUpdate} Updated emotecount for emote ${emote[1]} - ${date.dateSimple} for ${message.member.user.username} in jabmotesCount @${date.date}`, {logType: 'updateRow', time: Date.now()});
-        }
-        return;
-      }))
-      .catch(err => {
-        logger.error(err, {logType: 'error', time: Date.now()});
-        throw err;
-      });
-
-      console.log('=========================');
-    }, err => {
+    db.execute(config, database => database.query(`SELECT * FROM stat_emotes WHERE emoteId = '${emote[2]}' AND userId = '${message.author.id}' AND date = '${date.dateSimple}'`)
+    .then(rows => {
+      if (rows.length < 1) {
+        database.query(`INSERT INTO stat_emotes (emoteId, name, userId, count, date, updated) VALUES ('${emote[2]}', '${emote[1]}', '${message.author.id}', 1, '${date.dateSimple}', '${date.date}')`);
+        console.log('inserted emote count');
+      } else {
+        database.query(`UPDATE stat_emotes SET name = '${emote[1]}', count = count + 1, updated = '${date.date}' WHERE emoteId = '${emote[2]}' AND userId = '${message.author.id}' AND date = '${date.dateSimple}'`);
+        console.log('updated emote count');
+      }
+      return;
+    }))
+    .catch(err => {
       logger.error(err, {logType: 'error', time: Date.now()});
-      console.log(err);
+      throw err;
     });
-  }
+  },
+
 
 
 
   /*************
-  *
+  * check agree
   *************/
+  checkAgree: (server, message) => {
+    if (message.content.toLowerCase() != '!agree') return;
+    const date = getDate();
+
+    console.log('update agree');
+
+    db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, updated)
+                                                    VALUES ('${message.member.user.id}', '${mysql_real_escape_string(message.member.user.username)}', '${message.member.user.discriminator}', '${mysql_real_escape_string(message.member.nickname)}', 'NICKNAMES', '${message.member.user.avatar}', '${message.member.user.avatarURL}', ${message.member.displayColor}, '${message.member.displayHexColor}', '${message.member.user.presence.status}', ${message.member.user.bot}, false, '${message.member.user.createdAt}', '${message.member.user.createdTimestamp}', '${message.member.joinedAt}', '${message.member.joinedTimestamp}', '${date.date}', '${date.date}')
+                                                  ON DUPLICATE KEY UPDATE agreedAt = '${date.date}', updated = '${date.date}'`))
+    .catch(err => {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    });
+  },
+
+
+
+
+  /*************
+  * introductions    -> newcomer -> agree -> no role -> introduce -> I've introduced myself
+  *************/
+  checkIntroduction: (server, message) => {
+    const date = getDate();
+    let keywords = ['hello', 'hi', 'hey', 'my name is', 'i am', 'i\'m', 'years old', 'yo', 'new to programming', 'new to coding', 'i want to learn', 'currently learning', 'self taught', 'learning', 'teaching myself'];
+
+    // let roles = [];
+    // message.member.roles.forEach(role => {
+    //   roles.push(role.name);
+    // });
+
+    if (message.member.roles.size <= 1) {
+      console.log('check Introduction');
+      let prob = 0.0;
+
+      keywords.forEach(word => {
+        let regex = new RegExp(`\\b${word}\\b`, 'g');
+        if (message.content.toLowerCase().match(regex)) prob += 0.25;
+      });
+
+      console.log('Intro prob:', prob);
+      if (prob >= 0.5) {
+        console.log('is an introduction');
+        console.log('message id', message.id);
+
+        db.execute(config, database => database.query(`INSERT INTO stat_introductions (userId, text, messageId, probability, date) VALUES ('${message.author.id}', '${mysql_real_escape_string(message.content)}', '${message.id}', ${prob}, '${date.dateSimple}')`))
+        .catch(err => {
+          logger.error(err, {logType: 'error', time: Date.now()});
+          throw err;
+        });
+      }
+    }
+  },
+
+
+
+
+  /*************
+  * check if introduced role gets applied
+  *************/
+  logRolechange: (server, oldMember, newMember) => {
+    const date = getDate();
+    if (!oldMember.roles.find(r => r.name.toLowerCase() === `i've introduced myself`) && newMember.roles.find(r => r.name.toLowerCase() === `i've introduced myself`)) {
+      console.log('user got introduced role!');
+
+      db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, nicknames, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, agreedAt, introducedAt, updated)
+                                                      VALUES ('${newMember.user.id}', '${mysql_real_escape_string(newMember.user.username)}', '${newMember.user.discriminator}', '${mysql_real_escape_string(newMember.nickname)}', 'NICKNAMES', '${newMember.user.avatar}', '${newMember.user.avatarURL}', ${newMember.displayColor}, '${newMember.displayHexColor}', '${newMember.user.presence.status}', ${newMember.user.bot}, false, '${newMember.user.createdAt}', '${newMember.user.createdTimestamp}', '${newMember.joinedAt}', '${newMember.joinedTimestamp}', '${date.date}', '${date.date}', '${date.date}')
+                                                    ON DUPLICATE KEY UPDATE introducedAt = '${date.date}', updated = '${date.date}'`))
+      .catch(err => {
+        logger.error(err, {logType: 'error', time: Date.now()});
+        throw err;
+      });
+    }
+  },
+
 }
