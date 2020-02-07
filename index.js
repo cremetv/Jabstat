@@ -17,11 +17,11 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-// const jabrilID = '430932202621108275'; // Cult of Jabril(s)
-const jabrilID = '343771301405786113'; // cremes filthy bot testing area
+const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+// const jabrilID = '343771301405786113'; // cremes filthy bot testing area
 
-// const selectedServer = '582622116617125928'; // Cult of Jabrils
-const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
+const selectedServer = '582622116617125928'; // Cult of Jabrils
+// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
@@ -129,7 +129,22 @@ client.on('ready', async () => {
   functions.logChannels(server); // if no channel is given as argument => update all
                                     // for example functions.logChannels(server, channel);
   functions.logMemberCount(server);
+
   functions.logMembers(server); // functions.logMembers(server, member);
+
+  // log daily userCount
+  const dailyLog = () => {
+    let now = new Date();
+    let millisTill23 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 0) - now;
+    if (millisTill23 < 0) millisTill23 += 86400000;
+    setTimeout(() => {
+      logger.info(`it\'s 23:59`);
+      functions.logMemberCount(server);
+      // functions.logMembers(server);
+      dailyLog();
+    }, millisTill23);
+  }
+  dailyLog();
 
   /****************
   * Check for contest Deadlines
@@ -195,7 +210,6 @@ client.on('message', async message => {
   let cmd = client.commands.get(command.slice(prefix.length));
   if (cmd) cmd.run(client, message, args, db);
 });
-
 
 
 client.on('guildMemberAdd', member => {
