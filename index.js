@@ -64,154 +64,6 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/contest', (req, res) => {
-
-  // get contests
-
-  res.render('contest', {
-    title: 'contest'
-  });
-});
-
-
-app.get('/emotes', (req, res) => {
-  let emotes = [], emoteCount = {};
-
-  db.execute(config, database => database.query(`SELECT * FROM jabmotes`)
-  .then(rows => {
-    rows.forEach(row => {
-      emotes.push(row);
-      // emoteCount[row.id] = row.name + 'YEET';
-    });
-
-    // return database.query(`SELECT * FROM jabmotesCount`);
-  })
-  .then(() => {
-
-    function delay() {
-      return new Promise(resolve => setTimeout(resolve, 300));
-    }
-
-    async function delayedLog(item) {
-      await delay();
-
-      let count = 0;
-
-      db.execute(config, database => database.query(`SELECT * FROM jabmotesCount WHERE emoteid = '${item.id}'`)
-      .then(rows => {
-        if (rows.length < 0) return;
-
-        rows.forEach(row => {
-          console.log('one count');
-          console.log(row.count);
-          count += parseInt(row.count);
-          console.log(`current count: ${count}`);
-        });
-      })
-      .then(() => {
-        emoteCount[item.id] = count;
-        console.log(`count: ${count}`);
-      }));
-    }
-
-    async function processEmotes(array) {
-      array.forEach(async (item) => {
-        await delayedLog(item);
-      });
-
-      console.log(emoteCount);
-      console.log('done!');
-      res.render('emotes', {
-        title: 'emotes',
-        emotes: emotes,
-        emoteCount: emoteCount
-      });
-    }
-
-    processEmotes(emotes);
-
-  }))
-  // .then(() => {
-  //   console.log(emotes);
-  //   res.render('emotes', {
-  //     title: 'emotes',
-  //     emotes: emotes,
-  //     emoteCount: emoteCount
-  //   });
-  // }))
-  .catch(err => {
-    throw err;
-  });
-
-  // res.render('emotes', {
-  //   title: 'emotes',
-  //   emotes: emotes
-  // });
-});
-
-app.get('/log', (req, res) => {
-
-  let infoPath = path.join(__dirname, 'info.log'),
-      errorPath = path.join(__dirname, 'error.log'),
-      // infoLog = [],
-      infoLog = {},
-      errorLog = '';
-
-  const getInfoLog = () => {
-    fs.readFile(infoPath, {encoding: 'utf-8'}, (err, data) => {
-      if (err) throw err;
-      let lines = data.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        // let el = {};
-        // el.log = lines[i];
-
-        // infoLog.push(el);
-        infoLog[i] = lines[i];
-      }
-      // infoLog[0] = infoLogArray;
-      // infoLog = data;
-      getErrorLog();
-    });
-  }
-
-  const getErrorLog = () => {
-    fs.readFile(errorPath, {encoding: 'utf-8'}, (err, data) => {
-      if (err) throw err;
-      errorLog = data;
-      renderLog();
-    });
-  }
-
-  const renderLog = () => {
-    // infoLog = `{"log": [${infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{')}]}`;
-    // infoLog = JSON.stringify(infoLog);
-    // infoLog = infoLog.replace(/\r?\n|\r/g, '').replace(/}{/g, '},{');
-
-    res.render('log', {
-      title: 'log',
-      infoLog: infoLog,
-      errorLog: errorLog,
-    });
-  }
-
-  getInfoLog();
-
-});
-
-io.sockets.on('connection', (socket) => {
-  logger.info(`${logColor.connect} user connected to webinterface`, {logType: 'connect', time: Date.now()});
-
-  socket.on('verify', (data) => {
-
-    if (bcrypt.compareSync(data.pw, hash)) {
-      console.log('logged in!');
-    } else {
-      console.log('wrong pw!');
-    }
-  });
-});
-
-
 
 /****************
 * Load Events
@@ -277,7 +129,8 @@ client.on('ready', async () => {
   functions.logChannels(server); // if no channel is given as argument => update all
                                     // for example functions.logChannels(server, channel);
   functions.logMemberCount(server);
-  // functions.logMembers(server); // functions.logMembers(server, member);
+
+  functions.logMembers(server); // functions.logMembers(server, member);
 
   // log daily userCount
   const dailyLog = () => {
@@ -292,7 +145,6 @@ client.on('ready', async () => {
     }, millisTill23);
   }
   dailyLog();
-
 
   /****************
   * Check for contest Deadlines
@@ -313,53 +165,24 @@ client.on('ready', async () => {
     }, hour);
   }
   checkContests();
-
-
-  // store passwords
-  db.execute(config, database => database.query(`SELECT * FROM passwords`)
-  .then(rows => {
-    if (rows.length < 1) {
-
-      db.execute(config, database => database.query(`INSERT INTO passwords (hash) VALUES ('${hash}')`)
-      .then(rows => {
-        logger.info(`${logColor.green}stored password hash in database${logColor.clear}`, {logType: 'log', time: Date.now()});
-      }))
-      .catch(err => {
-        throw err;
-      });
-    } else {
-      logger.info(`${logColor.yellow}hash already stored${logColor.clear}`, {logType: 'warning', time: Date.now()});
-      let dbHash = rows[0].hash;
-
-      if (dbHash != hash) {
-        logger.info(`${logColor.yellow}hash not the same${logColor.clear}`, {logType: 'warning', time: Date.now()});
-        db.execute(config, database => database.query(`UPDATE passwords SET hash = '${hash}' WHERE id = 1`)
-        .then(rows => {
-          logger.info(`${logColor.green}updated password hash in database${logColor.clear}`, {logType: 'log', time: Date.now()});
-        }))
-        .catch(err => {
-          throw err;
-        });
-      }
-    }
-  }))
-  .catch(err => {
-    throw err;
-  });
 });
+
+
 
 
 client.on('messageReactionAdd', async (messageReaction, user) => {
   if (user.bot) return;
+  console.log('manage reactions');
   contestFunctions.manageReactions(client, messageReaction, user);
 });
 
 
+
+
 client.on('message', async message => {
   if (message.guild === null || message.channel.type === 'dm') return;
-  // check for emotes in message
-  let found = message.content.match(/<a?:([^:]*):([^>]*)>/g);
 
+  let found = message.content.match(/<a?:([^:]*):([^>]*)>/g);
   if (found != null) {
     for (let i = 0; i < found.length; i++) {
       let emote = found[i].match(/<a?:([^:]*):([^>]*)>/i);
@@ -367,27 +190,6 @@ client.on('message', async message => {
       // emote[0].startsWith('<a') ? functions.logEmote(message, emote, true) : functions.logEmote(message, emote);
     }
   }
-
-
-  // check newcomers
-  // let keywords = ['hello', 'hi', 'hey', 'i am', 'i\'m', 'years old', 'yo', 'new to programming', 'i want to learn', 'currently learning', 'self taught', 'learning', 'teaching myself'];
-  // const checkInput = () => {
-  // 	let str = input.value;
-  //
-  // 	console.log(`message: ${str}`);
-  //
-  // 	let prob = 0.0;
-  //
-  // 	keywords.forEach(word => {
-  // 		var regex = new RegExp(`\\b${word}\\b`, 'g');
-  // 		if (str.toLowerCase().match(regex)) prob += 0.25;
-  // 	});
-  //
-  // 	console.log(`Intro prob:`, prob);
-  // 	if (prob >= 0.5) {
-  // 		console.log('is an introduction');
-  // 	}
-  // }
 
   functions.logMembers(server, message.member);
   functions.logMessages(message);
@@ -399,12 +201,14 @@ client.on('message', async message => {
   let command = messageArray[0];
   let args = messageArray.slice(1);
 
+  if (command === 'checkStarttimes') contestFunctions.checkStarttimes(client);
+  if (command === 'checkDeadlines') contestFunctions.checkDeadlines(client);
+  if (command === 'checkEndVoting') contestFunctions.checkEndVoting(client);
+
   if (!command.startsWith(prefix)) return;
 
   let cmd = client.commands.get(command.slice(prefix.length));
   if (cmd) cmd.run(client, message, args, db);
-
-
 });
 
 
