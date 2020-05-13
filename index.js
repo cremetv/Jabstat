@@ -120,7 +120,7 @@ fs.readdir('./cmds/', (err, files) => {
 let server;
 
 client.on('ready', async () => {
-  server = client.guilds.get(jabrilID);
+  server = client.guilds.get(serverId);
 
   const contestChannel = client.channels.get(contestChat);
   contestChannel.fetchMessages().then(msg => console.log('fetched old messages')).catch(err => {
