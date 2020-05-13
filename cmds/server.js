@@ -154,7 +154,7 @@ module.exports.run = async(client, message, args, db) => {
 
       let embed = new Discord.RichEmbed()
       .setAuthor(message.guild.name)
-      .setDescription(`stats for ${message.guild.name}\n*Dates: DD.MM.YYYY UTC*`)
+      .setDescription(`stats for ${message.guild.name}`)
       .setThumbnail(message.guild.iconURL)
       .setColor('#EF3340')
       .addField('Members', `Users: \`${message.guild.memberCount}\``)
@@ -163,7 +163,7 @@ module.exports.run = async(client, message, args, db) => {
       .addField('Emotes', '...', true)
       .addField('Server Info', `Server created on: \`${createdAt}\`\n\nServer owner: <@${message.guild.ownerID}>`)
       // .addField('Links', `[View Profile](https://jabstats.com/) | [General Server stats](https://jabstats.com/)`)
-      .setFooter(`beep boop • server ID: ${message.guild.id}`, client.user.avatarURL);
+      .setFooter(`beep boop • server ID: ${message.guild.id} • Dates: dd.mm.yyyy UTC`, client.user.avatarURL);
 
       message.channel.send({embed: embed});
 

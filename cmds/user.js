@@ -113,7 +113,7 @@ module.exports.run = async(client, message, args, db) => {
 
       let embed = new Discord.RichEmbed()
       .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL)
-      .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**\n*Dates: DD.MM.YYYY UTC*`)
+      .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**`)
       .setThumbnail(target.user.avatarURL)
       .setColor('#EF3340')
       .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${intro}**\naccount created on: **${createdAt}**`)
@@ -123,7 +123,7 @@ module.exports.run = async(client, message, args, db) => {
       .addField('Messages', `__total__: **${totalMessages}**\nlast 30 days: **${lastMonthMessages}**\nlast 7 days: **${lastWeekMessages}**\nlast 24 hours: **${lastDayMessages}**`, true)
       .addField('Emotes', '...', true)
       // .addField('Links', `[View Profile](https://jabstats.com/) | [General Server stats](https://jabstats.com/)`)
-      .setFooter(`beep boop • user ID: ${target.id}`, client.user.avatarURL);
+      .setFooter(`beep boop • user ID: ${target.id} • Dates: dd.mm.yyyy UTC`, client.user.avatarURL);
 
       message.channel.send({embed: embed});
 

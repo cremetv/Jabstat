@@ -114,7 +114,7 @@ module.exports.run = async(client, message, args, db) => {
       .setDescription(`Duration between joining the server and leaving`)
       .setColor('#EF3340')
       .addField('Top 10:', topString)
-      .setFooter(`beep boop`, client.user.avatarURL);
+      .setFooter(`beep boop goota go fast`, client.user.avatarURL);
 
       message.channel.send({embed: embed});
     }))
