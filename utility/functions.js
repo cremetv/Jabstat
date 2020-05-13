@@ -285,4 +285,19 @@ module.exports = {
     }
   },
 
+
+
+
+  /*************
+  * insert prune record
+  *************/
+  insertPrune: () => {
+    const date = getDate();
+    db.execute(config, database => database.query(`INSERT INTO stat_prunes (date) VALUES ('${date.dateSimple}')`))
+    .catch(err => {
+      logger.error(err, {logType: 'error', time: Date.now()});
+      throw err;
+    });
+  },
+
 }

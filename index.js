@@ -198,6 +198,8 @@ client.on('message', async message => {
   let command = messageArray[0];
   let args = messageArray.slice(1);
 
+  if (command === '!pruneNewcomers') functions.insertPrune();
+
   if (command === 'checkStarttimes') contestFunctions.checkStarttimes(client);
   if (command === 'checkDeadlines') contestFunctions.checkDeadlines(client);
   if (command === 'checkEndVoting') contestFunctions.checkEndVoting(client);
