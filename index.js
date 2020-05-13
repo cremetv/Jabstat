@@ -17,10 +17,13 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-const jabrilID = '430932202621108275'; // Cult of Jabril(s)
+// const serverId = botsettings.jabrils.serverId;
+// const contestChat = botsettings.jabrils.contestChat;
+const serverId = botsettings.testServer.serverId;
+const contestChat = botsettings.testServer.contestChat;
+// const jabrilID = '430932202621108275'; // Cult of Jabril(s)
 // const jabrilID = '343771301405786113'; // cremes filthy bot testing area
-
-const selectedServer = '582622116617125928'; // Cult of Jabrils
+// const selectedServer = '582622116617125928'; // Cult of Jabrils
 // const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
 
 const client = new Discord.Client({disableEveryone: true});
@@ -119,7 +122,7 @@ let server;
 client.on('ready', async () => {
   server = client.guilds.get(jabrilID);
 
-  const contestChannel = client.channels.get(selectedServer);
+  const contestChannel = client.channels.get(contestChat);
   contestChannel.fetchMessages().then(msg => console.log('fetched old messages')).catch(err => {
     logger.error(err, {logType: 'error', time: Date.now()});
     throw err;
