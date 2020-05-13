@@ -1,4 +1,10 @@
 {
 	"token": "YOURBOTTOKEN",
-	"prefix": "$"
+	"prefix": "$",
+  "invlink": "BOTINVITELINK",
+	"salt": "SALT",
+	"password": "PASSWORD",
+	"serverId": "MAIN SERVER ID",
+	"contestChat": "MAIN CONTEST CHAT ID",
+	"contestRole": "CONTEST ROLE ID"
 }
