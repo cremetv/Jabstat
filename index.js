@@ -17,10 +17,8 @@ const contestFunctions = require('./utility/contest');
 
 const prefix = botsettings.prefix;
 
-const serverId = botsettings.jabrils.serverId;
-const contestChat = botsettings.jabrils.contestChat;
-// const serverId = botsettings.testServer.serverId;
-// const contestChat = botsettings.testServer.contestChat;
+const serverId = botsettings.serverId;
+const contestChat = botsettings.contestChat;
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();

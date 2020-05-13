@@ -6,12 +6,9 @@ const logColor = require('./../utility/logcolors');
 const getDate = require('./../utility/date');
 
 const botsettings = require('./../botsettings.json');
-const serverId = botsettings.jabrils.serverId;
-const contestChat = botsettings.jabrils.contestChat;
-const contestRole = botsettings.jabrils.contestRole;
-// const serverId = botsettings.testServer.serverId;
-// const contestChat = botsettings.testServer.contestChat;
-// const contestRole = botsettings.testServer.contestRole;
+const serverId = botsettings.serverId;
+const contestChat = botsettings.contestChat;
+const contestRole = botsettings.contestRole;
 
 let currentDate = new Date();
 
