@@ -373,7 +373,6 @@ module.exports = {
 
 
   manageReactions: (client, messageReaction, user) => {
-    console.log('manage reactions 2');
     db.execute(config, database => database.query(`SELECT * FROM cont_contests WHERE active = 1 AND votelink IS NOT NULL AND (voted IS NULL or voted = 0)`)
     .then(rows => {
       if (rows.length < 1) {
@@ -426,7 +425,7 @@ module.exports = {
                 return;
               } else {
                 console.log('successfully voted');
-                db.execute(config, database => database.query(`UPDATE cont_submissions SET votes = votes + 1 WHERE contestId = '${contest.id}' AND emote = '${messageReaction.emoji.name}'`)
+                db.execute(config, database => database.query(`UPDATE cont_submissions SET votes = '${messageReaction.count}' WHERE contestId = '${contest.id}' AND emote = '${messageReaction.emoji.name}'`)
                 .then(() => {
                   console.log('updated vote in db');
                 }))
