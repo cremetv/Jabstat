@@ -1,7 +1,7 @@
 {
 	"token": "YOURBOTTOKEN",
 	"prefix": "$",
-  "invlink": "BOTINVITELINK",
+	"invlink": "BOTINVITELINK",
 	"salt": "SALT",
 	"password": "PASSWORD",
 	"serverId": "MAIN SERVER ID",
