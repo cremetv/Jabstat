@@ -149,7 +149,7 @@ module.exports.run = async(client, message, args, db) => {
       return;
     })
     .then(() => {
-      let createdAt = new Date(target.user.createdTimestamp);
+      let createdAt = new Date(message.guild.createdTimestamp);
       createdAt = `${('0' + createdAt.getDate()).slice(-2)}.${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${createdAt.getFullYear()}`;
 
       let embed = new Discord.RichEmbed()
