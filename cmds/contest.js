@@ -5,12 +5,12 @@ const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 
 const botsettings = require('./../botsettings.json');
-// const serverId = botsettings.jabrils.serverId;
-// const contestChat = botsettings.jabrils.contestChat;
-// const contestRole = botsettings.jabrils.contestRole;
-const serverId = botsettings.testServer.serverId;
-const contestChat = botsettings.testServer.contestChat;
-const contestRole = botsettings.testServer.contestRole;
+const serverId = botsettings.jabrils.serverId;
+const contestChat = botsettings.jabrils.contestChat;
+const contestRole = botsettings.jabrils.contestRole;
+// const serverId = botsettings.testServer.serverId;
+// const contestChat = botsettings.testServer.contestChat;
+// const contestRole = botsettings.testServer.contestRole;
 
 module.exports.run = async(client, message, args, db) => {
 
