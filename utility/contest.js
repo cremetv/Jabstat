@@ -5,7 +5,7 @@ const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 const getDate = require('./../utility/date');
 
-const botsettings = require('./botsettings.json');
+const botsettings = require('./../botsettings.json');
 // const serverId = botsettings.jabrils.serverId;
 // const contestChat = botsettings.jabrils.contestChat;
 // const contestRole = botsettings.jabrils.contestRole;
