@@ -4,8 +4,13 @@ const functions = require('./../utility/contest');
 const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 
-const contestant = '&588687670490824704'; // Cult of jabrils
-// const contestant = '&588700001090273295'; // cremes filthy bot testing area
+const botsettings = require('./../botsettings.json');
+// const serverId = botsettings.jabrils.serverId;
+// const contestChat = botsettings.jabrils.contestChat;
+// const contestRole = botsettings.jabrils.contestRole;
+const serverId = botsettings.testServer.serverId;
+const contestChat = botsettings.testServer.contestChat;
+const contestRole = botsettings.testServer.contestRole;
 
 module.exports.run = async(client, message, args, db) => {
 
@@ -377,12 +382,14 @@ module.exports.run = async(client, message, args, db) => {
       }
   }
 
-  db.execute(config, database => database.query(`SELECT * FROM cont_contests ${statement} ORDER BY startdate`)
+  db.execute(config, database => database.query(`SELECT * FROM cont_contests ${statement} ORDER BY startdate DESC LIMIT 10`)
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contests');
       return null;
     }
+
+    rows = rows.reverse();
 
     rows.forEach(contest => {
       let contestStartDate = new Date(contest.startdate);
@@ -557,7 +564,7 @@ module.exports.run = async(client, message, args, db) => {
         .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-        message.channel.send(`<@${contestant}>`).then(msg => {
+        message.channel.send(`<@${contestRole}>`).then(msg => {
           message.channel.send({embed: embed}).then(msg => {
             voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
             async function processReacts(array) {

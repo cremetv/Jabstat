@@ -5,6 +5,14 @@ const logger = require('./../utility/logger');
 const logColor = require('./../utility/logcolors');
 const getDate = require('./../utility/date');
 
+const botsettings = require('./../botsettings.json');
+// const serverId = botsettings.jabrils.serverId;
+// const contestChat = botsettings.jabrils.contestChat;
+// const contestRole = botsettings.jabrils.contestRole;
+const serverId = botsettings.testServer.serverId;
+const contestChat = botsettings.testServer.contestChat;
+const contestRole = botsettings.testServer.contestRole;
+
 let currentDate = new Date();
 
 const formatDate = (rawDate) => {
@@ -36,13 +44,6 @@ const groupBy = (xs, key) => {
 
 
 let voteEmotes = ['🥞', '🍗', '🌭', '🍕', '🍙', '🍣', '🍤', '🍦', '🍩', '🍪', '🍫', '🍯', '🍬', '🍭', '🦐', '🍥', '🍘', '🍱', '🥗', '🍲'];
-
-
-const selectedServer = '582622116617125928'; // Cult of Jabrils
-// const selectedServer = '588368200304033822'; // Cremes filthy bot testing area
-
-const contestant = '&588687670490824704'; // Cult of jabrils
-// const contestant = '&588700001090273295'; // cremes filthy bot testing area
 
 
 Object.compare = function (obj1, obj2) {
@@ -93,7 +94,7 @@ module.exports = {
 
 
   checkStarttimes: (client) => {
-    const contestChannel = client.channels.get(selectedServer);
+    const contestChannel = client.channels.get(contestChat);
     let contest;
 
     db.execute(config, database => database.query(`SELECT * FROM cont_contests WHERE active = 1 AND startdate <= NOW() AND startdate > NOW() - INTERVAL 1 HOUR`)
@@ -119,7 +120,7 @@ module.exports = {
       .addField('Deadline', enddate.dateStr, true)
       .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-      contestChannel.send(`<@${contestant}>`).then(msg => {
+      contestChannel.send(`<@${contestRole}>`).then(msg => {
         contestChannel.send({embed: contestEmbed});
       });
 
@@ -138,7 +139,7 @@ module.exports = {
 
 
   checkDeadlines: (client) => {
-    const contestChannel = client.channels.get(selectedServer);
+    const contestChannel = client.channels.get(contestChat);
     let contest, participants = [], userIds = [];
 
     db.execute(config, database => database.query(`SELECT * FROM cont_contests WHERE active = 1 AND (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
@@ -210,7 +211,7 @@ module.exports = {
         .addField('Submissions;', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest Id: ${contest.id}`, client.user.avatarURL);
 
-        contestChannel.send(`<@${contestant}>`).then(msg => {
+        contestChannel.send(`<@${contestRole}>`).then(msg => {
           contestChannel.send({embed: embed}).then(msg => {
             voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
@@ -262,7 +263,7 @@ module.exports = {
 
 
   checkEndVoting: (client) => {
-    const contestChannel = client.channels.get(selectedServer);
+    const contestChannel = client.channels.get(contestChat);
     let contest, participants = [], y = 0, voteMessageId;
 
     /****************
@@ -277,7 +278,7 @@ module.exports = {
 
       contest = rows[0];
 
-      contestChannel.send(`<@${contestant}> Voting for **${contest.name}** (${contest.id}) ended!`);
+      contestChannel.send(`<@${contestRole}> Voting for **${contest.name}** (${contest.id}) ended!`);
 
       return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contest.id}'`);
     })
