@@ -44,7 +44,6 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
-        return null;
       }
 
       contest = rows[0];
@@ -138,7 +137,6 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
-        return null;
       }
 
       contest = rows[0];
@@ -150,7 +148,6 @@ module.exports.run = async(client, message, args, db) => {
       let contestStartDate = new Date(contest.startdate);
       if (contestStartDate > currentDate) {
         throw new Error('not public yet');
-        return null;
       }
 
       return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contest.id}'`);
@@ -250,17 +247,14 @@ module.exports.run = async(client, message, args, db) => {
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contest');
-      return null;
     }
 
     contest = rows[0];
 
     if (contest.startdate > currentDate) {
       throw new Error('did not start');
-      return null;
     } else if (contest.enddate < currentDate) {
       throw new Error('contest over');
-      return null;
     }
 
     return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contest.id}' AND userId = '${message.author.id}'`);
@@ -268,7 +262,6 @@ module.exports.run = async(client, message, args, db) => {
   .then(rows => {
     if (rows.length > 0) {
       throw new Error('already submitted');
-      return null;
     }
 
     return database.query(`INSERT INTO cont_submissions (contestId, userId, submission, submissionLink) VALUES ('${contestId}', ${message.author.id}, '${submission}', '${submissionLink}')`);
@@ -314,7 +307,6 @@ module.exports.run = async(client, message, args, db) => {
 
     if (contestEnd.date <= currentDate) {
       throw new Error('contest ended');
-      return null;
     }
 
     return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contestId}' AND userId = '${message.author.id}'`);
@@ -322,7 +314,6 @@ module.exports.run = async(client, message, args, db) => {
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no submission');
-      return null;
     }
     return database.query(`DELETE FROM cont_submissions WHERE userId = '${message.author.id}' AND contestId = '${contestId}'`);
   })
@@ -383,7 +374,6 @@ module.exports.run = async(client, message, args, db) => {
   .then(rows => {
     if (rows.length < 1) {
       throw new Error('no contests');
-      return null;
     }
 
     rows = rows.reverse();
@@ -445,14 +435,12 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('no contest');
-        return null;
       }
 
       contest = rows[0];
 
       if (contest.votelink) {
         throw new Error('already voting');
-        return null;
       }
 
       startdate = formatDate(contest.startdate);

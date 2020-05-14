@@ -28,7 +28,6 @@ module.exports.run = async(client, message, args, db) => {
     .then(rows => {
       if (rows.length < 1) {
         throw new Error('nothing found');
-        return null;
       }
 
       rows.forEach(row => {
