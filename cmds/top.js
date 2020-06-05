@@ -1,6 +1,8 @@
 const config = module.require('./../utility/config.js');
 const Discord = require('discord.js');
 
+const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
 module.exports.run = async(client, message, args, db) => {
 
   const cmd = args[0];
@@ -14,7 +16,7 @@ module.exports.run = async(client, message, args, db) => {
     * >t
     *
     ****************/
-    message.channel.send('currently is only 1 command available => >t leaves');
+    message.channel.send('currently are only 2 commands available => `>t leaves` & `>t messages`');
 
 
   } else if (cmd == 'leaves' || cmd == 'leave' || cmd == 'l') {
@@ -125,6 +127,54 @@ module.exports.run = async(client, message, args, db) => {
         throw err;
       }
     });
+
+
+
+  } else if (cmd == 'messages' || cmd == 'msg' || cmd == 'm') {
+    db.execute(config, database => database.query(`SELECT userId, SUM(messageCount) AS messages
+                                                    FROM stat_messages GROUP BY userId ORDER BY messages DESC LIMIT 10`)
+    .then(users => {
+      console.log(users);
+
+      let topUsersString = [];
+
+      function asyncFunction(user, callback) {
+        setTimeout(() => {
+          client.fetchUser(user.userId).then(u => {
+            topUsersString.push(`**${u.username}**: ${numberWithCommas(user.messages)}`);
+          }).then(() => {
+            callback();
+          });
+        }, 100);
+      }
+
+      let requests = users.reduce((promiseChain, user) => {
+        return promiseChain.then(() => new Promise((resolve) => {
+          asyncFunction(user, resolve);
+        }));
+      }, Promise.resolve());
+
+      requests.then(() => {
+        let embed = new Discord.RichEmbed()
+        .setAuthor(`Message Count`)
+        .setDescription(`All time messages`)
+        .setColor('#EF3340')
+        .addField('Top 10:', topUsersString.join('\n'))
+        .setFooter(`beep boop send mooore`, client.user.avatarURL);
+
+        message.channel.send({embed: embed});
+      });
+
+    }))
+    .catch(err => {
+      if (err.message == '') {
+        message.channel.send(`lorem`);
+      } else {
+        throw err;
+      }
+    });
+  } else {
+    message.channel.send('currently are only 2 commands available => `>t leaves` & `>t messages`');
   }
 
 }
