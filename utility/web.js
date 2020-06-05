@@ -62,6 +62,15 @@ app.post('/pruned', (req, res) => {
   // res.send(response);
   console.log('====== webhook data ======');
   console.log(req.body);
+
+  let data = req.body;
+
+  if (data.error === false) {
+    console.log('Prune was successfull');
+    console.log('Prune by:', data.prunedBy);
+    console.log('Pruned users:' data.prunedUsers.join(', '));
+  }
+
   res.status(200).end();
 });
 
