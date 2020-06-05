@@ -1,6 +1,9 @@
 /****************
 * Web
 ****************/
+const logger = require('./logger');
+const logColor = require('./logcolors');
+
 const socket = require('socket.io');
 const express = require('express');
 const http = require('http');
@@ -11,13 +14,13 @@ const path = require('path');
 const app = express();
 app.engine('hbs', hbs({
   extname: 'hbs',
-  helpers: require("./utility/helpers.js").helpers,
+  helpers: require("./helpers.js").helpers,
   defaultLayout: 'layout',
-  layoutsDir: `${__dirname}/web/layouts`
+  layoutsDir: `${__dirname}/../web/layouts`
 }));
-app.set('views', path.join(__dirname, 'web/views'));
+app.set('views', path.join(__dirname, '../web/views'));
 app.set('view engine', 'hbs');
-app.use(express.static(path.join(__dirname, '/web/public')));
+app.use(express.static(path.join(__dirname, '..//web/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -37,6 +40,21 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: 'index'
   });
+
+  let url = "http://localhost:3000/pruned?data=abcde";
+  let request = http.request(url, res => {
+    res.on('data', (chunk) => {
+      console.log(`BODY: ${chunk}`);
+    });
+  });
+  request.end();
+});
+
+
+app.get('/pruned', (req, res) => {
+  let response = req.query;
+  console.log('response', response);
+  res.send(response);
 });
 
 
