@@ -141,9 +141,12 @@ module.exports.run = async(client, message, args, db) => {
     db.execute(config, database => database.query(`SELECT userId, SUM(messageCount) AS messages
                                                     FROM stat_messages GROUP BY userId ORDER BY messages DESC LIMIT 10`)
     .then(users => {
-      console.log(users);
 
       let topUsersString = [];
+          // topUserAvatar,
+          // topUser = client.fetchUser(users[0].userId);
+
+      client.fetchUser(users[0].userId).then(u => topUserAvatar = u.avatar);
 
       function asyncFunction(user, callback) {
         setTimeout(() => {
@@ -165,6 +168,7 @@ module.exports.run = async(client, message, args, db) => {
         let embed = new Discord.RichEmbed()
         .setAuthor(`Message Count`)
         .setDescription(`All time messages`)
+        // .setThumbnail(topUserAvatar)
         .setColor('#EF3340')
         .addField('Top 10:', topUsersString.join('\n'))
         .setFooter(`beep boop send mooore`, client.user.avatarURL);
@@ -194,7 +198,6 @@ module.exports.run = async(client, message, args, db) => {
     db.execute(config, database => database.query(`SELECT emoteId, name, SUM(count) AS count
                                                     FROM stat_emotes GROUP BY emoteId ORDER BY count DESC LIMIT 10`)
     .then(emotes => {
-      console.log(emotes);
 
       let topEmotesString = [];
 
