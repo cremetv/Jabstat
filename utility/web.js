@@ -60,6 +60,7 @@ app.get('/pruned', (req, res) => {
   // let response = req.query;
   // console.log('response', response);
   // res.send(response);
+  console.log('webhook data');
   console.log(req.body);
   res.status(200).end();
 });
