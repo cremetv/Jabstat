@@ -68,7 +68,7 @@ app.post('/pruned', (req, res) => {
   if (data.error === false) {
     console.log('Prune was successfull');
     console.log('Prune by:', data.prunedBy);
-    console.log('Pruned users:' data.prunedUsers.join(', '));
+    console.log('Pruned users:', data.prunedUsers.join(', '));
   }
 
   res.status(200).end();
