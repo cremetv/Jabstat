@@ -62,6 +62,10 @@ app.post('/pruned', (req, res) => {
   // res.send(response);
   console.log('====== webhook data ======');
   console.log(req.body);
+  console.log('query **********');
+  console.log(req.query);
+  console.log('params **********');
+  console.log(req.params);
   res.status(200).end();
 });
 
