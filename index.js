@@ -147,11 +147,26 @@ client.on('message', async message => {
 
   let found = message.content.match(/<a?:([^:]*):([^>]*)>/g);
   if (found != null) {
+    let emotesInMessage = [];
+
     for (let i = 0; i < found.length; i++) {
       let emote = found[i].match(/<a?:([^:]*):([^>]*)>/i);
-      functions.logEmote(message, emote);
+      emotesInMessage.push(emote);
       // emote[0].startsWith('<a') ? functions.logEmote(message, emote, true) : functions.logEmote(message, emote);
     }
+
+    const uniqueEmotesInMessage = emotesInMessage.reduce((acc, current) => {
+    	const x = acc.find(item => item.input === current.input);
+    	if (!x) {
+    		return acc.concat([current]);
+    	} else {
+    		return acc
+    	};
+    }, []);
+
+    uniqueEmotesInMessage.forEach(e => {
+      functions.logEmote(message, e);
+    });
   }
 
   functions.logMembers(server, message.member);
