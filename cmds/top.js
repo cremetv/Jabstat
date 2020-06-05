@@ -204,7 +204,7 @@ module.exports.run = async(client, message, args, db) => {
       function asyncFunction(e, callback) {
         setTimeout(() => {
           let emote = client.emojis.find(emoji => emoji.name === e.name);
-          topEmotesString.push(`${emote} ${e.count}`);
+          topEmotesString.push(`**${emote == null ? e.name : emote}** ${e.count}`);
           callback();
         }, 100);
       }
