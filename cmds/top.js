@@ -130,7 +130,14 @@ module.exports.run = async(client, message, args, db) => {
 
 
 
+
   } else if (cmd == 'messages' || cmd == 'msg' || cmd == 'm') {
+    /****************
+    *
+    * Top Messages of all time
+    * >t m
+    *
+    ****************/
     db.execute(config, database => database.query(`SELECT userId, SUM(messageCount) AS messages
                                                     FROM stat_messages GROUP BY userId ORDER BY messages DESC LIMIT 10`)
     .then(users => {
@@ -161,6 +168,57 @@ module.exports.run = async(client, message, args, db) => {
         .setColor('#EF3340')
         .addField('Top 10:', topUsersString.join('\n'))
         .setFooter(`beep boop send mooore`, client.user.avatarURL);
+
+        message.channel.send({embed: embed});
+      });
+
+    }))
+    .catch(err => {
+      if (err.message == '') {
+        message.channel.send(`lorem`);
+      } else {
+        throw err;
+      }
+    });
+
+
+
+
+  } else if (cmd == 'emote' || cmd == 'emotes' || cmd == 'emoji' || cmd === 'emojis' || cmd == 'e') {
+    /****************
+    *
+    * Top emotes of all time
+    * >t e
+    *
+    ****************/
+    db.execute(config, database => database.query(`SELECT emoteId, name, SUM(count) AS count
+                                                    FROM stat_emotes GROUP BY emoteId ORDER BY count DESC LIMIT 10`)
+    .then(emotes => {
+      console.log(emotes);
+
+      let topEmotesString = [];
+
+      function asyncFunction(e, callback) {
+        setTimeout(() => {
+          let emote = client.emojis.find(emoji => emoji.name === e.name);
+          topEmotesString.push(`${emote} ${e.count}`);
+          callback();
+        }, 100);
+      }
+
+      let requests = emotes.reduce((promiseChain, emote) => {
+        return promiseChain.then(() => new Promise((resolve) => {
+          asyncFunction(emote, resolve);
+        }));
+      }, Promise.resolve());
+
+      requests.then(() => {
+        let embed = new Discord.RichEmbed()
+        .setAuthor(`Emote Count`)
+        .setDescription(`Most used emotes`)
+        .setColor('#EF3340')
+        .addField('Top 10:', topEmotesString.join('\n'))
+        .setFooter(`beep boop sad`, client.user.avatarURL);
 
         message.channel.send({embed: embed});
       });
