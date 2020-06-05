@@ -216,9 +216,10 @@ module.exports.run = async(client, message, args, db) => {
         let embed = new Discord.RichEmbed()
         .setAuthor(`Emote Count`)
         .setDescription(`Most used emotes`)
+        .setThumbnail(`https://cdn.discordapp.com/emojis/${emotes[0].emoteId}.png`)
         .setColor('#EF3340')
         .addField('Top 10:', topEmotesString.join('\n'))
-        .setFooter(`beep boop sad`, client.user.avatarURL);
+        .setFooter(`beep boop ${emotes[0].name}`, client.user.avatarURL);
 
         message.channel.send({embed: embed});
       });
