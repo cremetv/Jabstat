@@ -40,8 +40,13 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: 'index'
   });
+});
 
-  let url = "http://localhost:3000/pruned?data=abcde";
+
+
+app.get('/test', (req, res) => {
+  res.send('data send');
+  let url = "http://localhost:3000/pruned?param=abcde";
   let request = http.request(url, res => {
     res.on('data', (chunk) => {
       console.log(`BODY: ${chunk}`);
@@ -52,9 +57,11 @@ app.get('/', (req, res) => {
 
 
 app.get('/pruned', (req, res) => {
-  let response = req.query;
-  console.log('response', response);
-  res.send(response);
+  // let response = req.query;
+  // console.log('response', response);
+  // res.send(response);
+  console.log(req.body);
+  res.status(200).end();
 });
 
 
