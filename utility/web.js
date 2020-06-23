@@ -43,6 +43,21 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/remoteTest', (req, res) => {
+  res.render('remoteTest', {
+    title: 'remoteTest',
+    bodyClass: 'remote'
+  });
+});
+
+app.get('/remoteControl', (req, res) => {
+  res.render('remoteControl', {
+    title: 'remoteControl',
+    bodyClass: 'remote-control'
+  });
+});
+
+
 
 app.get('/test', (req, res) => {
   res.send('data send');
@@ -223,5 +238,23 @@ io.sockets.on('connection', (socket) => {
     } else {
       console.log('wrong pw!');
     }
+  });
+
+
+  socket.on('chat message', data => {
+    console.log('message: ', data.msg);
+    console.log('from: ', data.userId);
+    console.log('controllerId', data.controllerId);
+    io.emit('chat message', {msg: data.msg, userId: data.userId, controllerId: data.controllerId});
+  });
+
+
+  socket.on('keypress', data => {
+    console.log('dir', data.dir);
+    console.log('state', data.state);
+    console.log('user', data.userId);
+    console.log('controllerId', data.controllerId);
+
+    io.emit('move', data);
   });
 });

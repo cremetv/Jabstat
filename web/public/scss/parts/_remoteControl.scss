@@ -1,0 +1,46 @@
+body.remote-control {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .key-controls {
+    display: grid;
+    grid: "upLeft up upRight" 1fr
+          "left mid right" 1fr
+          "downLeft down downRight" 1fr
+          / 1fr 1fr 1fr;
+  }
+
+  .key {
+    border: 1px solid rgba(0,0,0,.2);
+    transition: background .25s ease;
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+
+    &:active {
+      background: rgba(0,0,0,.2);
+    }
+
+    &--up {
+      grid-area: up;
+    }
+
+    &--right {
+      grid-area: right;
+    }
+
+    &--down {
+      grid-area: down;
+    }
+
+    &--left {
+      grid-area: left;
+    }
+  }
+}

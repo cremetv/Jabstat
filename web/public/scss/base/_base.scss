@@ -119,21 +119,21 @@ select {
   }
 }
 
-input[type='text'] {
-  background: $light;
-  height: 2rem;
-  border: none;
-  border-radius: $br;
-  color: lighten($typo, 10%);
-  padding: 0 1rem;
-  width: 100%;
-  font-size: .8rem;
-
-  &::placeholder {
-    color: $typo;
-  }
-
-  &:active, &:focus {
-    outline: none;
-  }
-}
+// input[type='text'] {
+//   background: $light;
+//   height: 2rem;
+//   border: none;
+//   border-radius: $br;
+//   color: lighten($typo, 10%);
+//   padding: 0 1rem;
+//   width: 100%;
+//   font-size: .8rem;
+//
+//   &::placeholder {
+//     color: $typo;
+//   }
+//
+//   &:active, &:focus {
+//     outline: none;
+//   }
+// }
