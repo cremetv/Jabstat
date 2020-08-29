@@ -117,7 +117,7 @@ module.exports = {
       .addField('Deadline', enddate.dateStr, true)
       .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-      contestChannel.send(`<@${contestRole}>`).then(msg => {
+      contestChannel.send(`<@&${contestRole}>`).then(msg => {
         contestChannel.send({embed: contestEmbed});
       });
 
@@ -208,7 +208,7 @@ module.exports = {
         .addField('Submissions;', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest Id: ${contest.id}`, client.user.avatarURL);
 
-        contestChannel.send(`<@${contestRole}>`).then(msg => {
+        contestChannel.send(`<@&${contestRole}>`).then(msg => {
           contestChannel.send({embed: embed}).then(msg => {
             voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
@@ -275,7 +275,7 @@ module.exports = {
 
       contest = rows[0];
 
-      contestChannel.send(`<@${contestRole}> Voting for **${contest.name}** (${contest.id}) ended!`);
+      contestChannel.send(`<@&${contestRole}> Voting for **${contest.name}** (${contest.id}) ended!`);
 
       return database.query(`SELECT * FROM cont_submissions WHERE contestId = '${contest.id}'`);
     })
@@ -332,7 +332,7 @@ module.exports = {
           }, Promise.resolve());
 
           req.then(() => {
-            winners.push(`${places[x]}: ${groupedUsers.join(', ')} (${parseInt(votes) + 1})`);
+            winners.push(`${places[x]}: ${groupedUsers.join(', ')} (${parseInt(votes) == 0 ? 1 : parseInt(votes)})`);
           });
 
           await delayedReact(array[i])
