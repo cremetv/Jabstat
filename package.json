@@ -22,7 +22,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "mysql": "^2.18.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nodemon": "^1.19.4",
     "socket.io": "^2.3.0",
     "winston": "^3.2.1"
