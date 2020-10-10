@@ -94,6 +94,8 @@ module.exports = {
     const contestChannel = client.channels.get(contestChat);
     let contest;
 
+    let sentEmbed = false;
+
     db.execute(config, database => database.query(`SELECT * FROM cont_contests WHERE active = 1 AND startdate <= NOW() AND startdate > NOW() - INTERVAL 1 HOUR`)
     .then(rows => {
       if (rows.length < 1) {
@@ -117,9 +119,12 @@ module.exports = {
       .addField('Deadline', enddate.dateStr, true)
       .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-      contestChannel.send(`<@&${contestRole}>`).then(msg => {
-        contestChannel.send({embed: contestEmbed});
-      });
+      if (!sentEmbed) {
+        contestChannel.send(`<@&${contestRole}>`).then(msg => {
+          contestChannel.send({embed: contestEmbed});
+        });
+        sentEmbed = true;
+      }
 
     }))
     .catch(err => {
@@ -138,6 +143,8 @@ module.exports = {
   checkDeadlines: (client) => {
     const contestChannel = client.channels.get(contestChat);
     let contest, participants = [], userIds = [];
+
+    let sentEmbed = false;
 
     db.execute(config, database => database.query(`SELECT * FROM cont_contests WHERE active = 1 AND (votelink is NULL or votelink = '') AND enddate >= NOW() - INTERVAL 1 HOUR AND enddate <= NOW()`)
     .then(rows => {
@@ -208,37 +215,43 @@ module.exports = {
         .addField('Submissions;', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest Id: ${contest.id}`, client.user.avatarURL);
 
-        contestChannel.send(`<@&${contestRole}>`).then(msg => {
-          contestChannel.send({embed: embed}).then(msg => {
-            voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+        if (!sentEmbed) {
+          contestChannel.send(`<@&${contestRole}>`).then(msg => {
+            contestChannel.send({embed: embed}).then(msg => {
+              voteLink = `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
-            async function processReacts(array) {
-              for (let i = 0; i < array.length; i++) {
-                msg.react(`${voteEmotes[i]}`);
+              async function processReacts(array) {
+                for (let i = 0; i < array.length; i++) {
+                  msg.react(`${voteEmotes[i]}`);
 
-                db.execute(config, database => database.query(`UPDATE cont_submissions SET emote = '${voteEmotes[i]}' WHERE contestId = '${contest.id}' AND userId = '${userIds[i]}'`)
+                  db.execute(config, database => database.query(`UPDATE cont_submissions SET emote = '${voteEmotes[i]}' WHERE contestId = '${contest.id}' AND userId = '${userIds[i]}'`)
+                  .then(() => {
+                    console.log(`updated ${userIds[i]}'s emote`);
+                  }))
+                  .catch(err => {
+                    throw err;
+                  });
+
+                  await delayedReact(array[i]);
+                }
+                db.execute(config, database => database.query(`UPDATE cont_contests SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
                 .then(() => {
-                  console.log(`updated ${userIds[i]}'s emote`);
+                  logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
                 }))
                 .catch(err => {
+                  logger.error(err, {logType: 'error', time: Date.now()});
                   throw err;
                 });
-
-                await delayedReact(array[i]);
               }
-              db.execute(config, database => database.query(`UPDATE cont_contests SET votelink = '${voteLink}' WHERE id = '${contest.id}'`)
-              .then(() => {
-                logger.info(`\x1b[93mupdated votelink for contest ${contest.id}\x1b[0m`, {logType: 'log', time: Date.now()});
-              }))
-              .catch(err => {
-                logger.error(err, {logType: 'error', time: Date.now()});
-                throw err;
-              });
-            }
-            processReacts(participantString)
+              processReacts(participantString)
 
+            });
           });
-        });
+
+          sentEmbed = true;
+        }
+
+
       });
 
       // participants.forEach((p, i) => {
@@ -262,6 +275,8 @@ module.exports = {
   checkEndVoting: (client) => {
     const contestChannel = client.channels.get(contestChat);
     let contest, participants = [], y = 0, voteMessageId;
+
+    let sentEmbed = false;
 
     /****************
     * check for contests to end voting
@@ -354,7 +369,10 @@ module.exports = {
         .addBlankField()
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
-        contestChannel.send({embed: embed});
+        if (!sentEmbed) {
+          contestChannel.send({embed: embed});
+          sentEmbed = true;
+        }
       });
 
       return database.query(`UPDATE cont_contests SET voted = 1 WHERE id = '${contest.id}'`);
