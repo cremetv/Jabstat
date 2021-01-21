@@ -24,7 +24,7 @@
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.4",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "winston": "^3.2.1"
   }
 }
