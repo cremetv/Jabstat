@@ -57,20 +57,20 @@ module.exports = {
   *************/
   logMembers: (server, member, status) => {
     const date = getDate();
-    let targets = member ? [member] : server.members;
+    let targets = member ? [member] : server.members.cache;
     if (!status) status = false;
 
     targets.forEach(target => {
       let roles = [];
-      target.roles.forEach(role => {
+      target.roles.cache.forEach(role => {
         roles.push(role.name);
       });
 
       let game;
-      if (target.user.presence.game === null) {
+      if (target.user.presence.activities === null) {
         game = '';
       } else {
-        game = mysql_real_escape_string(target.user.presence.game.name);
+        game = mysql_real_escape_string(target.user.presence.activities.name);
       }
 
       db.execute(config, database => database.query(`INSERT INTO stat_members (userId, username, discriminator, nick, avatar, avatarURL, displayColor, displayHexColor, status, bot, deleted, createdAt, createdTimestamp, joinedAt, joinedTimestamp, updated)
@@ -94,8 +94,8 @@ module.exports = {
   *************/
   logServerInfo: (server) => {
       db.execute(config, database => database.query(`INSERT INTO stat_serverInfo (serverId, name, acronym, greeting, memberCount, available, iconURL, defaultRole, afkTimeout, explicitContentFilter, splash, splashURL, createdAt, createdTimestamp, large, ownerID, region)
-                                                      VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', '${server.greeting}', ${server.memberCount}, ${server.available}, '${server.iconURL}', '${server.defaultRole}', ${server.afkTimeout}, ${server.explicitContentFilter}, '${server.splash}', '${server.splashURL}', '${server.createdAt}', '${server.createdTimestamp}', ${server.large}, '${server.ownerID}', '${server.region}')
-                                                      ON DUPLICATE KEY UPDATE name = '${mysql_real_escape_string(server.name)}', acronym = '${server.nameAcronym}', greeting = '${server.greeting}', memberCount = ${server.memberCount}, available = ${server.available}, iconURL = '${server.iconURL}', defaultRole = '${server.defaultRole}', afkTimeout = ${server.afkTimeout}, explicitContentFilter = ${server.explicitContentFilter}, splash = '${server.splash}', splashURL = '${server.splashURL}', createdAt = '${server.createdAt}', createdTimestamp = '${server.createdTimestamp}', large = ${server.large}, ownerID = '${server.ownerID}', region = '${server.region}'`)
+                                                      VALUES ('${server.id}', '${mysql_real_escape_string(server.name)}', '${server.nameAcronym}', '${server.greeting}', ${server.memberCount}, ${server.available}, '${server.iconURL({format: 'webp', dynamic: true, size: 1024})}', '${server.defaultRole}', ${server.afkTimeout}, '${server.explicitContentFilter}', '${server.splash}', '${server.splashURL({format: 'webp', size: 1024})}', '${server.createdAt}', '${server.createdTimestamp}', ${server.large}, '${server.ownerID}', '${server.region}')
+                                                      ON DUPLICATE KEY UPDATE name = '${mysql_real_escape_string(server.name)}', acronym = '${server.nameAcronym}', greeting = '${server.greeting}', memberCount = ${server.memberCount}, available = ${server.available}, iconURL = '${server.iconURL({format: 'webp', dynamic: true, size: 1024})}', defaultRole = '${server.defaultRole}', afkTimeout = ${server.afkTimeout}, explicitContentFilter = '${server.explicitContentFilter}', splash = '${server.splash}', splashURL = '${server.splashURL({format: 'webp', size: 1024})}', createdAt = '${server.createdAt}', createdTimestamp = '${server.createdTimestamp}', large = ${server.large}, ownerID = '${server.ownerID}', region = '${server.region}'`)
       .then(rows => {
         logger.info(`${logColor.logUpdate} Updated serverStats`, {logType: 'updateRow', time: Date.now()});
       }))
@@ -113,7 +113,7 @@ module.exports = {
   *************/
   logChannels: (server, channel, status) => {
     const date = getDate();
-    let targets = channel ? [channel] : server.channels;
+    let targets = channel ? [channel] : server.channels.cache;
     if (!status) status = false;
 
     targets.forEach(target => {

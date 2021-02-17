@@ -71,7 +71,7 @@ module.exports.run = async(client, message, args, db) => {
       /* loop the submissions */
       function asyncFunction(user, callback) {
         setTimeout(() => {
-          client.fetchUser(user.id).then(u => {
+          client.users.fetch(user.id).then(u => {
             console.log('username', u.username);
             participantString.push(`[${u.username}](${user.submissionLink})`);
           }).then(() => {
@@ -166,7 +166,7 @@ module.exports.run = async(client, message, args, db) => {
 
       function asyncFunction(user, callback) {
         setTimeout(() => {
-          client.fetchUser(user.id).then(u => {
+          client.users.fetch(user.id).then(u => {
             console.log('username', u.username);
             participantString.push(`[${u.username}](${user.submissionLink})`);
           }).then(() => {

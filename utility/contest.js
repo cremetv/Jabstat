@@ -91,7 +91,7 @@ module.exports = {
 
 
   checkStarttimes: (client) => {
-    const contestChannel = client.channels.get(contestChat);
+    const contestChannel = client.channels.cache.get(contestChat);
     let contest;
 
     let sentEmbed = false;
@@ -141,7 +141,7 @@ module.exports = {
 
 
   checkDeadlines: (client) => {
-    const contestChannel = client.channels.get(contestChat);
+    const contestChannel = client.channels.cache.get(contestChat);
     let contest, participants = [], userIds = [];
 
     let sentEmbed = false;
@@ -174,7 +174,7 @@ module.exports = {
       let i = 0;
       function asyncFunction(user, callback) {
         setTimeout(() => {
-          client.fetchUser(user.id).then(u => {
+          client.users.fetch(user.id).then(u => {
             userIds.push(user.id);
             console.log('username', u.username);
             participantString.push(`${voteEmotes[i]} [${u.username}](${user.submissionLink})`);
@@ -273,7 +273,7 @@ module.exports = {
 
 
   checkEndVoting: (client) => {
-    const contestChannel = client.channels.get(contestChat);
+    const contestChannel = client.channels.cache.get(contestChat);
     let contest, participants = [], y = 0, voteMessageId;
 
     let sentEmbed = false;
@@ -405,13 +405,13 @@ module.exports = {
 
         if (messageReaction.message.id == votelinkId) {
 
-          messageReaction.message.channel.fetchMessage(messageReaction.message.id).then(msg => {
+          messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => {
             // get all users that reacted already
             let reactionUsers = [], i = 0;
 
             const reactionHandling = new Promise((resolve, reject) => {
               msg.reactions.forEach(reaction => {
-                reaction.fetchUsers().then(users => {
+                reaction.users.fetch().then(users => {
                   users.forEach(user => {
                     reactionUsers.push(user.username);
                   });

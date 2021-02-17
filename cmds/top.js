@@ -144,13 +144,13 @@ module.exports.run = async(client, message, args, db) => {
 
       let topUsersString = [];
           // topUserAvatar,
-          // topUser = client.fetchUser(users[0].userId);
+          // topUser = client.users.fetch(users[0].userId);
 
-      client.fetchUser(users[0].userId).then(u => topUserAvatar = u.avatar);
+      client.users.fetch(users[0].userId).then(u => topUserAvatar = u.avatar);
 
       function asyncFunction(user, callback) {
         setTimeout(() => {
-          client.fetchUser(user.userId).then(u => {
+          client.users.fetch(user.userId).then(u => {
             topUsersString.push(`**${u.username}**: ${numberWithCommas(user.messages)}`);
           }).then(() => {
             callback();

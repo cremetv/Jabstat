@@ -16,14 +16,22 @@ const getDate = require('./utility/date');
 const functions = require('./utility/functions');
 const contestFunctions = require('./utility/contest');
 
+const cheese = require('./utility/cheese');
+
 const prefix = botsettings.prefix;
 
 // get id's
 const serverId = botsettings.serverId;
 const contestChat = botsettings.contestChat;
 
-const client = new Discord.Client({disableEveryone: true});
+const client = new Discord.Client({disableMentions: 'everyone'});
 client.commands = new Discord.Collection();
+
+
+
+cheese.getCheeseOfTheDay(client);
+
+
 
 /****************
 * Web
@@ -83,11 +91,11 @@ fs.readdir('./cmds/', (err, files) => {
 let server;
 
 client.on('ready', async () => {
-  server = client.guilds.get(serverId);
+  server = client.guilds.cache.get(serverId);
 
   // fetch old messages in contest chat
-  const contestChannel = client.channels.get(contestChat);
-  contestChannel.fetchMessages().then(msg => console.log('fetched old messages')).catch(err => {
+  const contestChannel = client.channels.cache.get(contestChat);
+  contestChannel.messages.fetch().then(msg => console.log('fetched old messages')).catch(err => {
     logger.error(err, {logType: 'error', time: Date.now()});
     throw err;
   });

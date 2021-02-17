@@ -2,9 +2,9 @@ const config = module.require('./../utility/config.js');
 const Discord = require('discord.js');
 
 module.exports.run = async(client, message, args, db) => {
-  let target = message.mentions.users.first() || message.guild.members.get(args[0]) || message.author;
+  let target = message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author;
 
-  if (!target.user) target = message.guild.members.get(target.id);
+  if (!target.user) target = message.guild.members.cache.get(target.id);
 
   if (args[0] != undefined && args[0] != message.author.username && message.mentions.users.first() == undefined) {
     let matches = message.guild.members.filter(u => u.user.username.toLowerCase().includes(args[0].toLowerCase()));
