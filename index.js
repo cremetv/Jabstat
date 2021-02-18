@@ -16,7 +16,7 @@ const getDate = require('./utility/date');
 const functions = require('./utility/functions');
 const contestFunctions = require('./utility/contest');
 
-const cheese = require('./utility/cheese');
+const cheese = require('./apis/cheese');
 
 const prefix = botsettings.prefix;
 
@@ -27,9 +27,6 @@ const contestChat = botsettings.contestChat;
 const client = new Discord.Client({disableMentions: 'everyone'});
 client.commands = new Discord.Collection();
 
-
-
-// cheese.getCheeseOfTheDay(client);
 
 
 
@@ -118,6 +115,17 @@ client.on('ready', async () => {
     }, millisTill23);
   }
   dailyLog();
+
+  const dailyCheese = () => {
+    let now = new Date();
+    let millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 00, 00, 0) - now;
+    if (millisTill10 < 0) millisTill10 += 86400000;
+    setTimeout(() => {
+      logger.info(`it\'s 10:00`);
+      cheese.postCheeseOfTheDay(client);
+    }, millisTill10);
+  }
+  dailyCheese();
 
   /****************
   * Check for contest Deadlines
