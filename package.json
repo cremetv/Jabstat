@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/cremetv/Jabstat#readme",
   "dependencies": {
+    "@thatcopy/catapi": "^1.0.1",
     "bcryptjs": "^2.4.3",
     "discord.js": "^12.5.1",
     "express": "^4.17.1",
