@@ -9,13 +9,13 @@ module.exports.run = async(client, message, args, con) => {
 
   chosenResponse = responses[Math.floor(Math.random()*responses.length)];
 
-  let embed = new Discord.RichEmbed()
+  let embed = new Discord.MessageEmbed()
   .setTitle("Please provide more information!")
   .setDescription(`We want to help you but to do that we need more information.\n For example, instead of asking: \n\`\`\`\n${chosenResponse.wrong}\n\`\`\`\nInstead ask: \n\`\`\`\n${chosenResponse.right}\n\`\`\``)
-  .addBlankField()
+  .addField('\u200b', '\u200b')
   .addField('Please make sure your question contains the following:', '- A code snippet\n\n- The programming language of that snippet\n\n- A good and in-depth explanation what you want to achieve with that code and what went wrong')
   .setColor('#428ff4')
-  .addBlankField()
+  .addField('\u200b', '\u200b')
   .setFooter('Thank you - Your mod team • temporarily stolen from XP-Bot till he\'s alive again');
 
   message.channel.send(embed);

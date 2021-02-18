@@ -79,17 +79,17 @@ module.exports.run = async(client, message, args, db) => {
       requests.then(() => {
 
         // gamejam detail embed
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setTitle(gamejam.title)
         .setURL(gamejam.link)
         .setThumbnail(gamejam.image)
         .setColor('#3498db')
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .addField('Start', startdate.dateStr, true)
         .addField('Deadline', enddate.dateStr, true)
         .setFooter(`beep boop • gamejam ID: ${gamejam.id}`, client.user.avatarURL);
 
-        let entryEmbed = new Discord.RichEmbed()
+        let entryEmbed = new Discord.MessageEmbed()
         .setColor('#3498db')
         .addField('Entries:', `- ${entryString.join('\n- ')}`);
 
@@ -167,7 +167,7 @@ module.exports.run = async(client, message, args, db) => {
         console.log('setup embed');
 
         // gamejam detail embed
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setTitle(gamejam.title)
         .setURL(gamejam.link)
         .setThumbnail(gamejam.image)
@@ -176,7 +176,7 @@ module.exports.run = async(client, message, args, db) => {
         .addField('Deadline', enddate.dateStr, true)
         .setFooter(`beep boop • gamejam ID: ${gamejam.id}`, client.user.avatarURL);
 
-        let entryEmbed = new Discord.RichEmbed()
+        let entryEmbed = new Discord.MessageEmbed()
         .setColor('#3498db')
         .addField('Entries:', `- ${entryString.join('\n- ')}`);
 
@@ -261,7 +261,7 @@ module.exports.run = async(client, message, args, db) => {
     });
   })
   .then(() => {
-    let embed = new Discord.RichEmbed()
+    let embed = new Discord.MessageEmbed()
     .setAuthor('Gamejam list')
     .setDescription(`type \`>gamejam <id>\` to get more informations`)
     .addField('All gamejams:', `${gamejams.join('\n')}`)
@@ -286,7 +286,7 @@ module.exports.run = async(client, message, args, db) => {
     * >gj help
     *
     ****************/
-    let embed = new Discord.RichEmbed()
+    let embed = new Discord.MessageEmbed()
     .setAuthor('Gamejam help')
     .setDescription('```MD\nuse >gamejam or >gj\n\n>gamejam\n===\nshow the active gamejam\n\n>gamejam list [option]\n===\nget a list of all gamejams\noptions:--open --closed --current --voting\n\n>gamejam <id>\n===\nget detailed information about that gamejam```')
     .setColor('#3498db')

@@ -117,6 +117,7 @@ module.exports = {
     if (!status) status = false;
 
     targets.forEach(target => {
+      if (target.type === 'dm') return;
       let topic = target.topic || '';
       let nsfw = target.nsfw || '0';
       let lastMessageID = target.lastMessageID || '';

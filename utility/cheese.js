@@ -7,6 +7,8 @@ const cheese = require('say-cheese-node-wrapper');
 const getCheeseOfTheDay = async(client) => {
     const randomCheese = await cheese.today();
 
+    console.log('cheese', randomCheese);
+
     if (randomCheese.failed == true) return;
 
     const rc = randomCheese.cheese;
@@ -25,26 +27,6 @@ const getCheeseOfTheDay = async(client) => {
     .setColor('#F0E838')
     .addField('Milks', rc.milks.join('\n'), true)
     .setFooter('beep boop • api: illu\'s say-cheese', client.user.avatarURL());
-
-    // const usedFields = [
-    //     'countries',
-    //     'region',
-    //     'family',
-    //     'types',
-    //     'fat',
-    //     'calcium',
-    //     'textures',
-    //     'rind',
-    //     'color',
-    //     'flavors',
-    //     'aromas',
-    //     'vegetarian'
-    // ]
-
-    // embed
-    // .addField('Countrys', rc.attributes.countries.join('\n'), true)
-    // .addField('Region', rc.attributes.region, true)
-    // .addField('Fat', rc.attributes.fat, true)
 
     for (const attr in rc.attributes) {
         if (rc.attributes[attr] != null && attr != 'made') {

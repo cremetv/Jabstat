@@ -110,7 +110,7 @@ module.exports.run = async(client, message, args, db) => {
         topString += `${line}\n`;
       });
 
-      let embed = new Discord.RichEmbed()
+      let embed = new Discord.MessageEmbed()
       .setAuthor(`Leave times`)
       .setDescription(`Duration between joining the server and leaving`)
       .setColor('#EF3340')
@@ -165,7 +165,7 @@ module.exports.run = async(client, message, args, db) => {
       }, Promise.resolve());
 
       requests.then(() => {
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor(`Message Count`)
         .setDescription(`All time messages`)
         // .setThumbnail(topUserAvatar)
@@ -203,7 +203,7 @@ module.exports.run = async(client, message, args, db) => {
 
       function asyncFunction(e, callback) {
         setTimeout(() => {
-          let emote = client.emojis.find(emoji => emoji.name === e.name);
+          let emote = client.emojis.cache.find(emoji => emoji.name === e.name);
           topEmotesString.push(`**${emote == null ? e.name : emote}** ${e.count}`);
           callback();
         }, 100);
@@ -216,7 +216,7 @@ module.exports.run = async(client, message, args, db) => {
       }, Promise.resolve());
 
       requests.then(() => {
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor(`Emote Count`)
         .setDescription(`Most used emotes`)
         .setThumbnail(`https://cdn.discordapp.com/emojis/${emotes[0].emoteId}.png`)

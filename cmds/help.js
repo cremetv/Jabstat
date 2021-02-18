@@ -30,7 +30,7 @@ module.exports.run = async(client, message, args, con) => {
 
     let outputAmount = helpList.length / maxLength;
 
-    let botEmbed = new Discord.RichEmbed()
+    let botEmbed = new Discord.MessageEmbed()
     .setAuthor('Jabstat', client.user.avatarURL, 'https://github.com/cremetv/Jabstat')
     .setThumbnail(client.user.avatarURL)
     .setColor(`AQUA`)

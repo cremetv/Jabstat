@@ -29,7 +29,7 @@ client.commands = new Discord.Collection();
 
 
 
-cheese.getCheeseOfTheDay(client);
+// cheese.getCheeseOfTheDay(client);
 
 
 

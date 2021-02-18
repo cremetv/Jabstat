@@ -11,7 +11,7 @@ module.exports.run = async(client, message, args, con) => {
 
   chosenResponse = responses[Math.floor(Math.random()*responses.length)];
 
-  let embed = new Discord.RichEmbed()
+  let embed = new Discord.MessageEmbed()
   .setTitle('Don\'t ask to ask, just ask')
   .setDescription(`If someone can help, they will; Simply ask your question from the beginning to save everyone time\n\nInstead of asking:\n\`\`\`${chosenResponse.wrong}\`\`\`ask:\n\`\`\`${chosenResponse.right}\`\`\`\n\nYou get help sooner, and we waste less time - win | win`)
   .setColor('#428ff4')

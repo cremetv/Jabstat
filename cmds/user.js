@@ -1,15 +1,36 @@
 const config = module.require('./../utility/config.js');
 const Discord = require('discord.js');
 
+const getUser = (message = null, args) => {
+  return new Promise((res, rej) => {
+    console.log('fetch member');
+    message.guild.members.fetch()
+    .then(() => {
+      let target = message.guild.members.cache.filter(m => m.user.username.toLowerCase().includes(args[0].toLowerCase()));
+      console.log('target', target);
+      res(target);
+    });
+  });
+}
+
 module.exports.run = async(client, message, args, db) => {
-  let target = message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author;
+  let target;
 
-  if (!target.user) target = message.guild.members.cache.get(target.id);
-
-  if (args[0] != undefined && args[0] != message.author.username && message.mentions.users.first() == undefined) {
-    let matches = message.guild.members.filter(u => u.user.username.toLowerCase().includes(args[0].toLowerCase()));
-    target = matches.first();
+  // if query is given
+  if (args[0] != undefined && message.mentions.users.first() == undefined) {
+    let fetchedUser = await message.guild.members.fetch({ query: args[0], limit: 1 }).catch(console.error);
+    target = fetchedUser.first();
   }
+  // else take the first mention or author
+  else {
+    target = message.mentions.users.first() || message.author;
+  }
+
+  if (target == null || target == undefined) return message.channel.send('no user found');
+
+  // if target is not a guildMember find it
+  if (!target.user) target = message.guild.members.cache.find(m => m.id === target.id);
+
 
   let joinedAt,
       agreedAt = '-',
@@ -25,8 +46,6 @@ module.exports.run = async(client, message, args, db) => {
       emoteCount,
       usedChannels = [],
       introLink;
-
-  if (target == null || target == undefined) return message.channel.send('no user found');
 
   setTimeout(() => {
     db.execute(config, database => database.query(`SELECT * FROM stat_members WHERE userId = '${target.id}'`)
@@ -74,7 +93,7 @@ module.exports.run = async(client, message, args, db) => {
 
         mostActiveChannel = usedChannels[0];
 
-        channelName = client.channels.find(c => c.id === mostActiveChannel.channelId);
+        channelName = client.channels.cache.find(c => c.id === mostActiveChannel.channelId);
       }
 
       return database.query(`SELECT SUM(messageCount) AS messages
@@ -102,7 +121,7 @@ module.exports.run = async(client, message, args, db) => {
     })
     .then(rows => {
       if (rows.length > 0) {
-        let introChannel = client.channels.find(c => c.name.toLowerCase() === 'introduce-yourself');
+        let introChannel = client.channels.cache.find(c => c.name.toLowerCase() === 'introduce-yourself');
         introLink = `https://discordapp.com/channels/${message.guild.id}/${introChannel.id}/${rows[0].messageId}`;
       }
       return;
@@ -110,15 +129,15 @@ module.exports.run = async(client, message, args, db) => {
     .then(() => {
       let intro = (introLink) ? `[${introducedAt}](${introLink})` : `${introducedAt}`;
 
-      let embed = new Discord.RichEmbed()
-      .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL)
+      let embed = new Discord.MessageEmbed()
+      .setAuthor(`stats for ${target.displayName}`, target.user.avatarURL())
       .setDescription(`statistics for **${target.user.username}**#**${target.user.discriminator}**`)
-      .setThumbnail(target.user.avatarURL)
+      .setThumbnail(target.user.avatarURL())
       .setColor('#EF3340')
       .addField('Info', `joined on: **${joinedAt}**\nagreed on: **${agreedAt}**\nintroduced on: **${intro}**\naccount created on: **${createdAt}**`)
-      .addBlankField()
+      .addField('\u200b', '\u200b')
       .addField('Most active Channel', `<#${mostActiveChannel.channelId}> \`${mostActiveChannel.count} messages\``)
-      .addBlankField()
+      .addField('\u200b', '\u200b')
       .addField('Messages', `__total__: **${totalMessages}**\nlast 30 days: **${lastMonthMessages}**\nlast 7 days: **${lastWeekMessages}**\nlast 24 hours: **${lastDayMessages}**`, true)
       .addField('Emotes', '...', true)
       // .addField('Links', `[View Profile](https://jabstats.com/) | [General Server stats](https://jabstats.com/)`)

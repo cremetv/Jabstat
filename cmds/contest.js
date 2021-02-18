@@ -93,7 +93,7 @@ module.exports.run = async(client, message, args, db) => {
         if (voteLink) voteLinkStr = `\n\n[Vote link](${voteLink})`;
 
         // contest detail embed
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor('Contest!', 'https://ice-creme.de/images/jabstat/public-icon.jpg')
         .setTitle(contest.name)
         .setDescription(`${contest.description}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.${voteLinkStr}`)
@@ -102,7 +102,7 @@ module.exports.run = async(client, message, args, db) => {
         .addField('Deadline', enddate.dateStr, true)
         .setFooter(`beep boop • contest ID: ${contest.id} • Dates: dd.mm.yyyy UTC`, client.user.avatarURL);
 
-        let participantEmbed = new Discord.RichEmbed()
+        let participantEmbed = new Discord.MessageEmbed()
         .setDescription('click on the names to see the submission')
         .setColor('#3498db')
         .addField('Submissions:', `- ${participantString.join('\n- ')}`);
@@ -187,7 +187,7 @@ module.exports.run = async(client, message, args, db) => {
         if (voteLink) voteLinkStr = `\n\n[Vote link](${voteLink})`;
 
         // contest detail embed
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor('Contest!', 'https://ice-creme.de/images/jabstat/public-icon.jpg')
         .setTitle(contest.name)
         .setDescription(`${contest.description}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.${voteLinkStr}`)
@@ -196,7 +196,7 @@ module.exports.run = async(client, message, args, db) => {
         .addField('Deadline', enddate.dateStr, true)
         .setFooter(`beep boop • contest ID: ${contest.id} • Dates: dd.mm.yyyy UTC`, client.user.avatarURL);
 
-        let participantEmbed = new Discord.RichEmbed()
+        let participantEmbed = new Discord.MessageEmbed()
         .setDescription('click on the names to see the submission')
         .setColor('#3498db')
         .addField('Submissions:', `- ${participantString.join('\n- ')}`);
@@ -394,10 +394,10 @@ module.exports.run = async(client, message, args, db) => {
     });
   })
   .then(() => {
-    let embed = new Discord.RichEmbed()
+    let embed = new Discord.MessageEmbed()
     .setAuthor('Contest list')
     .setDescription(`${title}type \`>contest <id>\` to get more informations`)
-    .addBlankField()
+    .addField('\u200b', '\u200b')
     .addField('All contests:', `${contests.join('\n')}`)
     .setColor('#3498db')
     .setFooter(`beep boop`, client.user.avatarURL);
@@ -537,14 +537,14 @@ module.exports.run = async(client, message, args, db) => {
         tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '.' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
 
         // contest detail embed
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
         .setTitle(`Contest: ${contest.name}`)
         .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}`)
         .setColor('#2ecc71')
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .addField('Themes:', `${themes.join('\n')}`)
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .addField('Submissions:', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest ID: ${contest.id} • Dates: dd.mm.yyyy UTC`, client.user.avatarURL);
 
@@ -579,7 +579,7 @@ module.exports.run = async(client, message, args, db) => {
         message.channel.send(`There is currently no contest running.`);
       } else if (err.message === 'already voting') {
         message.channel.send(`There is already a voting`);
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setDescription(`[Go vote!](${contest.votelink})`);
         message.channel.send({embed: embed})
       } else {
@@ -596,7 +596,7 @@ module.exports.run = async(client, message, args, db) => {
     * >c help
     *
     ****************/
-    let embed = new Discord.RichEmbed()
+    let embed = new Discord.MessageEmbed()
     .setAuthor('Contest help')
     .setDescription('```MD\n> use >contest or >c\n\n>contest\n===\nshow the active contest\n\n>contest list [option]\n===\nget a list of all contests\noptions:--open --closed --current --voting\n\n>contest <id>\n===\nget detailed information about that contest\n\n>contest submit <id>\n===\nadd this to an attachment to submit something\n\n>contest submitdelete <id>\n===\ndelete your submission```')
     .setColor('#3498db')

@@ -109,12 +109,12 @@ module.exports = {
 
       console.log(`starting contest: ${contest.name}`);
 
-      let contestEmbed = new Discord.RichEmbed()
+      let contestEmbed = new Discord.MessageEmbed()
       .setAuthor('New Contest!', 'https://ice-creme.de/images/jabstat/public-icon.jpg')
       .setTitle(`Contest: ${contest.name}`)
       .setDescription(`${contest.description}\n\nadd \`>contest submit ${contest.id}\` to your submission\n\n24 hour voting will start after the deadline.\n\n*Date: DD.MM.YYYY UTC*`)
       .setColor('#3498db')
-      .addBlankField()
+      .addField('\u200b', '\u200b')
       .addField('Start', startdate.dateStr, true)
       .addField('Deadline', enddate.dateStr, true)
       .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
@@ -206,12 +206,12 @@ module.exports = {
         tomorrow.setHours(tomorrow.getHours() + 24);
         tomorrow = ('0' + tomorrow.getDate()).slice(-2) + '.' + ('0' + (tomorrow.getMonth() + 1)).slice(-2) + '.' + tomorrow.getFullYear() + ' ' + ('0' + tomorrow.getHours()).slice(-2) + ':' + ('0' + tomorrow.getMinutes()).slice(-2);
 
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor('Voting!', 'https://ice-creme.de/images/jabstat/voting.jpg')
         .setTitle(`Contest: ${contest.name}`)
         .setDescription(`${contest.description}\n\nyou have 24 hours to vote.\nVoting will end at ${tomorrow}\n*Date: DD.MM.YYYY UTC*`)
         .setColor('#2ecc71')
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .addField('Submissions;', `*use the reactions to vote*\n${participantString.join('\n')}`)
         .setFooter(`beep boop • contest Id: ${contest.id}`, client.user.avatarURL);
 
@@ -358,15 +358,15 @@ module.exports = {
       loopGroup(grouped).then(() => {
         winners = winners.slice(0, 3);
 
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setAuthor(`We have a winner!`, 'https://ice-creme.de/images/jabstat/winner.jpg')
         .setTitle(`Contest: ${contest.name}`)
         .setDescription(`${contest.description}`)
         .setThumbnail(winnerImg)
         .setColor('#f1c40f')
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .addField('Result:', `${winners.join('\n')}`)
-        .addBlankField()
+        .addField('\u200b', '\u200b')
         .setFooter(`beep boop • contest ID: ${contest.id}`, client.user.avatarURL);
 
         if (!sentEmbed) {

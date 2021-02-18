@@ -142,7 +142,7 @@ module.exports.run = async(client, message, args, db) => {
         topChannel.sort((a, b) => parseFloat(a.count) - parseFloat(b.count));
         topChannel.reverse();
 
-        channelName = client.channels.find(c => c.id === topChannel[0].channelId);
+        channelName = client.channels.cache.find(c => c.id === topChannel[0].channelId);
       }
 
       return;
@@ -151,10 +151,10 @@ module.exports.run = async(client, message, args, db) => {
       let createdAt = new Date(message.guild.createdTimestamp);
       createdAt = `${('0' + createdAt.getDate()).slice(-2)}.${('0' + (createdAt.getMonth() + 1)).slice(-2)}.${createdAt.getFullYear()}`;
 
-      let embed = new Discord.RichEmbed()
+      let embed = new Discord.MessageEmbed()
       .setAuthor(message.guild.name)
       .setDescription(`stats for ${message.guild.name}`)
-      .setThumbnail(message.guild.iconURL)
+      .setThumbnail(message.guild.iconURL())
       .setColor('#EF3340')
       .addField('Members', `Users: \`${message.guild.memberCount}\``)
       .addField('Top Channel', `<#${topChannel[0].channelId}> \`${topChannel[0].count} messages\``)
