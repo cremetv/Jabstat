@@ -26,7 +26,7 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^1.19.4",
     "say-cheese-node-wrapper": "^1.0.2",
-    "socket.io": "^2.4.1",
+    "socket.io": "^2.5.0",
     "winston": "^3.3.3"
   }
 }
